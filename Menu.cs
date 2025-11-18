@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Spectre.Console;
+using Terminal.Gui;
+
+
 
 
 namespace lain
 {
-    internal class Helpers
+    internal class Menu
     {
 
+        //prints welcome message
         internal static void Welcome()
         {
 
@@ -16,6 +19,10 @@ namespace lain
 
 
         }
+
+
+
+
 
 
     }
