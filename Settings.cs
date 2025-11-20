@@ -19,11 +19,13 @@ namespace lain
         internal static int MaxDownloadSpeed { get; set; } = 1000;
         internal static int MaxUploadSpeed { get; set; } = 1000;
         internal static bool EnableDht { get; set; } = true;
+
+        internal static bool DetailedLogging { get; set; } = false;
         internal static bool StopSeedingWhenFinished { get; set; } = true;
         internal static bool EnablePortForwarding { get; set; } = true;
         internal static string? DefaultDownloadPath { get; set; } = "";
         internal static string? LogPath { get; set; } = "";
-        internal static string? SettingsPath { get; set; } = "settings.json";
+        internal static string? SettingsPath { get; set; } = "cfg.json";
 
         internal static EngineSettingsBuilder? EngineSettings { get; set; } = new EngineSettingsBuilder
         {
@@ -65,7 +67,7 @@ namespace lain
                 };
 
                 string json = JsonSerializer.Serialize(settingsData, jsonOptions);
-                File.WriteAllText(SettingsPath ?? "settings.json", json);
+                File.WriteAllText(SettingsPath ?? "cfg.json", json);
             }
             catch (Exception ex)
             {
@@ -83,7 +85,7 @@ namespace lain
                 if (!File.Exists(SettingsPath ?? "cfg.json"))
                     return;
 
-                string json = File.ReadAllText(SettingsPath ?? "settings.json");
+                string json = File.ReadAllText(SettingsPath ?? "cfg.json");
 
                 // Deserialize into a temporary object
                 var settingsData = JsonSerializer.Deserialize<SettingsDTO>(json);
@@ -99,6 +101,7 @@ namespace lain
                 EnableDht = settingsData.EnableDht;
                 StopSeedingWhenFinished = settingsData.StopSeedingWhenFinished;
                 EnablePortForwarding = settingsData.EnablePortForwarding;
+                DetailedLogging = settingsData.DetailedLogging;
                 DefaultDownloadPath = settingsData.DefaultDownloadPath;
                 LogPath = settingsData.LogPath;
                 SettingsPath = settingsData.SettingsPath;
@@ -131,9 +134,13 @@ namespace lain
             public bool EnableDht { get; set; }
             public bool StopSeedingWhenFinished { get; set; }
             public bool EnablePortForwarding { get; set; }
+
+            public bool DetailedLogging { get; set; }
             public string? DefaultDownloadPath { get; set; }
             public string? LogPath { get; set; }
             public string? SettingsPath { get; set; }
+
+            
         }
     }
 }

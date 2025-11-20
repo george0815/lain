@@ -41,30 +41,33 @@ namespace lain
             // Run the app
             Application.Run();
 
-            /*
-            Console.WriteLine("Hello, World!");
-
-            if (args.Length >= 3)
-            {
-
-                TorrentOperations torrentOps = new();
-
-
-
-                Settings settings = new(port: ushort.Parse(args[2]));
-
+            
             
 
 
-                await torrentOps.AddTorrent(settings, args[0], args[1]);
+
+
+
+            if (args.Length > 0) {
+               // await TorrentOperations.AddTorrent(args[0], args[1]);
 
             }
-            */
+            else
+            {
+                // await torrentOperations.AddTorrent("test.torrent", "tmpdir");
+
+                //TorrentOperations.AddTorrent("tmpdir", "test.torrent").GetAwaiter().GetResult();
+
+
+            }
+
+
 
         }
 
 
-       
+
+
 
     }
 

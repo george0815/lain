@@ -2,6 +2,7 @@
 using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace lain
@@ -9,13 +10,14 @@ namespace lain
     internal class TorrentOperations
     {
 
-        ClientEngine engine;
+         static ClientEngine engine = new ClientEngine(Settings.EngineSettings.ToSettings());
 
 
 
 
 
-        internal List<TorrentManager>? managers { get; set; }
+
+        static internal List<TorrentManager>? managers { get; set; } = [];
 
 
         internal TorrentOperations()
@@ -77,54 +79,63 @@ namespace lain
 
 
 
-        internal async Task AddTorrent(string downPath, string torPath)
+        internal static async Task AddTorrent(string downPath, string torPath)
         {
 
 
+
             Torrent torrent = await Torrent.LoadAsync(torPath);
+
+
             var manager = await engine.AddAsync(torrent, downPath);
-
-            managers.Add(manager);
-
-
-
 
 
             manager.TorrentStateChanged += (o, e) =>
             {
-
-                //update TUI
-
-                Log.log.Add($"State changed: {e.OldState} -> {e.NewState}");
-
+                Log.Write($"State changed: {e.OldState} -> {e.NewState}");
             };
 
             manager.PieceHashed += (o, e) =>
             {
-
-                //update TUI
-
-                //update log
-                Log.log.Add($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
-
-
+                //Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
             };
 
-            Log.log.Add("Downloading... Press any key to exit.");
+            Log.Write("Downloading... Press any key to exit.");
 
 
-            manager.StartAsync().GetAwaiter().GetResult();
+            managers!.Add(manager);
 
+            await manager.StartAsync();
 
+            await Task.Run(async () =>
+            {
+                while (true)
+                {
+                    foreach (var m in managers)
+                    {
+                        Log.Write(
+                            $"[{m.Torrent!.Name}] {m.Progress:0.00}% " +
+                            $"DL: {m.Monitor.DownloadRate / 1024:0.0}kB/s " +
+                            $"UL: {m.Monitor.UploadRate / 1024:0.0}kB/s"
+                        );
+                    }
 
+                    await Task.Delay(1000);
+                }
+            });
 
             /*
-
-            TODO move this to torrent list UI codebehind and have it update the TUI rather than write to console 
-
             while (manager.State != TorrentState.Stopped)
             {
                 Console.WriteLine(
+
+                    $"Progress: {manager.Progress:0.00}% - " +
+                    $"Download Speed: {manager.Monitor.DownloadRate / 1024:0.00} kB/s - " +
+                    $"Upload Speed: {manager.Monitor.UploadRate / 1024:0.00} kB/s - "
+
+                    );
+
+                Log.Write(
 
                     $"Progress: {manager.Progress:0.00}% - " +
                     $"Download Speed: {manager.Monitor.DownloadRate / 1024:0.00} kB/s - " +
