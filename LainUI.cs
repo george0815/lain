@@ -91,7 +91,7 @@ namespace lain
             Add(menu);
 
             // --- CONTENT PANELS ----------------------------------------------
-            torrentListView = new TorrentListView();
+            torrentListView = new TorrentListView(TorrentOperations.managers);
             downloadView = new DownloadView();
             createView = new CreateView();
             settingsView = new SettingsView();
@@ -114,14 +114,12 @@ namespace lain
 
             switch (index)
             {
-                case 0: Add(torrentListView); break;
+                case 0: Add(torrentListView); ((TorrentListView)torrentListView).Refresh(); break;
                 case 1: Add(downloadView); break;
                 case 2: Add(createView); break;
                 case 3: Add(settingsView); break;
                 case 4: Add(searchView); break;
-                case 5:
-                  
-                    Add(logView); break;
+                case 5: Add(logView); break;
                 case 6: Application.RequestStop(); break;
             }
 

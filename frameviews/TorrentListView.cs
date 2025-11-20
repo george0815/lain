@@ -1,50 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using lain;
+using MonoTorrent.Client;
+using System.Data;
 using Terminal.Gui;
 
-namespace lain.frameviews
+public class TorrentListView : FrameView
 {
-    internal class TorrentListView : FrameView
+    private readonly List<TorrentManager> _managers;
+    private readonly TableView _table;
+    private readonly DataTable _tableData;
+
+    public TorrentListView(List<TorrentManager> managers)
+        : base("Torrents")
     {
+        _managers = managers;
 
-        public TorrentListView()
-            : base("Torrents")
+        X = 20;
+        Y = 3;
+        Width = Dim.Fill();
+        Height = Dim.Fill();
+
+        // Define the table's schema
+        _tableData = new DataTable();
+        _tableData.Columns.Add("Name", typeof(string));
+        _tableData.Columns.Add("State", typeof(string));
+        _tableData.Columns.Add("Progress", typeof(string));
+
+        // Create the TableView
+        _table = new TableView()
         {
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = Dim.Fill(),
+            Table = _tableData
+        };
 
+        Add(_table);
+      
 
-            X = 20;
-            Y = 3;
-            Width = Dim.Fill();
-            Height = Dim.Fill();
+        // Subscribe to log updates
+        TorrentOperations.UpdateProgress += Refresh;
+    }
 
-            List<string> ActiveTorrents = new List<string>()
-             {
-                "Ubuntu ISO",
-                "Arch Linux ISO",
-                "Fedora ISO"
-            };
+    public void Refresh()
+    {
+        Application.MainLoop.Invoke(() =>
+        {
+            _tableData.Clear();
 
-
-            var list = new ListView(ActiveTorrents)
+            foreach (var m in _managers)
             {
-                X = 0,
-                Y = 0
-            };
+                string name = m.Torrent?.Name ?? "Unknown";
+                string state = m.State.ToString();
+                string progress = $"{m.Progress:0.0}%";
 
-            Add(list);
+                _tableData.Rows.Add(name, state, progress);
+            }
 
-            // Pause/resume with key P
-            list.KeyPress += (e) =>
-            {
-                if (e.KeyEvent.Key == Key.P)
-                {
-                    MessageBox.Query("Torrent", "Pause/Resume requested", "OK");
-                    e.Handled = true;
-                }
-            };
-
-            
-        }
+            _table.Update();
+            _table.SetNeedsDisplay();
+            SetNeedsDisplay();
+        });
     }
 }

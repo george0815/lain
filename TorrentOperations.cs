@@ -12,7 +12,8 @@ namespace lain
 
          static ClientEngine engine = new ClientEngine(Settings.EngineSettings.ToSettings());
 
-
+        // Event fired whenever progress updates
+        public static event Action? UpdateProgress;
 
 
 
@@ -89,6 +90,7 @@ namespace lain
 
             var manager = await engine.AddAsync(torrent, downPath);
 
+            
 
             manager.TorrentStateChanged += (o, e) =>
             {
@@ -113,12 +115,15 @@ namespace lain
                 {
                     foreach (var m in managers)
                     {
+
                         Log.Write(
                             $"[{m.Torrent!.Name}] {m.Progress:0.00}% " +
                             $"DL: {m.Monitor.DownloadRate / 1024:0.0}kB/s " +
                             $"UL: {m.Monitor.UploadRate / 1024:0.0}kB/s"
                         );
                     }
+                    // Fire event to notify UI
+                    UpdateProgress?.Invoke();
 
                     await Task.Delay(1000);
                 }
