@@ -22,14 +22,26 @@ namespace lain
         {
 
             //load settings
-            
+            Settings.LoadSettings();
 
 
             //welcome message
 
 
             //load tui
+            Application.Init();
 
+            // Create a top-level container
+            var top = Application.Top;
+
+            // Add your window to the top-level
+            var mainWin = new LainUI();
+            top.Add(mainWin);
+
+            // Run the app
+            Application.Run();
+
+            /*
             Console.WriteLine("Hello, World!");
 
             if (args.Length >= 3)
@@ -44,9 +56,10 @@ namespace lain
             
 
 
-                await torrentOps.TestMonoTorrent(settings, args[0], args[1]);
+                await torrentOps.AddTorrent(settings, args[0], args[1]);
 
             }
+            */
 
         }
 

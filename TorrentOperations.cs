@@ -9,36 +9,118 @@ namespace lain
     internal class TorrentOperations
     {
 
+        ClientEngine engine;
+
+
+
+
+
+        internal List<TorrentManager>? managers { get; set; }
+
+
         internal TorrentOperations()
         {
+
+
+            engine = new ClientEngine(Settings.EngineSettings!.ToSettings());
+
         }
 
-        internal async Task TestMonoTorrent(Settings settings, string downPath, string torPath)
+
+        internal void DeleteTorrent(short index)
         {
 
-            
+            //pause torrent 
 
-            var engine = new ClientEngine(settings.EngineSettings!.ToSettings());
+            //stop seeding 
 
-           
+            //remove from list 
+
+
+
+
+        }
+
+        internal void CreateTorrent(string? trackerUrl, List<FileInfo> files, string? magnetlink, short port)
+        {
+
+            //create torrent 
+
+
+            //start seeding 
+
+
+
+        }
+
+
+
+
+        internal void PauseTorrent(short index)
+        {
+
+            //stop leeching       
+
+            //write progress to disk
+
+
+        }
+
+        internal void ResumeTorrent(short index)
+        {
+
+            //load progress from disk 
+
+            //start seeding 
+
+        }
+
+
+
+        internal async Task AddTorrent(string downPath, string torPath)
+        {
+
 
             Torrent torrent = await Torrent.LoadAsync(torPath);
             var manager = await engine.AddAsync(torrent, downPath);
 
+            managers.Add(manager);
+
+
+
+
 
             manager.TorrentStateChanged += (o, e) =>
             {
-                Console.WriteLine($"State changed: {e.OldState} -> {e.NewState}");
+
+                //update TUI
+
+                Log.log.Add($"State changed: {e.OldState} -> {e.NewState}");
+
             };
 
             manager.PieceHashed += (o, e) =>
             {
-                Console.WriteLine($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+
+                //update TUI
+
+                //update log
+                Log.log.Add($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+
+
             };
 
-            Console.WriteLine("Downloading... Press any key to exit.");
+            Log.log.Add("Downloading... Press any key to exit.");
+
 
             manager.StartAsync().GetAwaiter().GetResult();
+
+
+
+
+            /*
+
+            TODO move this to torrent list UI codebehind and have it update the TUI rather than write to console 
 
             while (manager.State != TorrentState.Stopped)
             {
@@ -53,6 +135,7 @@ namespace lain
                 await Task.Delay(1000);
 
             }
+            */
 
 
         }

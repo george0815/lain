@@ -8,6 +8,26 @@ namespace lain
     {
 
 
+        static internal List<string> log { get; set; }
+
+
+
+
+        static void LoadLog()
+        {
+
+        }
+
+
+        static void SaveLog()
+        {
+
+
+        }
+
+
+
+
 
 
 
