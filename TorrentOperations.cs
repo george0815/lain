@@ -1,7 +1,9 @@
 ﻿using MonoTorrent;
+using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -44,17 +46,73 @@ namespace lain
 
         }
 
-        internal void CreateTorrent(string? trackerUrl, List<FileInfo> files, string? magnetlink, short port)
+        internal static async Task CreateTorrent(string folderPath, string outputPath, string? trackerUrl = null, string? magnetLink = null)
         {
 
-            //create torrent 
+
+            TorrentCreator creator = new TorrentCreator();
+            creator.Announces.Add(new List<string> { trackerUrl! });
+            ITorrentFileSource files = new TorrentFileSource("C:\\Users\\Hunter\\Documents\\GitHub\\lain\\bin\\Debug\\net10.0\\tmpout");
+
+            int x = 5;
+
+            BEncodedDictionary dict = await creator.CreateAsync(files);
+            Torrent torrent = Torrent.Load(dict);
 
 
-            //start seeding 
+            //BitField bitfield = new BitField(torrent.Pieces.Count).Not();
+           // FastResume fastResumeData = new FastResume(torrent.InfoHash, bitfield);
+
+            //manager.LoadFastResume(fastResumeData);
+
+            var manager = await engine.AddAsync(torrent, outputPath);
+
+
+            manager.TorrentStateChanged += (o, e) =>
+            {
+                Log.Write($"State changed: {e.OldState} -> {e.NewState}");
+            };
+
+            manager.PieceHashed += (o, e) =>
+            {
+                //Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+            };
+
+            Log.Write("Creating... Press any key to exit.");
+
+
+            managers!.Add(manager);
+
+            await manager.StartAsync();
+
+            //MagnetLink magnet = new MagnetLink(manager.Torrent.InfoHash, manager.Torrent.Name, new[] { "http://192.168.5.151:8000/announce", "udp://192.168.5.151:8000" });
+
+            /*
+
+            var creator = new TorrentCreator();
+            TorrentFileSource src = new TorrentFileSource(folderPath);
+      
+
+            if (!string.IsNullOrWhiteSpace(trackerUrl))
+            {
+                creator.Announces.Add(new List<string> { trackerUrl });
+            }
 
 
 
+            // Create the .torrent
+            await creator.CreateAsync(src, outputPath);
+
+            
+
+            Log.Write("Torrent created at: " + outputPath);
+
+            // Automatically seed via your AddTorrent() method
+            await AddTorrent(Settings.DefaultDownloadPath!, outputPath);
+
+            */
         }
+
 
 
 
@@ -83,6 +141,7 @@ namespace lain
         internal static async Task AddTorrent(string downPath, string torPath)
         {
 
+           
 
 
             Torrent torrent = await Torrent.LoadAsync(torPath);
@@ -155,6 +214,9 @@ namespace lain
 
 
         }
+
+
+
 
     }
 }

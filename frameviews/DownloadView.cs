@@ -57,6 +57,7 @@ namespace lain.frameviews
 
             downloadBtn.Clicked += async () =>
             {
+
                 _ = Task.Run(async () =>
                 {
                     await TorrentOperations.AddTorrent(
@@ -64,6 +65,9 @@ namespace lain.frameviews
                         fileInput.Text.ToString()!
                     );
                 });
+
+                MessageBox.Query("Download", "Torrent download started.", "OK");
+
             };
 
 
