@@ -48,13 +48,13 @@ namespace lain
 
         internal static async Task CreateTorrent(string folderPath, string outputPath, string? trackerUrl = null, string? magnetLink = null)
         {
-
+            int x = 5;
 
             TorrentCreator creator = new TorrentCreator();
             creator.Announces.Add(new List<string> { trackerUrl! });
-            ITorrentFileSource files = new TorrentFileSource("C:\\Users\\Hunter\\Documents\\GitHub\\lain\\bin\\Debug\\net10.0\\tmpout");
+            ITorrentFileSource files = new TorrentFileSource(folderPath);
 
-            int x = 5;
+           
 
             BEncodedDictionary dict = await creator.CreateAsync(files);
             Torrent torrent = Torrent.Load(dict);

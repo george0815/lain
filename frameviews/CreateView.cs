@@ -47,9 +47,9 @@ namespace lain.frameviews
 
                 _ = Task.Run(async () =>
                 {
-                    await TorrentOperations.CreateTorrent(
-                        Settings.DefaultDownloadPath!,
+                    await TorrentOperations.CreateTorrent(                  
                         folderPath.Text.ToString()!,
+                        Settings.DefaultDownloadPath!,
                         trackerLink.Text.ToString()!
                     );
                 });
