@@ -13,7 +13,7 @@ namespace lain.frameviews
         {
 
             X = 20;
-            Y = 3;
+            Y = Settings.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
 

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Drawing;
 using Terminal.Gui;
 
 namespace lain.frameviews
@@ -8,110 +7,164 @@ namespace lain.frameviews
     internal class SettingsView : FrameView
     {
 
+        Dictionary<string, Terminal.Gui.Color> colors = new Dictionary<string, Terminal.Gui.Color>
+        {
+            { "Black", Terminal.Gui.Color.Black },
+            { "Blue", Terminal.Gui.Color.Blue  },
+            { "Green", Terminal.Gui.Color.Green },
+            { "Cyan", Terminal.Gui.Color.Cyan },
+            { "Red", Terminal.Gui.Color.Red },
+            { "Magenta", Terminal.Gui.Color.Magenta },
+            { "Brown", Terminal.Gui.Color.Brown   },
+            { "Gray", Terminal.Gui.Color.Gray },
+            { "DarkGray", Terminal.Gui.Color.DarkGray },
+            { "Bright Blue", Terminal.Gui.Color.BrightBlue },
+            { "Bright Green", Terminal.Gui.Color.BrightGreen },
+            { "Bright Cyan", Terminal.Gui.Color.BrightCyan },
+            { "Bright Red", Terminal.Gui.Color.BrightRed },
+            { "Bright Magenta", Terminal.Gui.Color.BrightMagenta },
+            { "Bright Yellow", Terminal.Gui.Color.BrightYellow},
+            { "White", Terminal.Gui.Color.White }
+        };
+
+
         public SettingsView()
             : base("Settings")
         {
-
-
             X = 20;
-            Y = 3;
+            Y = Settings.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
-           
 
-            int y = 1; // starting Y position
+            // Create a scroll view
+            var scroll = new ScrollView()
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+                ShowVerticalScrollIndicator = true,
+                ShowHorizontalScrollIndicator = false,
+            };
+
+            Add(scroll);
+
+            int y = 1; // starting Y position inside scroll view
 
             // Port
-             Add(new Label("Port:") { X = 1, Y = y });
-            var portField = new TextField(Settings.DhtPort.ToString()) { X = 20, Y = y, Width = 10 };
-             Add(portField);
+            scroll.Add(new Label("Port:") { X = 1, Y = y });
+            var portField = new TextField(Settings.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(portField);
             y += 2;
 
             // Max Connections
-             Add(new Label("Max Connections:") { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.MaxConnections.ToString()) { X = 20, Y = y, Width = 10 };
-             Add(maxConnField);
+            scroll.Add(new Label("Max Connections:") { X = 1, Y = y });
+            var maxConnField = new TextField(Settings.MaxConnections.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(maxConnField);
             y += 2;
 
             // Max Seeders per Torrent
-             Add(new Label("Max Seeders/Torrent:") { X = 1, Y = y });
-            var maxSeedField = new TextField(Settings.MaxSeedersPerTorrent.ToString()) { X = 20, Y = y, Width = 10 };
-             Add(maxSeedField);
+            scroll.Add(new Label("Max Seeders/Torrent:") { X = 1, Y = y });
+            var maxSeedField = new TextField(Settings.MaxSeedersPerTorrent.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(maxSeedField);
             y += 2;
 
             // Max Leechers per Torrent
-             Add(new Label("Max Leechers/Torrent:") { X = 1, Y = y });
-            var maxLeechField = new TextField(Settings.MaxLeechersPerTorrent.ToString()) { X = 20, Y = y, Width = 10 };
-             Add(maxLeechField);
+            scroll.Add(new Label("Max Leechers/Torrent:") { X = 1, Y = y });
+            var maxLeechField = new TextField(Settings.MaxLeechersPerTorrent.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(maxLeechField);
             y += 2;
 
             // Max Download Speed
-             Add(new Label("Max Download Speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString()) { X = 25, Y = y, Width = 10 };
-             Add(maxDlField);
+            scroll.Add(new Label("Max Download Speed (kB/s):") { X = 1, Y = y });
+            var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
-             Add(new Label("Max Upload Speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString()) { X = 25, Y = y, Width = 10 };
-             Add(maxUpField);
+            scroll.Add(new Label("Max Upload Speed (kB/s):") { X = 1, Y = y });
+            var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(maxUpField);
             y += 2;
 
-            // Enable DHT
-            var dhtCheckbox = new CheckBox("Enable DHT") { X = 1, Y = y, Checked = Settings.EnableDht };
-             Add(dhtCheckbox);
+            // Checkboxes
+            var dhtCheckbox = new CheckBox("Enable DHT for public torrents") { X = 1, Y = y, Checked = Settings.EnableDht };
+            scroll.Add(dhtCheckbox);
             y += 2;
 
-            // Stop Seeding When Finished
             var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.StopSeedingWhenFinished };
-             Add(stopSeedCheckbox);
+            scroll.Add(stopSeedCheckbox);
             y += 2;
 
-            // Detailed logging
             var detailedLogging = new CheckBox("Enable detailed logging") { X = 1, Y = y, Checked = Settings.DetailedLogging };
-            Add(detailedLogging);
+            scroll.Add(detailedLogging);
             y += 2;
 
-            // Enable Port Forwarding
             var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.EnablePortForwarding };
-             Add(portFwdCheckbox);
+            scroll.Add(portFwdCheckbox);
             y += 2;
 
-            // Default Download Path
-             Add(new Label("Default Download Path:") { X = 1, Y = y });
-            var downloadPathField = new TextField(Settings.DefaultDownloadPath ?? "") { X = 25, Y = y, Width = 40 };
-             Add(downloadPathField);
+            // Paths
+            scroll.Add(new Label("Default Download Path:") { X = 1, Y = y });
+            var downloadPathField = new TextField(Settings.DefaultDownloadPath ?? "") { X = 30, Y = y, Width = 40 };
+            scroll.Add(downloadPathField);
             y += 2;
 
-            // Log Path
-             Add(new Label("Log Path:") { X = 1, Y = y });
-            var logPathField = new TextField(Settings.LogPath ?? "") { X = 25, Y = y, Width = 40 };
-             Add(logPathField);
+            scroll.Add(new Label("Log Path:") { X = 1, Y = y });
+            var logPathField = new TextField(Settings.LogPath ?? "") { X = 30, Y = y, Width = 40 };
+            scroll.Add(logPathField);
             y += 2;
 
-            // Settings Path
-             Add(new Label("Settings Path:") { X = 1, Y = y });
-            var settingsPathField = new TextField(Settings.SettingsPath ?? "") { X = 25, Y = y, Width = 40 };
-             Add(settingsPathField);
-            y += 2;
+            scroll.Add(new Label("Settings Path:") { X = 1, Y = y });
+            var settingsPathField = new TextField(Settings.SettingsPath ?? "") { X = 30, Y = y, Width = 40 };
+            scroll.Add(settingsPathField);
+            y += 3;
 
+            
 
-            // Save Button
-            var saveBtn = new Button("Save")
+            // Background Color
+            scroll.Add(new Label("Background color:") { X = 1, Y = y });
+
+            var bgColorCombo = new ComboBox()
             {
-                X = 1,
-                Y = y
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
             };
+            bgColorCombo.SetSource(new List<string>(colors.Keys));
+            bgColorCombo.SelectedItem = (int)Settings.BackgroundColor!; // default
+            scroll.Add(bgColorCombo);
+            y += 2;
 
+            // Text Color
+            scroll.Add(new Label("Text color:") { X = 1, Y = y });
 
-             Add(saveBtn);
+            var textColorCombo = new ComboBox()
+            {
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
+            };
+            textColorCombo.SetSource(new List<string>(colors.Keys));
+            textColorCombo.SelectedItem = (int)Settings.TextColor!; // default
+            scroll.Add(textColorCombo);
+            y += 2;
 
+            // Save button
+            var saveBtn = new Button("Save") { X = 1, Y = y };
+            scroll.Add(saveBtn);
+            y += 2;
 
-
+            // Set the content size so scroll bars work
+            scroll.ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 2, y);
 
             saveBtn.Clicked += () =>
             {
-                // Parse numeric fields safely
+                // Numeric fields
                 if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.DhtPort = port;
                 if (ushort.TryParse(maxConnField.Text.ToString(), out var maxConn)) Settings.MaxConnections = maxConn;
                 if (ushort.TryParse(maxSeedField.Text.ToString(), out var maxSeed)) Settings.MaxSeedersPerTorrent = maxSeed;
@@ -129,13 +182,14 @@ namespace lain.frameviews
                 Settings.LogPath = logPathField.Text.ToString();
                 Settings.SettingsPath = settingsPathField.Text.ToString();
 
-                MessageBox.Query("Settings", "Settings saved.", "OK");
+                //Colors
+                Settings.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
+                Settings.TextColor = colors[textColorCombo.Text.ToString()!];
 
                 Settings.SaveSettings();
 
+                MessageBox.Query("Settings", "Settings saved.", "OK");
             };
-
-
         }
     }
 }

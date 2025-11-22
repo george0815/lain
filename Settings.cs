@@ -11,6 +11,11 @@ namespace lain
     {
         #region Properties
 
+        internal static ushort HeaderHeight { get; set; } = 15;
+        internal static ushort LogoWidth { get; set; } = 55;
+
+
+
         internal static ushort Port { get; set; } = 55123;
         internal static ushort DhtPort { get; set; } = 55124;
         internal static ushort MaxSeedersPerTorrent { get; set; } = 100;
@@ -26,6 +31,10 @@ namespace lain
         internal static string? DefaultDownloadPath { get; set; } = "";
         internal static string? LogPath { get; set; } = "";
         internal static string? SettingsPath { get; set; } = "cfg.json";
+
+        internal static Terminal.Gui.Color BackgroundColor { get; set; } = 0;
+        internal static Terminal.Gui.Color TextColor { get; set; } = (Terminal.Gui.Color)7;
+
 
         internal static EngineSettingsBuilder? EngineSettings { get; set; } = new EngineSettingsBuilder
         {
@@ -61,6 +70,9 @@ namespace lain
                     EnableDht,
                     StopSeedingWhenFinished,
                     EnablePortForwarding,
+                    DetailedLogging,
+                    BackgroundColor,
+                    TextColor,  
                     DefaultDownloadPath,
                     LogPath,
                     SettingsPath
@@ -105,6 +117,8 @@ namespace lain
                 DefaultDownloadPath = settingsData.DefaultDownloadPath;
                 LogPath = settingsData.LogPath;
                 SettingsPath = settingsData.SettingsPath;
+                BackgroundColor = settingsData.BackgroundColor;
+                TextColor = settingsData.TextColor;
 
                 // Rebuild EngineSettings
                 EngineSettings = new EngineSettingsBuilder
@@ -140,7 +154,9 @@ namespace lain
             public string? LogPath { get; set; }
             public string? SettingsPath { get; set; }
 
-            
+            public Terminal.Gui.Color BackgroundColor { get; set; }
+            public Terminal.Gui.Color TextColor { get; set; }
+
         }
     }
 }

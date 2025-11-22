@@ -1,6 +1,8 @@
 ﻿using lain;
 using MonoTorrent.Client;
+using System;
 using System.Data;
+using System.Xml.Linq;
 using Terminal.Gui;
 
 public class TorrentListView : FrameView
@@ -15,15 +17,25 @@ public class TorrentListView : FrameView
         _managers = managers;
 
         X = 20;
-        Y = 3;
+        Y = Settings.HeaderHeight;
         Width = Dim.Fill();
         Height = Dim.Fill();
 
         // Define the table's schema
         _tableData = new DataTable();
+
+        
+
+
         _tableData.Columns.Add("Name", typeof(string));
         _tableData.Columns.Add("State", typeof(string));
         _tableData.Columns.Add("Progress", typeof(string));
+        _tableData.Columns.Add("Peers", typeof(string));
+        _tableData.Columns.Add("Leechers", typeof(string));
+        _tableData.Columns.Add("Seeders", typeof(string));
+        _tableData.Columns.Add("Download rate", typeof(string));
+        _tableData.Columns.Add("Upload rate", typeof(string));
+
 
         // Create the TableView
         _table = new TableView()
@@ -36,7 +48,16 @@ public class TorrentListView : FrameView
         };
 
         Add(_table);
-      
+
+       
+        
+        for (int i = 0; i <= 10; i++)
+        {
+            _tableData.Rows.Add(432423, 4324, 432423);
+            // Add a blank row to act as a separator
+        }
+
+        
 
         // Subscribe to log updates
         TorrentOperations.UpdateProgress += Refresh;

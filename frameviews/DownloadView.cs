@@ -14,9 +14,9 @@ namespace lain.frameviews
 
 
             X = 20;
-                Y = 3;
-                Width = Dim.Fill();
-                Height = Dim.Fill();
+            Y = Settings.HeaderHeight;
+            Width = Dim.Fill();
+            Height = Dim.Fill();
           
 
             var magnetLabel = new Label("Magnet URL:")
@@ -25,33 +25,70 @@ namespace lain.frameviews
                 Y = 1
             };
 
+            Add(magnetLabel);
+
             var magnetInput = new TextField("")
             {
-                X = 15,
+                X = 20,
                 Y = 1,
                 Width = 40
             };
 
-            var fileLabel = new Label("Torrent File Path:")
+            Add(magnetInput);
+
+
+            var magnetCheckbox = new CheckBox("Use magnet link")
             {
                 X = 1,
-                Y = 3
-            };
-
-            var fileInput = new TextField("")
-            {
-                X = 15,
                 Y = 3,
-                Width = 40
+                Checked = false
             };
 
-            var downloadBtn = new Button("Download")
+            Add(magnetCheckbox);
+
+
+
+            var fileLabel = new Label("Torrent file path:")
             {
                 X = 1,
                 Y = 5
             };
 
-            Add(magnetLabel, magnetInput, fileLabel, fileInput, downloadBtn);
+            Add(fileLabel);
+
+            var fileInput = new TextField("")
+            {
+                X = 20,
+                Y = 5,
+                Width = 40
+            };
+
+            Add(fileInput);
+
+            var downloadPathLabel = new Label("Download path:")
+            {
+                X = 1,
+                Y = 7
+            };
+
+            Add(downloadPathLabel);
+
+            var downloadPathInput = new TextField("")
+            {
+                X = 20,
+                Y = 7,
+                Width = 40
+            };
+
+            Add(downloadPathInput);
+
+            var downloadBtn = new Button("Download")
+            {
+                X = 1,
+                Y = 9
+            };
+
+            Add(downloadBtn);
 
 
 
@@ -73,5 +110,8 @@ namespace lain.frameviews
 
 
         }
+
+        
+
     }
 }

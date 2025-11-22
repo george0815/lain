@@ -18,7 +18,7 @@ namespace lain
 
         
 
-         public static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             //load settings
@@ -36,13 +36,23 @@ namespace lain
 
             // Add your window to the top-level
             var mainWin = new LainUI();
+
+            ColorScheme myScheme = new ColorScheme()
+            {
+                Normal = Application.Driver.MakeAttribute(Settings.TextColor, Settings.BackgroundColor), // text, background
+                Focus = Application.Driver.MakeAttribute(Color.Black, Color.Cyan), // focused element
+                HotNormal = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Blue),
+                HotFocus = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Cyan),
+            };
+
+            mainWin.ColorScheme = myScheme;
             top.Add(mainWin);
 
             // Run the app
             Application.Run();
 
             
-            
+           
 
 
 

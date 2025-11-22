@@ -15,17 +15,18 @@ namespace lain
         FrameView createView;
         FrameView settingsView;
         FrameView searchView;
+    
         internal FrameView logView;
+
+
+        public bool ShouldExit { get; private set; }
+
+
+        
 
         public LainUI()
         {
-            //Title = "Torrent Client - Terminal.Gui";
-            List<string> ActiveTorrents = new List<string>()
-             {
-                "Ubuntu ISO",
-                "Arch Linux ISO",
-                "Fedora ISO"
-            };
+            
 
             // --- HEADER -------------------------------------------------------
             var header = new FrameView()
@@ -33,23 +34,37 @@ namespace lain
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height = 3,
+                Height = Settings.HeaderHeight,
                 CanFocus = false,
                 Border = new Border() { BorderStyle = BorderStyle.None }
             };
 
-            // Image placeholder
+            // Wrap ASCII art in a FrameView to give it a border
+            var logoFrame = new FrameView()
+            {
+                X = 0,
+                Y = 0,
+                Width = Settings.LogoWidth, // fixed width for logo
+                Height = Settings.HeaderHeight,
+                Border = new Border() { BorderStyle = BorderStyle.Single }
+            };
+
             var logo = new Label()
             {
-                X = 1,
-                Y = 1,
-                Text = "[IMG]"
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+                Text = Helper.icons[0]
             };
+
+            logoFrame.Add(logo);
+            header.Add(logoFrame);
 
             // Date
             var date = new Label()
             {
-                X = 10,
+                X = Settings.LogoWidth + 2,
                 Y = 1,
                 Text = DateTime.Now.ToString("yyyy-MM-dd")
             };
@@ -59,36 +74,61 @@ namespace lain
             {
                 X = Pos.Right(date) + 5,
                 Y = 1,
-                Text = $"Active Torrents: {ActiveTorrents.Count}"
+                Text = $"Active Torrents: {TorrentOperations.managers!.Count}"
             };
 
-            header.Add(logo, date, torrentCount);
+            header.Add(date, torrentCount);
             Add(header);
 
-            // --- SIDEBAR MENU ------------------------------------------------
-            var menu = new ListView(new string[]
-            {
-            "Torrents",
-            "Download",
-            "Create",
-            "Settings",
-            "Search",
-            "Log",
-            "Exit"
-            })
+            // --- SIDEBAR CONTAINER ---
+            var sidebar = new FrameView()
             {
                 X = 0,
-                Y = 3,
+                Y = Settings.HeaderHeight,
                 Width = 20,
-                Height = Dim.Fill()
+                Height = Dim.Fill(),
+                Border = new Border() { BorderStyle = BorderStyle.Rounded }
+            };
+
+            // --- MENU (inside sidebar) ---
+            var menu = new ListView(new string[]
+            {
+                "Torrents",
+                "Download",
+                "Create",
+                "Settings",
+                "Search",
+                "Log"
+            })
+            {
+                X = 1,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill() - 3
             };
 
             menu.SelectedItemChanged += (args) =>
             {
-                SwitchPanel(args.Item);
+                SwitchPanel(args.Item, ref logo);
             };
 
-            Add(menu);
+            sidebar.Add(menu);
+
+            // --- EXIT BUTTON (inside sidebar, below menu) ---
+            var exitButton = new Button("Exit")
+            {
+                X = 1,
+                Y = Pos.Bottom(menu),
+                Width = 16,
+            };
+
+            exitButton.Clicked += () => ShowExitDialog();
+
+            sidebar.Add(exitButton);
+
+            // Add sidebar to window
+            Add(sidebar);
+
 
             // --- CONTENT PANELS ----------------------------------------------
             torrentListView = new TorrentListView(TorrentOperations.managers);
@@ -102,8 +142,50 @@ namespace lain
             Add(torrentListView);
         }
 
+
+        private void ShowExitDialog()
+        {
+            var dialog = new Dialog("Exit?", 50, 10);
+            dialog.Height = 3;
+            var ok = new Button("OK");
+            var cancel = new Button("Cancel");
+
+            bool exitRequested = false;
+
+            // Wire handlers BEFORE showing the dialog
+            ok.Clicked += () =>
+            {
+                exitRequested = true;               // remember choice
+                Application.RequestStop(dialog);    // close the modal dialog
+            };
+
+            cancel.Clicked += () =>
+            {
+                Application.RequestStop(dialog);    // just close the modal dialog
+            };
+
+            dialog.AddButton(ok);
+            dialog.AddButton(cancel);
+
+            // Run the dialog modally. This call returns when the dialog is closed.
+            Application.Run(dialog);
+
+            // After the dialog is closed, react to the choice
+            if (exitRequested)
+            {
+                // Optional: clear UI
+                Application.Top.RemoveAll();
+
+                // Stop main UI loop (if running)
+                Application.RequestStop();
+
+               
+            }
+        }
+
+
         // Switches visible panel
-        private void SwitchPanel(int index)
+        private void SwitchPanel(int index, ref Label logo)
         {
             Remove(torrentListView);
             Remove(downloadView);
@@ -111,6 +193,8 @@ namespace lain
             Remove(settingsView);
             Remove(searchView);
             Remove(logView);
+
+            logo.Text = Helper.icons[index];   
 
             switch (index)
             {
@@ -120,7 +204,6 @@ namespace lain
                 case 3: Add(settingsView); break;
                 case 4: Add(searchView); break;
                 case 5: Add(logView); break;
-                case 6: Application.RequestStop(); break;
             }
 
             SetNeedsDisplay();
