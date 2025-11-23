@@ -40,9 +40,9 @@ namespace lain
             ColorScheme myScheme = new ColorScheme()
             {
                 Normal = Application.Driver.MakeAttribute(Settings.TextColor, Settings.BackgroundColor), // text, background
-                Focus = Application.Driver.MakeAttribute(Color.Black, Color.Cyan), // focused element
-                HotNormal = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Blue),
-                HotFocus = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Cyan),
+                Focus = Application.Driver.MakeAttribute(Settings.FocusTextColor, Settings.FocusBackgroundColor), // focused element
+                HotNormal = Application.Driver.MakeAttribute(Settings.HotTextColor, Settings.BackgroundColor),
+                HotFocus = Application.Driver.MakeAttribute(Settings.FocusTextColor, Settings.FocusBackgroundColor),
             };
 
             mainWin.ColorScheme = myScheme;

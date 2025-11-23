@@ -32,8 +32,14 @@ namespace lain
         internal static string? LogPath { get; set; } = "";
         internal static string? SettingsPath { get; set; } = "cfg.json";
 
-        internal static Terminal.Gui.Color BackgroundColor { get; set; } = 0;
-        internal static Terminal.Gui.Color TextColor { get; set; } = (Terminal.Gui.Color)7;
+        internal static Terminal.Gui.Color BackgroundColor { get; set; } = Terminal.Gui.Color.Black;
+        internal static Terminal.Gui.Color TextColor { get; set; } = Terminal.Gui.Color.White;
+
+        internal static Terminal.Gui.Color FocusBackgroundColor { get; set; } = Terminal.Gui.Color.White;
+        internal static Terminal.Gui.Color FocusTextColor { get; set; } = Terminal.Gui.Color.Black;
+
+        internal static Terminal.Gui.Color HotTextColor { get; set; } = Terminal.Gui.Color.BrightYellow;
+
 
 
         internal static EngineSettingsBuilder? EngineSettings { get; set; } = new EngineSettingsBuilder
@@ -72,10 +78,14 @@ namespace lain
                     EnablePortForwarding,
                     DetailedLogging,
                     BackgroundColor,
-                    TextColor,  
+                    TextColor,
+                    FocusBackgroundColor,
+                    HotTextColor,
+                    FocusTextColor,
                     DefaultDownloadPath,
                     LogPath,
-                    SettingsPath
+                    SettingsPath,
+
                 };
 
                 string json = JsonSerializer.Serialize(settingsData, jsonOptions);
@@ -119,6 +129,9 @@ namespace lain
                 SettingsPath = settingsData.SettingsPath;
                 BackgroundColor = settingsData.BackgroundColor;
                 TextColor = settingsData.TextColor;
+                FocusBackgroundColor = settingsData.FocusBackgroundColor;
+                FocusTextColor = settingsData.FocusTextColor;
+                HotTextColor = settingsData.HotTextColor;
 
                 // Rebuild EngineSettings
                 EngineSettings = new EngineSettingsBuilder
@@ -156,6 +169,11 @@ namespace lain
 
             public Terminal.Gui.Color BackgroundColor { get; set; }
             public Terminal.Gui.Color TextColor { get; set; }
+
+            public Terminal.Gui.Color FocusBackgroundColor { get; set; }
+            public Terminal.Gui.Color FocusTextColor { get; set; }
+
+            public Terminal.Gui.Color HotTextColor { get; set; }
 
         }
     }

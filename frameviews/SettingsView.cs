@@ -154,6 +154,58 @@ namespace lain.frameviews
             scroll.Add(textColorCombo);
             y += 2;
 
+            
+
+            //Focus background color
+            scroll.Add(new Label("Focus background color:") { X = 1, Y = y });
+
+            var backgroundFocusColorCombo = new ComboBox()
+            {
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
+            };
+            backgroundFocusColorCombo.SetSource(new List<string>(colors.Keys));
+            backgroundFocusColorCombo.SelectedItem = (int)Settings.FocusBackgroundColor!; // default
+            scroll.Add(backgroundFocusColorCombo);
+            y += 2;
+
+            //Focus text color
+            scroll.Add(new Label("Focus text color:") { X = 1, Y = y });
+
+            var textFocusColorCombo = new ComboBox()
+            {
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
+            };
+            textFocusColorCombo.SetSource(new List<string>(colors.Keys));
+            textFocusColorCombo.SelectedItem = (int)Settings.FocusTextColor!; // default
+            scroll.Add(textFocusColorCombo);
+            y += 2;
+
+
+            //Hot text color
+            scroll.Add(new Label("Hotkey text color:") { X = 1, Y = y });
+
+            var hotTextColorCombo = new ComboBox()
+            {
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
+            };
+            hotTextColorCombo.SetSource(new List<string>(colors.Keys));
+            hotTextColorCombo.SelectedItem = (int)Settings.HotTextColor!; // default
+            scroll.Add(hotTextColorCombo);
+            y += 2;
+
+
             // Save button
             var saveBtn = new Button("Save") { X = 1, Y = y };
             scroll.Add(saveBtn);
@@ -185,6 +237,9 @@ namespace lain.frameviews
                 //Colors
                 Settings.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
                 Settings.TextColor = colors[textColorCombo.Text.ToString()!];
+                Settings.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
+                Settings.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
+                Settings.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
 
                 Settings.SaveSettings();
 
