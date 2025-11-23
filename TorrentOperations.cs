@@ -12,7 +12,7 @@ namespace lain
     internal class TorrentOperations
     {
 
-         static ClientEngine engine = new ClientEngine(Settings.EngineSettings.ToSettings());
+         static ClientEngine engine = new ClientEngine(Settings.EngineSettings!.ToSettings());
 
         // Event fired whenever progress updates
         public static event Action? UpdateProgress;
@@ -48,7 +48,6 @@ namespace lain
 
         internal static async Task CreateTorrent(string folderPath, string outputPath, string? trackerUrl = null, string? magnetLink = null)
         {
-            int x = 5;
 
             TorrentCreator creator = new TorrentCreator();
             creator.Announces.Add(new List<string> { trackerUrl! });
@@ -75,10 +74,10 @@ namespace lain
 
             manager.PieceHashed += (o, e) =>
             {
-                //Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+                if (Settings.DetailedLogging) { Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}"); }
             };
 
-            Log.Write("Creating... Press any key to exit.");
+            Log.Write("Creating...");
 
 
             managers!.Add(manager);
@@ -87,30 +86,7 @@ namespace lain
 
             //MagnetLink magnet = new MagnetLink(manager.Torrent.InfoHash, manager.Torrent.Name, new[] { "http://192.168.5.151:8000/announce", "udp://192.168.5.151:8000" });
 
-            /*
-
-            var creator = new TorrentCreator();
-            TorrentFileSource src = new TorrentFileSource(folderPath);
-      
-
-            if (!string.IsNullOrWhiteSpace(trackerUrl))
-            {
-                creator.Announces.Add(new List<string> { trackerUrl });
-            }
-
-
-
-            // Create the .torrent
-            await creator.CreateAsync(src, outputPath);
-
             
-
-            Log.Write("Torrent created at: " + outputPath);
-
-            // Automatically seed via your AddTorrent() method
-            await AddTorrent(Settings.DefaultDownloadPath!, outputPath);
-
-            */
         }
 
 
@@ -158,10 +134,10 @@ namespace lain
 
             manager.PieceHashed += (o, e) =>
             {
-                //Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+                if (Settings.DetailedLogging) { Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}"); }
             };
 
-            Log.Write("Downloading... Press any key to exit.");
+            Log.Write("Downloading...");
 
 
             managers!.Add(manager);
@@ -184,33 +160,11 @@ namespace lain
                     // Fire event to notify UI
                     UpdateProgress?.Invoke();
 
-                    await Task.Delay(1000);
+                    await Task.Delay(5000);
                 }
             });
 
-            /*
-            while (manager.State != TorrentState.Stopped)
-            {
-                Console.WriteLine(
-
-                    $"Progress: {manager.Progress:0.00}% - " +
-                    $"Download Speed: {manager.Monitor.DownloadRate / 1024:0.00} kB/s - " +
-                    $"Upload Speed: {manager.Monitor.UploadRate / 1024:0.00} kB/s - "
-
-                    );
-
-                Log.Write(
-
-                    $"Progress: {manager.Progress:0.00}% - " +
-                    $"Download Speed: {manager.Monitor.DownloadRate / 1024:0.00} kB/s - " +
-                    $"Upload Speed: {manager.Monitor.UploadRate / 1024:0.00} kB/s - "
-
-                    );
-
-                await Task.Delay(1000);
-
-            }
-            */
+   
 
 
         }

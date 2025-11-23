@@ -49,13 +49,13 @@ public class TorrentListView : FrameView
 
         Add(_table);
 
-       
-        
+
+        /* for testing
         for (int i = 0; i <= 10; i++)
         {
             _tableData.Rows.Add(432423, 4324, 432423);
-            // Add a blank row to act as a separator
         }
+        */
 
         
 

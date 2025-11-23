@@ -228,6 +228,8 @@ namespace lain.frameviews
                 Settings.EnableDht = dhtCheckbox.Checked;
                 Settings.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                 Settings.EnablePortForwarding = portFwdCheckbox.Checked;
+                Settings.DetailedLogging = detailedLogging.Checked;
+
 
                 // String paths
                 Settings.DefaultDownloadPath = downloadPathField.Text.ToString();
