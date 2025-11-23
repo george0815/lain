@@ -1,117 +1,142 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using Terminal.Gui;
 
 namespace lain.frameviews
 {
     internal class DownloadView : FrameView
     {
-
         public DownloadView()
             : base("Download")
         {
-
-
             X = 20;
             Y = Settings.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
-          
 
-            var magnetLabel = new Label("Magnet URL:")
+            // Create scroll view
+            var scroll = new ScrollView()
             {
-                X = 1,
-                Y = 1
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+
+                ShowVerticalScrollIndicator = true,
+                ShowHorizontalScrollIndicator = false
             };
 
-            Add(magnetLabel);
+            Add(scroll);
 
-            var magnetInput = new TextField("")
-            {
-                X = 20,
-                Y = 1,
-                Width = 40
-            };
+            int y = 1;
 
-            Add(magnetInput);
-
+            // Magnet URL
+            scroll.Add(new Label("Magnet URL:") { X = 1, Y = y });
+            var magnetInput = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(magnetInput);
+            y += 2;
 
             var magnetCheckbox = new CheckBox("Use magnet link")
             {
                 X = 1,
-                Y = 3,
+                Y = y,
                 Checked = false
             };
+            scroll.Add(magnetCheckbox);
+            y += 2;
 
-            Add(magnetCheckbox);
+            // Torrent file path
+            scroll.Add(new Label("Torrent file path:") { X = 1, Y = y });
+            var fileInput = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(fileInput);
+            y += 2;
 
+            // Download path
+            scroll.Add(new Label("Download path:") { X = 1, Y = y });
+            var downloadPathInput = new TextField(Settings.DefaultDownloadPath) { X = 20, Y = y, Width = 40 };
+            scroll.Add(downloadPathInput);
+            y += 2;
 
+            
 
-            var fileLabel = new Label("Torrent file path:")
+            // Max Connections
+            scroll.Add(new Label("Max connections:") { X = 1, Y = y });
+            var maxConnField = new TextField(Settings.MaxConnections.ToString())
+            {
+                X = 30,
+                Y = y,
+                Width = 10
+            };
+            scroll.Add(maxConnField);
+            y += 2;
+
+            // Max Download Speed
+            scroll.Add(new Label("Max download speed (kB/s):") { X = 1, Y = y });
+            var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString())
+            {
+                X = 30,
+                Y = y,
+                Width = 10
+            };
+            scroll.Add(maxDlField);
+            y += 2;
+
+            // Max Upload Speed
+            scroll.Add(new Label("Max upload speed (kB/s):") { X = 1, Y = y });
+            var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString())
+            {
+                X = 30,
+                Y = y,
+                Width = 10
+            };
+            scroll.Add(maxUpField);
+            y += 2;
+
+            
+
+            // DHT checkbox
+            var dhtCheckbox = new CheckBox("Enable DHT")
             {
                 X = 1,
-                Y = 5
+                Y = y,
+                Checked = false
             };
+            scroll.Add(dhtCheckbox);
+            y += 2;
 
-            Add(fileLabel);
+            // Download button
+            var downloadBtn = new Button("Download") { X = 1, Y = y };
+            scroll.Add(downloadBtn);
+            y += 2;
 
-            var fileInput = new TextField("")
-            {
-                X = 20,
-                Y = 5,
-                Width = 40
-            };
+            // Set scroll content size AFTER layout
+            scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
 
-            Add(fileInput);
-
-            var downloadPathLabel = new Label("Download path:")
-            {
-                X = 1,
-                Y = 7
-            };
-
-            Add(downloadPathLabel);
-
-            var downloadPathInput = new TextField("")
-            {
-                X = 20,
-                Y = 7,
-                Width = 40
-            };
-
-            Add(downloadPathInput);
-
-            var downloadBtn = new Button("Download")
-            {
-                X = 1,
-                Y = 9
-            };
-
-            Add(downloadBtn);
-
-
-
+            //
+            // DOWNLOAD BUTTON EVENT
+            //
             downloadBtn.Clicked += async () =>
             {
+                TorrentData settings = new TorrentData
+                {
+                    UseMagnetLink = magnetCheckbox.Checked,
+                    MagnetUrl = magnetInput.Text.ToString()!,
+                    TorPath = fileInput.Text.ToString()!,
+                    DownPath = downloadPathInput.Text.ToString()!,
+                    MaxConnections = int.TryParse(maxConnField.Text.ToString(), out int mc)  ? mc : Settings.MaxConnections,
+                    MaxDownloadRate = int.TryParse(maxDlField.Text.ToString(), out int mds) ? mds * 1024 : Settings.MaxDownloadSpeed,
+                    MaxUploadRate = int.TryParse(maxUpField.Text.ToString(), out int mus) ? mus * 1024 : Settings.MaxUploadSpeed,
+              
+                    UseDht = dhtCheckbox.Checked
+                };
 
                 _ = Task.Run(async () =>
                 {
-                    await TorrentOperations.AddTorrent(
-                        Settings.DefaultDownloadPath!,
-                        fileInput.Text.ToString()!
-                    );
+                    await TorrentOperations.AddTorrent(settings);
                 });
 
                 MessageBox.Query("Download", "Torrent download started.", "OK");
-
             };
-
-
-
         }
-
-        
-
     }
 }

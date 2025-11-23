@@ -53,44 +53,34 @@ namespace lain.frameviews
 
             // Port
             scroll.Add(new Label("Port:") { X = 1, Y = y });
-            var portField = new TextField(Settings.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
+            var portField = new TextField(Settings.Port.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
+            // Port
+            scroll.Add(new Label("DHT port:") { X = 1, Y = y });
+            var dhtPortField = new TextField(Settings.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
+            scroll.Add(dhtPortField);
+            y += 2;
+
             // Max Connections
-            scroll.Add(new Label("Max Connections:") { X = 1, Y = y });
+            scroll.Add(new Label("Max total connections:") { X = 1, Y = y });
             var maxConnField = new TextField(Settings.MaxConnections.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
-            // Max Seeders per Torrent
-            scroll.Add(new Label("Max Seeders/Torrent:") { X = 1, Y = y });
-            var maxSeedField = new TextField(Settings.MaxSeedersPerTorrent.ToString()) { X = 30, Y = y, Width = 10 };
-            scroll.Add(maxSeedField);
-            y += 2;
-
-            // Max Leechers per Torrent
-            scroll.Add(new Label("Max Leechers/Torrent:") { X = 1, Y = y });
-            var maxLeechField = new TextField(Settings.MaxLeechersPerTorrent.ToString()) { X = 30, Y = y, Width = 10 };
-            scroll.Add(maxLeechField);
-            y += 2;
-
             // Max Download Speed
-            scroll.Add(new Label("Max Download Speed (kB/s):") { X = 1, Y = y });
+            scroll.Add(new Label("Max total download speed (kB/s):") { X = 1, Y = y });
             var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
-            scroll.Add(new Label("Max Upload Speed (kB/s):") { X = 1, Y = y });
+            scroll.Add(new Label("Max total upload speed (kB/s):") { X = 1, Y = y });
             var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
-            // Checkboxes
-            var dhtCheckbox = new CheckBox("Enable DHT for public torrents") { X = 1, Y = y, Checked = Settings.EnableDht };
-            scroll.Add(dhtCheckbox);
-            y += 2;
 
             var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.StopSeedingWhenFinished };
             scroll.Add(stopSeedCheckbox);
@@ -217,15 +207,13 @@ namespace lain.frameviews
             saveBtn.Clicked += () =>
             {
                 // Numeric fields
-                if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.DhtPort = port;
+                if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.Port = port;
+                if (ushort.TryParse(portField.Text.ToString(), out var dhtPort)) Settings.DhtPort = dhtPort;
                 if (ushort.TryParse(maxConnField.Text.ToString(), out var maxConn)) Settings.MaxConnections = maxConn;
-                if (ushort.TryParse(maxSeedField.Text.ToString(), out var maxSeed)) Settings.MaxSeedersPerTorrent = maxSeed;
-                if (ushort.TryParse(maxLeechField.Text.ToString(), out var maxLeech)) Settings.MaxLeechersPerTorrent = maxLeech;
                 if (int.TryParse(maxDlField.Text.ToString(), out var maxDl)) Settings.MaxDownloadSpeed = maxDl;
                 if (int.TryParse(maxUpField.Text.ToString(), out var maxUp)) Settings.MaxUploadSpeed = maxUp;
 
                 // Boolean fields
-                Settings.EnableDht = dhtCheckbox.Checked;
                 Settings.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                 Settings.EnablePortForwarding = portFwdCheckbox.Checked;
                 Settings.DetailedLogging = detailedLogging.Checked;
@@ -242,6 +230,21 @@ namespace lain.frameviews
                 Settings.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
                 Settings.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
                 Settings.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
+
+                //Edit Engine settings
+                Settings.EngineSettings = new MonoTorrent.Client.EngineSettingsBuilder
+                {
+
+                   
+                    AllowPortForwarding = Settings.EnablePortForwarding,
+                    ListenEndPoints = new Dictionary<string, System.Net.IPEndPoint> { { "main", new System.Net.IPEndPoint(System.Net.IPAddress.Any, Settings.Port) } },
+                    DhtEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Settings.DhtPort),
+                    MaximumConnections = Settings.MaxConnections,
+                    MaximumDownloadRate = Settings.MaxDownloadSpeed * 1024,
+                    MaximumUploadRate = Settings.MaxUploadSpeed * 1024,
+                    
+
+                };
 
                 Settings.SaveSettings();
 

@@ -18,12 +18,12 @@ namespace lain
 
         internal static ushort Port { get; set; } = 55123;
         internal static ushort DhtPort { get; set; } = 55124;
-        internal static ushort MaxSeedersPerTorrent { get; set; } = 100;
         internal static ushort MaxConnections { get; set; } = 100;
-        internal static ushort MaxLeechersPerTorrent { get; set; } = 200;
+
+        internal static ushort MaxConnectionsPerTor { get; set; } = 100;
+
         internal static int MaxDownloadSpeed { get; set; } = 1000;
         internal static int MaxUploadSpeed { get; set; } = 1000;
-        internal static bool EnableDht { get; set; } = true;
 
         internal static bool DetailedLogging { get; set; } = false;
         internal static bool StopSeedingWhenFinished { get; set; } = true;
@@ -46,7 +46,9 @@ namespace lain
         {
             AllowPortForwarding = EnablePortForwarding,
             ListenEndPoints = new Dictionary<string, IPEndPoint> { { "main", new IPEndPoint(System.Net.IPAddress.Any, Port) } },
-            DhtEndPoint = new IPEndPoint(System.Net.IPAddress.Any, DhtPort)
+            DhtEndPoint = new IPEndPoint(System.Net.IPAddress.Any, DhtPort),
+            
+
         };
 
         #endregion
@@ -68,12 +70,9 @@ namespace lain
                 {
                     Port,
                     DhtPort,
-                    MaxSeedersPerTorrent,
                     MaxConnections,
-                    MaxLeechersPerTorrent,
                     MaxDownloadSpeed,
                     MaxUploadSpeed,
-                    EnableDht,
                     StopSeedingWhenFinished,
                     EnablePortForwarding,
                     DetailedLogging,
@@ -84,6 +83,7 @@ namespace lain
                     FocusTextColor,
                     DefaultDownloadPath,
                     LogPath,
+                    MaxConnectionsPerTor,
                     SettingsPath,
 
                 };
@@ -115,12 +115,10 @@ namespace lain
 
                 Port = settingsData.Port;
                 DhtPort = settingsData.DhtPort;
-                MaxSeedersPerTorrent = settingsData.MaxSeedersPerTorrent;
                 MaxConnections = settingsData.MaxConnections;
-                MaxLeechersPerTorrent = settingsData.MaxLeechersPerTorrent;
+                MaxConnectionsPerTor = settingsData.MaxConnectionsPerTor;   
                 MaxDownloadSpeed = settingsData.MaxDownloadSpeed;
                 MaxUploadSpeed = settingsData.MaxUploadSpeed;
-                EnableDht = settingsData.EnableDht;
                 StopSeedingWhenFinished = settingsData.StopSeedingWhenFinished;
                 EnablePortForwarding = settingsData.EnablePortForwarding;
                 DetailedLogging = settingsData.DetailedLogging;
@@ -153,12 +151,12 @@ namespace lain
         {
             public ushort Port { get; set; }
             public ushort DhtPort { get; set; }
-            public ushort MaxSeedersPerTorrent { get; set; }
             public ushort MaxConnections { get; set; }
-            public ushort MaxLeechersPerTorrent { get; set; }
+
+            public ushort MaxConnectionsPerTor { get; set; }
+            
             public int MaxDownloadSpeed { get; set; }
             public int MaxUploadSpeed { get; set; }
-            public bool EnableDht { get; set; }
             public bool StopSeedingWhenFinished { get; set; }
             public bool EnablePortForwarding { get; set; }
 

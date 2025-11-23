@@ -9,10 +9,25 @@ using System.Text;
 
 namespace lain
 {
+    internal struct TorrentData
+    {
+        public bool UseMagnetLink { get; set; } //
+        public bool UseDht { get; set; }
+        public string MagnetUrl { get; set; } //
+        public string TorPath { get; set; }
+        public string DownPath { get; set; }
+        public int MaxConnections { get; set; }
+        public int MaxDownloadRate { get; set; }
+        public int MaxUploadRate { get; set; }
+        public int MaxSeeders { get; set; } //
+        public int MaxLeechers { get; set; } //
+    }
+
     internal class TorrentOperations
     {
+        
 
-         static ClientEngine engine = new ClientEngine(Settings.EngineSettings!.ToSettings());
+        static ClientEngine engine = new ClientEngine(Settings.EngineSettings!.ToSettings());
 
         // Event fired whenever progress updates
         public static event Action? UpdateProgress;
@@ -66,7 +81,6 @@ namespace lain
 
             var manager = await engine.AddAsync(torrent, outputPath);
 
-
             manager.TorrentStateChanged += (o, e) =>
             {
                 Log.Write($"State changed: {e.OldState} -> {e.NewState}");
@@ -114,28 +128,42 @@ namespace lain
 
 
 
-        internal static async Task AddTorrent(string downPath, string torPath)
+        internal static async Task AddTorrent(TorrentData settings)
         {
 
-           
+
+            var tSettings = new TorrentSettingsBuilder
+            {
+                MaximumConnections = settings.MaxConnections,
+                MaximumDownloadRate = settings.MaxDownloadRate,
+                MaximumUploadRate = settings.MaxUploadRate,
+                AllowDht = settings.UseDht,
+            }.ToSettings();
+
+            Torrent torrent = await Torrent.LoadAsync(settings.TorPath);
 
 
-            Torrent torrent = await Torrent.LoadAsync(torPath);
-
-
-            var manager = await engine.AddAsync(torrent, downPath);
+            var manager = await engine.AddAsync(torrent, settings.DownPath, tSettings);
 
             
 
             manager.TorrentStateChanged += (o, e) =>
             {
                 Log.Write($"State changed: {e.OldState} -> {e.NewState}");
+
+                if (e.NewState == TorrentState.Seeding && Settings.StopSeedingWhenFinished)
+                {
+                    manager.StopAsync();
+                }
+
             };
 
             manager.PieceHashed += (o, e) =>
             {
                 if (Settings.DetailedLogging) { Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}"); }
             };
+
+           
 
             Log.Write("Downloading...");
 

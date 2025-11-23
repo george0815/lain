@@ -74,8 +74,15 @@ public class TorrentListView : FrameView
                 string name = m.Torrent?.Name ?? "Unknown";
                 string state = m.State.ToString();
                 string progress = $"{m.Progress:0.0}%";
+                string peers = m.OpenConnections.ToString() ?? "0";
+                string leechers = m.Peers.Leechs.ToString() ?? "0";
+                string seeders = m.Peers.Seeds.ToString() ?? "0";
+                string downloadRate = $"{m.Monitor.DownloadRate / 1024:0.0}kB/s";
+                string uploadRate = $"{m.Monitor.UploadRate / 1024:0.0}kB/s";
+             
 
-                _tableData.Rows.Add(name, state, progress);
+
+                _tableData.Rows.Add(name, state, progress, peers, leechers, seeders, downloadRate, uploadRate);
             }
 
             _table.Update();
