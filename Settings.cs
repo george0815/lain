@@ -44,11 +44,7 @@ internal static class Settings
 {
     internal static SettingsData Current { get; private set; } = new();
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true,
-        //Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
-    };
+    private static readonly JsonSerializerOptions JsonOptions = new(){ WriteIndented = true,};
 
     internal static EngineSettingsBuilder BuildEngineSettings()
     {
@@ -87,18 +83,19 @@ internal static class Settings
     {
         try
         {
-            if (!File.Exists(Current.SettingsPath))
-                return;
+            if (!File.Exists(Current.SettingsPath)) { Settings.Save(); return; }
 
             string json = File.ReadAllText(Current.SettingsPath);
             var loaded = JsonSerializer.Deserialize<SettingsData>(json, JsonOptions);
 
-            if (loaded != null)
-                Current = loaded;
+            if (loaded != null){ Current = loaded;}
+            else { Settings.Save();}
+            
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading settings: {ex.Message}");
+            Settings.Save();
         }
     }
 

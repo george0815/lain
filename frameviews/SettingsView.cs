@@ -220,35 +220,112 @@ namespace lain.frameviews
 
             saveBtn.Clicked += () =>
             {
-                // Numeric fields
-                if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.Current.Port = port;
-                if (ushort.TryParse(portField.Text.ToString(), out var dhtPort)) Settings.Current.DhtPort = dhtPort;
-                if (ushort.TryParse(maxConnField.Text.ToString(), out var maxConn)) Settings.Current.MaxConnections = maxConn;
-                if (int.TryParse(maxDlField.Text.ToString(), out var maxDl)) Settings.Current.MaxDownloadSpeed = maxDl;
-                if (int.TryParse(maxUpField.Text.ToString(), out var maxUp)) Settings.Current.MaxUploadSpeed = maxUp;
+                try
+                {
+                    // Parse ports
+                    if (!ushort.TryParse(portField.Text.ToString(), out var port))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid port number.", "OK");
+                        return;
+                    }
 
-                // Boolean fields
-                Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
-                Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
-                Settings.Current.DetailedLogging = detailedLogging.Checked;
+                    if (!ushort.TryParse(dhtPortField.Text.ToString(), out var dhtPort))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid DHT port number.", "OK");
+                        return;
+                    }
+
+                    // Parse limits
+                    if (!ushort.TryParse(maxConnField.Text.ToString(), out var maxConn))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid max connections.", "OK");
+                        return;
+                    }
+
+                    if (!int.TryParse(maxDlField.Text.ToString(), out var maxDl))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid max download speed.", "OK");
+                        return;
+                    }
+
+                    if (!int.TryParse(maxUpField.Text.ToString(), out var maxUp))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid max upload speed.", "OK");
+                        return;
+                    }
+
+                    // Paths
+                    string downloadPath = downloadPathField.Text.ToString()!.Trim();
+                    string logPath = logPathField.Text.ToString()!.Trim()!;
+                    string settingsPath = settingsPathField.Text.ToString()!.Trim();
+
+                    if (string.IsNullOrWhiteSpace(downloadPath))
+                    {
+                        MessageBox.ErrorQuery("Error", "Download path cannot be empty.", "OK");
+                        return;
+                    }
+
+                    if (!Directory.Exists(downloadPath))
+                    {
+                        if (MessageBox.Query("Missing Directory",
+                            "Download path does not exist. Create it?",
+                            "Yes", "No") == 0)
+                        {
+                            Directory.CreateDirectory(downloadPath);
+                        }
+                        else return;
+                    }
 
 
-                // String paths
-                Settings.Current.DefaultDownloadPath = downloadPathField.Text.ToString();
-                Settings.Current.LogPath = logPathField.Text.ToString();
-                Settings.Current.SettingsPath = settingsPathField.Text.ToString()!;
+                    if (string.IsNullOrWhiteSpace(logPath))
+                    {
+                        MessageBox.ErrorQuery("Error", "Log path cannot be empty.", "OK");
+                        return;
+                    }
 
-                //Colors
-                Settings.Current.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
-                Settings.Current.TextColor = colors[textColorCombo.Text.ToString()!];
-                Settings.Current.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
-                Settings.Current.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
-                Settings.Current.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
+                    
 
-                Settings.Save();
+                    if (string.IsNullOrWhiteSpace(settingsPath))
+                    {
+                        MessageBox.ErrorQuery("Error", "Settings path cannot be empty.", "OK");
+                        return;
+                    }
 
-                MessageBox.Query("Settings", "Settings saved.", "OK");
+                   
+
+
+
+                    // Apply settings
+                    Settings.Current.Port = port;
+                    Settings.Current.DhtPort = dhtPort;
+                    Settings.Current.MaxConnections = maxConn;
+                    Settings.Current.MaxDownloadSpeed = maxDl;
+                    Settings.Current.MaxUploadSpeed = maxUp;
+
+                    Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
+                    Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
+                    Settings.Current.DetailedLogging = detailedLogging.Checked;
+
+                    Settings.Current.DefaultDownloadPath = downloadPath;
+                    Settings.Current.LogPath = logPath;
+                    Settings.Current.SettingsPath = settingsPath;
+
+                    Settings.Current.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
+                    Settings.Current.TextColor = colors[textColorCombo.Text.ToString()!];
+                    Settings.Current.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
+                    Settings.Current.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
+                    Settings.Current.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
+
+                    Settings.Save();
+
+                    MessageBox.Query("Settings", "Settings saved successfully.", "OK");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.ErrorQuery("Fatal Error", ex.Message, "OK");
+                }
             };
+
         }
     }
 }

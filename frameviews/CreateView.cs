@@ -1,6 +1,7 @@
 ﻿using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
@@ -16,7 +17,6 @@ namespace lain.frameviews
             Width = Dim.Fill();
             Height = Dim.Fill();
 
-            //Scroll view           
             var scroll = new ScrollView()
             {
                 X = 0,
@@ -24,23 +24,19 @@ namespace lain.frameviews
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
                 ShowVerticalScrollIndicator = true,
-                ShowHorizontalScrollIndicator = false
             };
 
             Add(scroll);
 
-            int y = 1; 
-
+            int y = 1;
 
             #region PATHS
 
-            //Folder/file path
             scroll.Add(new Label("File/Folder:") { X = 1, Y = y });
             var folderPath = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(folderPath);
             y += 2;
 
-            //Output path
             scroll.Add(new Label("Output path:") { X = 1, Y = y });
             var outputPath = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(outputPath);
@@ -48,10 +44,8 @@ namespace lain.frameviews
 
             #endregion
 
+            #region TRACKERS
 
-            #region MISC OPTIONS
-
-            //Trackers
             scroll.Add(new Label("Trackers:") { X = 1, Y = y });
             var trackerLink = new TextView()
             {
@@ -63,9 +57,10 @@ namespace lain.frameviews
             scroll.Add(trackerLink);
             y += 6;
 
+            #endregion
 
+            #region PIECE SIZE
 
-            //Piece size
             scroll.Add(new Label("Piece Size:") { X = 1, Y = y });
 
             var pieceSizes = new Dictionary<string, int>
@@ -84,7 +79,7 @@ namespace lain.frameviews
             {
                 X = 20,
                 Y = y,
-                Width = 14,
+                Width = 20,
                 ReadOnly = true,
                 Height = pieceSizes.Count
             };
@@ -95,10 +90,8 @@ namespace lain.frameviews
 
             #endregion
 
-
             #region CHECKBOXES
 
-            //Checkboxes
             var startSeedingAfterCreationCheckbox = new CheckBox("Start seeding after creation")
             {
                 X = 1,
@@ -119,22 +112,18 @@ namespace lain.frameviews
 
             #endregion
 
-
             #region METADATA
 
-            //Name
             scroll.Add(new Label("Name:") { X = 1, Y = y });
             var name = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(name);
             y += 2;
 
-            //Publisher
             scroll.Add(new Label("Publisher:") { X = 1, Y = y });
             var publisher = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(publisher);
             y += 2;
 
-            //Comment
             scroll.Add(new Label("Comment:") { X = 1, Y = y });
             var comment = new TextView()
             {
@@ -144,39 +133,97 @@ namespace lain.frameviews
                 Height = 5
             };
             scroll.Add(comment);
-            y += 2;
-
+            y += 6;
 
             #endregion
 
-
-
-
-            //Create button
             var createTorBtn = new Button("Create") { X = 1, Y = y };
             scroll.Add(createTorBtn);
             y += 2;
 
-
-
-            //Scroll content size
             scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
 
-
-
-            //Create button action
+            //On click
             createTorBtn.Clicked += async () =>
             {
-                _ = Task.Run(async () =>
-                {
-                    await TorrentOperations.CreateTorrent(
-                        folderPath.Text.ToString()!,
-                        Settings.Current.DefaultDownloadPath!,
-                        trackerLink.Text.ToString()!
-                    );
-                });
+                #region VALIDATION
 
-                MessageBox.Query("Create", "Torrent created.", "OK");
+                //start validation
+                string inputPath = folderPath.Text.ToString()!.Trim();
+                string outPath = outputPath.Text.ToString()!.Trim();
+                string trackers = trackerLink.Text.ToString()!.Trim();
+                string torName = name.Text.ToString()!.Trim();
+
+                // Check file/folder exists
+                if (string.IsNullOrWhiteSpace(inputPath) ||
+                    (!File.Exists(inputPath) && !Directory.Exists(inputPath)))
+                {
+                    MessageBox.ErrorQuery("Error", "Invalid file/folder path.", "OK");
+                    return;
+                }
+
+                // Check output directory
+                if (string.IsNullOrWhiteSpace(outPath) || !Directory.Exists(outPath))
+                {
+                    MessageBox.ErrorQuery("Error", "Output path does not exist.", "OK");
+                    return;
+                }
+
+                // Check name
+                if (string.IsNullOrWhiteSpace(torName))
+                {
+                    MessageBox.ErrorQuery("Error", "Name cannot be empty.", "OK");
+                    return;
+                }
+
+                // Validate trackers (optional)
+                List<string> trackerList = new();
+                if (!string.IsNullOrWhiteSpace(trackers))
+                {
+                    foreach (var line in trackers.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string trimmed = line.Trim();
+                        if (Uri.IsWellFormedUriString(trimmed, UriKind.Absolute))
+                            trackerList.Add(trimmed);
+                        else
+                        {
+                            MessageBox.ErrorQuery("Error", $"Invalid tracker URL:\n{trimmed}", "OK");
+                            return;
+                        }
+                    }
+                }
+
+                int selectedPieceSize = pieceSizes[new List<string>(pieceSizes.Keys)[pieceSizeCombo.SelectedItem]];
+
+                #endregion
+
+                //Create
+                try
+                {
+                    await Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await TorrentOperations.CreateTorrent(
+                                inputPath,
+                                outPath,
+                                trackers
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            Application.MainLoop.Invoke(() =>
+                                MessageBox.ErrorQuery("Error", $"Torrent creation failed:\n{ex.Message}", "OK")
+                            );
+                        }
+                    });
+
+                    MessageBox.Query("Success", "Torrent created successfully!", "OK");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.ErrorQuery("Error", $"Unexpected error:\n{ex.Message}", "OK");
+                }
             };
         }
     }
