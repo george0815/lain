@@ -68,6 +68,8 @@ internal static class Settings
         };
     }
 
+    #region SAVE/LOAD
+
     internal static void Save()
     {
         try
@@ -99,4 +101,7 @@ internal static class Settings
             Console.WriteLine($"Error loading settings: {ex.Message}");
         }
     }
+
+    #endregion
+
 }

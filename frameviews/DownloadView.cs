@@ -30,6 +30,9 @@ namespace lain.frameviews
 
             int y = 1;
 
+
+            #region URLS AND PATHS
+
             // Magnet URL
             scroll.Add(new Label("Magnet URL:") { X = 1, Y = y });
             var magnetInput = new TextField("") { X = 20, Y = y, Width = 40 };
@@ -57,7 +60,9 @@ namespace lain.frameviews
             scroll.Add(downloadPathInput);
             y += 2;
 
-            
+            #endregion
+
+            #region LIMITS
 
             // Max Connections
             scroll.Add(new Label("Max connections:") { X = 1, Y = y });
@@ -92,7 +97,8 @@ namespace lain.frameviews
             scroll.Add(maxUpField);
             y += 2;
 
-            
+            #endregion
+
 
             // DHT checkbox
             var dhtCheckbox = new CheckBox("Enable DHT")
@@ -112,9 +118,7 @@ namespace lain.frameviews
             // Set scroll content size AFTER layout
             scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
 
-            //
-            // DOWNLOAD BUTTON EVENT
-            //
+            // Download button action
             downloadBtn.Clicked += async () =>
             {
                 TorrentData settings = new TorrentData

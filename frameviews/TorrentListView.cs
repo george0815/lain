@@ -24,9 +24,9 @@ public class TorrentListView : FrameView
         // Define the table's schema
         _tableData = new DataTable();
 
-        
 
 
+        // Define columns
         _tableData.Columns.Add("Name", typeof(string));
         _tableData.Columns.Add("State", typeof(string));
         _tableData.Columns.Add("Progress", typeof(string));
@@ -50,21 +50,16 @@ public class TorrentListView : FrameView
         Add(_table);
 
 
-        /* for testing
-        for (int i = 0; i <= 10; i++)
-        {
-            _tableData.Rows.Add(432423, 4324, 432423);
-        }
-        */
-
-        
-
         // Subscribe to log updates
         TorrentOperations.UpdateProgress += Refresh;
     }
 
+
+    // Method to refresh the torrent list display
     public void Refresh()
     {
+
+        //clear existing rows and repopulate
         Application.MainLoop.Invoke(() =>
         {
             _tableData.Clear();

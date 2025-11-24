@@ -4,6 +4,8 @@ using System.Text;
 
 namespace lain
 {
+
+    //Static helper class for storing constants and utility functions, in addtion to ASCII art icons
     internal static class Helper
     {
 

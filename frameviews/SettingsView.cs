@@ -7,6 +7,7 @@ namespace lain.frameviews
     internal class SettingsView : FrameView
     {
 
+        //Color options
         Dictionary<string, Terminal.Gui.Color> colors = new Dictionary<string, Terminal.Gui.Color>
         {
             { "Black", Terminal.Gui.Color.Black },
@@ -51,36 +52,41 @@ namespace lain.frameviews
 
             int y = 1; // starting Y position inside scroll view
 
+            #region PORTS AND LIMITS
+
             // Port
             scroll.Add(new Label("Port:") { X = 1, Y = y });
-            var portField = new TextField(Settings.Current.Port.ToString()) { X = 30, Y = y, Width = 10 };
+            var portField = new TextField(Settings.Current.Port.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
-            // Port
+            //DHT port
             scroll.Add(new Label("DHT port:") { X = 1, Y = y });
-            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
+            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(dhtPortField);
             y += 2;
 
             // Max Connections
             scroll.Add(new Label("Max total connections:") { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
             // Max Download Speed
             scroll.Add(new Label("Max total download speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
             scroll.Add(new Label("Max total upload speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
+            #endregion
+
+            #region BOOLEAN OPTIONS
 
             var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.Current.StopSeedingWhenFinished };
             scroll.Add(stopSeedCheckbox);
@@ -93,6 +99,10 @@ namespace lain.frameviews
             var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.Current.EnablePortForwarding };
             scroll.Add(portFwdCheckbox);
             y += 2;
+
+            #endregion
+
+            #region PATHS
 
             // Paths
             scroll.Add(new Label("Default Download Path:") { X = 1, Y = y });
@@ -110,7 +120,9 @@ namespace lain.frameviews
             scroll.Add(settingsPathField);
             y += 3;
 
-            
+            #endregion
+
+            #region COLOR SETTINGS
 
             // Background Color
             scroll.Add(new Label("Background color:") { X = 1, Y = y });
@@ -196,6 +208,8 @@ namespace lain.frameviews
             y += 2;
 
 
+            #endregion
+
             // Save button
             var saveBtn = new Button("Save") { X = 1, Y = y };
             scroll.Add(saveBtn);
@@ -222,7 +236,7 @@ namespace lain.frameviews
                 // String paths
                 Settings.Current.DefaultDownloadPath = downloadPathField.Text.ToString();
                 Settings.Current.LogPath = logPathField.Text.ToString();
-                Settings.Current.SettingsPath = settingsPathField.Text.ToString();
+                Settings.Current.SettingsPath = settingsPathField.Text.ToString()!;
 
                 //Colors
                 Settings.Current.BackgroundColor = colors[bgColorCombo.Text.ToString()!];

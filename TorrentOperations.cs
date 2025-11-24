@@ -27,6 +27,8 @@ namespace lain
     //CRUD operations
     internal class TorrentOperations
     {
+        #region DECLARATIONS
+
         // Shared engine instance (rebuilt on startup using settings)
         private static readonly ClientEngine Engine =
             new ClientEngine(Settings.BuildEngineSettings().ToSettings());
@@ -37,8 +39,9 @@ namespace lain
         //list of all torrents
         internal static List<TorrentManager> Managers { get; } = new();
 
-
         internal TorrentOperations() { }
+
+        #endregion
 
         #region ADD/CREATE
 

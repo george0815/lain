@@ -1,6 +1,7 @@
 ﻿using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Terminal.Gui;
 
 namespace lain.frameviews
@@ -15,7 +16,7 @@ namespace lain.frameviews
             Width = Dim.Fill();
             Height = Dim.Fill();
 
-            // Scrollable container
+            //Scroll view           
             var scroll = new ScrollView()
             {
                 X = 0,
@@ -23,18 +24,50 @@ namespace lain.frameviews
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
                 ShowVerticalScrollIndicator = true,
-                ShowHorizontalScrollIndicator = false,
-                ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 20, 30) // adjust height based on number of controls
+                ShowHorizontalScrollIndicator = false
             };
 
-            // --- Controls ---
-            var folderLabel = new Label("File/Folder:") { X = 1, Y = 1 };
-            var folderPath = new TextField("") { X = 14, Y = 1, Width = 40 };
+            Add(scroll);
 
-            var trackersLabel = new Label("Trackers:") { X = 1, Y = 3 };
-            var trackerLink = new TextView() { X = 14, Y = 3, Width = 40, Height = 5 };
+            int y = 1; 
 
-            var pieceSizeLabel = new Label("Piece Size:") { X = 1, Y = 9 };
+
+            #region PATHS
+
+            //Folder/file path
+            scroll.Add(new Label("File/Folder:") { X = 1, Y = y });
+            var folderPath = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(folderPath);
+            y += 2;
+
+            //Output path
+            scroll.Add(new Label("Output path:") { X = 1, Y = y });
+            var outputPath = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(outputPath);
+            y += 2;
+
+            #endregion
+
+
+            #region MISC OPTIONS
+
+            //Trackers
+            scroll.Add(new Label("Trackers:") { X = 1, Y = y });
+            var trackerLink = new TextView()
+            {
+                X = 20,
+                Y = y,
+                Width = 40,
+                Height = 5
+            };
+            scroll.Add(trackerLink);
+            y += 6;
+
+
+
+            //Piece size
+            scroll.Add(new Label("Piece Size:") { X = 1, Y = y });
+
             var pieceSizes = new Dictionary<string, int>
             {
                 { "16 KB", 16 * 1024 },
@@ -46,50 +79,92 @@ namespace lain.frameviews
                 { "1 MB", 1024 * 1024 },
                 { "2 MB", 2 * 1024 * 1024 }
             };
+
             var pieceSizeCombo = new ComboBox()
             {
-                X = 14,
-                Y = 9,
-                Width = 12,
+                X = 20,
+                Y = y,
+                Width = 14,
                 ReadOnly = true,
-                Height = 9
+                Height = pieceSizes.Count
             };
             pieceSizeCombo.SetSource(new List<string>(pieceSizes.Keys));
             pieceSizeCombo.SelectedItem = 0;
+            scroll.Add(pieceSizeCombo);
+            y += 2;
 
-            var startSeedingAfterCreationCheckbox = new CheckBox("Start seeding after creation") { X = 1, Y = 11, Checked = true };
-            var privateTorrentCheckbox = new CheckBox("Private") { X = 1, Y = 13, Checked = false };
+            #endregion
 
-            var nameLabel = new Label("Name:") { X = 1, Y = 15 };
-            var name = new TextField("") { X = 14, Y = 15, Width = 40 };
 
-            var publisherLabel = new Label("Publisher:") { X = 1, Y = 17 };
-            var publisher = new TextField("") { X = 14, Y = 17, Width = 40 };
+            #region CHECKBOXES
 
-            var commentLabel = new Label("Comment:") { X = 1, Y = 19 };
-            var comment = new TextView() { X = 14, Y = 19, Width = 40, Height = 5 };
+            //Checkboxes
+            var startSeedingAfterCreationCheckbox = new CheckBox("Start seeding after creation")
+            {
+                X = 1,
+                Y = y,
+                Checked = true
+            };
+            scroll.Add(startSeedingAfterCreationCheckbox);
+            y += 2;
 
-            var outputPathLabel = new Label("Output path:") { X = 1, Y = 25 };
-            var outputPath = new TextField("") { X = 14, Y = 25, Width = 40 };
+            var privateTorrentCheckbox = new CheckBox("Private")
+            {
+                X = 1,
+                Y = y,
+                Checked = false
+            };
+            scroll.Add(privateTorrentCheckbox);
+            y += 2;
 
-            var createTorBtn = new Button("Create") { X = 1, Y = 27 };
+            #endregion
 
-            // Add controls to scroll view
-            scroll.Add(
-                folderLabel, folderPath,
-                trackersLabel, trackerLink,
-                pieceSizeLabel, pieceSizeCombo,
-                startSeedingAfterCreationCheckbox, privateTorrentCheckbox,
-                nameLabel, name,
-                publisherLabel, publisher,
-                commentLabel, comment,
-                createTorBtn, outputPath, outputPathLabel
-            );
 
-            // Add scroll view to FrameView
-            Add(scroll);
+            #region METADATA
 
-            // --- Event handler ---
+            //Name
+            scroll.Add(new Label("Name:") { X = 1, Y = y });
+            var name = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(name);
+            y += 2;
+
+            //Publisher
+            scroll.Add(new Label("Publisher:") { X = 1, Y = y });
+            var publisher = new TextField("") { X = 20, Y = y, Width = 40 };
+            scroll.Add(publisher);
+            y += 2;
+
+            //Comment
+            scroll.Add(new Label("Comment:") { X = 1, Y = y });
+            var comment = new TextView()
+            {
+                X = 20,
+                Y = y,
+                Width = 40,
+                Height = 5
+            };
+            scroll.Add(comment);
+            y += 2;
+
+
+            #endregion
+
+
+
+
+            //Create button
+            var createTorBtn = new Button("Create") { X = 1, Y = y };
+            scroll.Add(createTorBtn);
+            y += 2;
+
+
+
+            //Scroll content size
+            scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
+
+
+
+            //Create button action
             createTorBtn.Clicked += async () =>
             {
                 _ = Task.Run(async () =>

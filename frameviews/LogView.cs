@@ -28,6 +28,7 @@ internal class LogView : FrameView
         Log.OnLogAdded += RefreshLog;
     }
 
+    // Method to refresh the log display
     internal void RefreshLog()
     {
         Application.MainLoop.Invoke(() =>

@@ -16,7 +16,6 @@ namespace lain
     class Program
     {
 
-        
 
         public static async Task Main(string[] args)
         {
@@ -48,14 +47,8 @@ namespace lain
             // Run the app
             Application.Run();
 
-              
-
-
 
         }
-
-
-
 
 
     }

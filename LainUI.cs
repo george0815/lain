@@ -26,9 +26,10 @@ namespace lain
 
         public LainUI()
         {
-            
 
-            // --- HEADER -------------------------------------------------------
+            #region HEADER
+
+            //Header
             var header = new FrameView()
             {
                 X = 0,
@@ -61,6 +62,9 @@ namespace lain
             logoFrame.Add(logo);
             header.Add(logoFrame);
 
+
+            #region EXTRA HEADER INFO
+
             // Date
             var date = new Label()
             {
@@ -77,10 +81,18 @@ namespace lain
                 Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
 
+            #endregion
+
+
+
             header.Add(date, torrentCount);
             Add(header);
 
-            // --- SIDEBAR CONTAINER ---
+            #endregion
+
+            #region SIDEBAR AND MENU
+
+            //Sidebar
             var sidebar = new FrameView()
             {
                 X = 0,
@@ -90,7 +102,7 @@ namespace lain
                 Border = new Border() { BorderStyle = BorderStyle.Rounded }
             };
 
-            // --- MENU (inside sidebar) ---
+            //Menu
             var menu = new ListView(new string[]
             {
                 "Torrents",
@@ -114,7 +126,11 @@ namespace lain
 
             sidebar.Add(menu);
 
-            // --- EXIT BUTTON (inside sidebar, below menu) ---
+            #endregion
+
+
+
+            //Exit
             var exitButton = new Button("Exit")
             {
                 X = 1,
@@ -130,7 +146,7 @@ namespace lain
             Add(sidebar);
 
 
-            // --- CONTENT PANELS ----------------------------------------------
+            //Content
             torrentListView = new TorrentListView(TorrentOperations.Managers);
             downloadView = new DownloadView();
             createView = new CreateView();
@@ -143,6 +159,9 @@ namespace lain
         }
 
 
+        #region HELPER METHODS
+
+        // Shows exit confirmation dialog
         private void ShowExitDialog()
         {
             var dialog = new Dialog("Exit?", 50, 10);
@@ -209,11 +228,13 @@ namespace lain
             SetNeedsDisplay();
         }
 
+        #endregion
 
-        
 
-       
-       
+
+
+
+
     }
 
 
