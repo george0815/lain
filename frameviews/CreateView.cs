@@ -11,7 +11,7 @@ namespace lain.frameviews
             : base("Create")
         {
             X = 20;
-            Y = Settings.HeaderHeight;
+            Y = SettingsData.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
 
@@ -96,7 +96,7 @@ namespace lain.frameviews
                 {
                     await TorrentOperations.CreateTorrent(
                         folderPath.Text.ToString()!,
-                        Settings.DefaultDownloadPath!,
+                        Settings.Current.DefaultDownloadPath!,
                         trackerLink.Text.ToString()!
                     );
                 });

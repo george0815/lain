@@ -1,190 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using MonoTorrent.Client;
 using System.Net;
 using System.Text.Json;
-using MonoTorrent.Client;
+using System.Text.Json.Serialization;
 
-namespace lain
+namespace lain;
+
+
+internal class SettingsData
 {
-    internal class Settings
+
+    //Variables for UI
+    public static ushort HeaderHeight { get; set; } = 15;
+    public static ushort LogoWidth { get; set; } = 55;
+
+    // Ports
+    public ushort Port { get; set; } = 55123;
+    public ushort DhtPort { get; set; } = 55124;
+
+    // Max connections / rates
+    public ushort MaxConnections { get; set; } = 100;
+    public int MaxDownloadSpeed { get; set; } = 1000;
+    public int MaxUploadSpeed { get; set; } = 1000;
+
+    // Client settings
+    public bool DetailedLogging { get; set; } = true;
+    public bool StopSeedingWhenFinished { get; set; } = true;
+    public bool EnablePortForwarding { get; set; } = true;
+    public string? DefaultDownloadPath { get; set; } = "";
+    public string? LogPath { get; set; } = "";
+    public string SettingsPath { get; set; } = "cfg.json";
+
+    // Colors
+    public Terminal.Gui.Color BackgroundColor { get; set; } = Terminal.Gui.Color.Black;
+    public Terminal.Gui.Color TextColor { get; set; } = Terminal.Gui.Color.White;
+    public Terminal.Gui.Color FocusBackgroundColor { get; set; } = Terminal.Gui.Color.White;
+    public Terminal.Gui.Color FocusTextColor { get; set; } = Terminal.Gui.Color.Black;
+    public Terminal.Gui.Color HotTextColor { get; set; } = Terminal.Gui.Color.BrightYellow;
+}
+
+
+
+internal static class Settings
+{
+    internal static SettingsData Current { get; private set; } = new();
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
-        #region PROPERTIES
+        WriteIndented = true,
+        //Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
+    };
 
-        //Variables for UI
-        internal static ushort HeaderHeight { get; set; } = 15;
-        internal static ushort LogoWidth { get; set; } = 55;
+    internal static EngineSettingsBuilder BuildEngineSettings()
+    {
+        var s = Current;
 
-        //Ports
-        internal static ushort Port { get; set; } = 55123;
-        internal static ushort DhtPort { get; set; } = 55124;
-
-        //Max connections/speed
-        internal static ushort MaxConnections { get; set; } = 100;
-        internal static int MaxDownloadSpeed { get; set; } = 1000;
-        internal static int MaxUploadSpeed { get; set; } = 1000;
-
-        //Client settings
-        internal static bool DetailedLogging { get; set; } = false;
-        internal static bool StopSeedingWhenFinished { get; set; } = true;
-        internal static bool EnablePortForwarding { get; set; } = true;
-        internal static string? DefaultDownloadPath { get; set; } = "";
-        internal static string? LogPath { get; set; } = "";
-        internal static string? SettingsPath { get; set; } = "cfg.json";
-
-        //Colors
-        internal static Terminal.Gui.Color BackgroundColor { get; set; } = Terminal.Gui.Color.Black;
-        internal static Terminal.Gui.Color TextColor { get; set; } = Terminal.Gui.Color.White;
-        internal static Terminal.Gui.Color FocusBackgroundColor { get; set; } = Terminal.Gui.Color.White;
-        internal static Terminal.Gui.Color FocusTextColor { get; set; } = Terminal.Gui.Color.Black;
-        internal static Terminal.Gui.Color HotTextColor { get; set; } = Terminal.Gui.Color.BrightYellow;
-
-
-        //Client engine settings
-        internal static EngineSettingsBuilder? EngineSettings { get; set; } = new EngineSettingsBuilder
+        return new EngineSettingsBuilder
         {
-            AllowPortForwarding = EnablePortForwarding,
-            ListenEndPoints = new Dictionary<string, IPEndPoint> { { "main", new IPEndPoint(System.Net.IPAddress.Any, Port) } },
-            DhtEndPoint = new IPEndPoint(System.Net.IPAddress.Any, DhtPort),
-            MaximumConnections = Settings.MaxConnections,
-            MaximumDownloadRate = Settings.MaxDownloadSpeed * 1024,
-            MaximumUploadRate = Settings.MaxUploadSpeed * 1024,
-
+            AllowPortForwarding = s.EnablePortForwarding,
+            ListenEndPoints = new()
+            {
+                { "main", new IPEndPoint(IPAddress.Any, s.Port) }
+            },
+            DhtEndPoint = new IPEndPoint(IPAddress.Any, s.DhtPort),
+            MaximumConnections = s.MaxConnections,
+            MaximumDownloadRate = s.MaxDownloadSpeed * 1024,
+            MaximumUploadRate = s.MaxUploadSpeed * 1024,
         };
+    }
 
-        #endregion
-
-
-        #region SERIALIZE/DESERIALIZE
-
-        /// <summary>
-        /// Save all static properties to JSON.
-        /// </summary>
-        internal static void SaveSettings()
+    internal static void Save()
+    {
+        try
         {
-            try
-            {
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-
-                // Serialize only the user-configurable properties
-                var settingsData = new
-                {
-                    Port,
-                    DhtPort,
-                    MaxConnections,
-                    MaxDownloadSpeed,
-                    MaxUploadSpeed,
-                    StopSeedingWhenFinished,
-                    EnablePortForwarding,
-                    DetailedLogging,
-                    BackgroundColor,
-                    TextColor,
-                    FocusBackgroundColor,
-                    HotTextColor,
-                    FocusTextColor,
-                    DefaultDownloadPath,
-                    LogPath,
-                    SettingsPath,
-
-                };
-
-                string json = JsonSerializer.Serialize(settingsData, jsonOptions);
-                File.WriteAllText(SettingsPath ?? "cfg.json", json);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving settings: {ex.Message}");
-            }
+            var json = JsonSerializer.Serialize(Current, JsonOptions);
+            File.WriteAllText(Current.SettingsPath ?? "cfg.json", json);
         }
-
-        /// <summary>
-        /// Load all static properties from JSON.
-        /// </summary>
-        internal static void LoadSettings()
+        catch (Exception ex)
         {
-            try
-            {
-                if (!File.Exists(SettingsPath ?? "cfg.json")) { return; }
-
-                string json = File.ReadAllText(SettingsPath ?? "cfg.json");
-
-                // Deserialize into a temporary object
-                var settingsData = JsonSerializer.Deserialize<SettingsDTO>(json);
-                if (settingsData == null) { return; }
-
-                //Ports
-                Port = settingsData.Port;
-                DhtPort = settingsData.DhtPort;
-                //Max connections/rates
-                MaxConnections = settingsData.MaxConnections;
-                MaxDownloadSpeed = settingsData.MaxDownloadSpeed;
-                MaxUploadSpeed = settingsData.MaxUploadSpeed;
-                //Client settings
-                StopSeedingWhenFinished = settingsData.StopSeedingWhenFinished;
-                EnablePortForwarding = settingsData.EnablePortForwarding;
-                DetailedLogging = settingsData.DetailedLogging;
-                DefaultDownloadPath = settingsData.DefaultDownloadPath;
-                LogPath = settingsData.LogPath;
-                SettingsPath = settingsData.SettingsPath;
-                //Colors
-                BackgroundColor = settingsData.BackgroundColor;
-                TextColor = settingsData.TextColor;
-                FocusBackgroundColor = settingsData.FocusBackgroundColor;
-                FocusTextColor = settingsData.FocusTextColor;
-                HotTextColor = settingsData.HotTextColor;
-
-                // Rebuild EngineSettings
-                EngineSettings = new EngineSettingsBuilder
-                {
-                    AllowPortForwarding = EnablePortForwarding,
-                    ListenEndPoints = new Dictionary<string, IPEndPoint> { { "main", new IPEndPoint(IPAddress.Any, Port) } },
-                    DhtEndPoint = new IPEndPoint(IPAddress.Any, DhtPort),
-                    MaximumConnections = Settings.MaxConnections,
-                    MaximumDownloadRate = Settings.MaxDownloadSpeed * 1024,
-                    MaximumUploadRate = Settings.MaxUploadSpeed * 1024,
-                };
-            }
-            catch (Exception ex)
-            {
-                SaveSettings();
-                Console.WriteLine($"Error loading settings: {ex.Message}");
-            }
+            Console.WriteLine($"Error saving settings: {ex.Message}");
         }
+    }
 
-        // DTO class used only for JSON serialization
-        private class SettingsDTO
+    internal static void Load()
+    {
+        try
         {
+            if (!File.Exists(Current.SettingsPath))
+                return;
 
-            //Ports
-            public ushort Port { get; set; }
-            public ushort DhtPort { get; set; }
+            string json = File.ReadAllText(Current.SettingsPath);
+            var loaded = JsonSerializer.Deserialize<SettingsData>(json, JsonOptions);
 
-            //Max connections/rates
-            public ushort MaxConnections { get; set; }
-            public int MaxDownloadSpeed { get; set; }
-            public int MaxUploadSpeed { get; set; }
-
-
-            //Client settings
-            public bool StopSeedingWhenFinished { get; set; }
-            public bool EnablePortForwarding { get; set; }
-            public bool DetailedLogging { get; set; }
-            public string? DefaultDownloadPath { get; set; }
-            public string? LogPath { get; set; }
-            public string? SettingsPath { get; set; }
-
-            //Colors
-            public Terminal.Gui.Color BackgroundColor { get; set; }
-            public Terminal.Gui.Color TextColor { get; set; }
-            public Terminal.Gui.Color FocusBackgroundColor { get; set; }
-            public Terminal.Gui.Color FocusTextColor { get; set; }
-            public Terminal.Gui.Color HotTextColor { get; set; }
-
+            if (loaded != null)
+                Current = loaded;
         }
-
-        #endregion
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading settings: {ex.Message}");
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace lain
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height = Settings.HeaderHeight,
+                Height = SettingsData.HeaderHeight,
                 CanFocus = false,
                 Border = new Border() { BorderStyle = BorderStyle.None }
             };
@@ -44,8 +44,8 @@ namespace lain
             {
                 X = 0,
                 Y = 0,
-                Width = Settings.LogoWidth, // fixed width for logo
-                Height = Settings.HeaderHeight,
+                Width = SettingsData.LogoWidth, // fixed width for logo
+                Height = SettingsData.HeaderHeight,
                 Border = new Border() { BorderStyle = BorderStyle.Single }
             };
 
@@ -64,7 +64,7 @@ namespace lain
             // Date
             var date = new Label()
             {
-                X = Settings.LogoWidth + 2,
+                X = SettingsData.LogoWidth + 2,
                 Y = 1,
                 Text = DateTime.Now.ToString("yyyy-MM-dd")
             };
@@ -74,7 +74,7 @@ namespace lain
             {
                 X = Pos.Right(date) + 5,
                 Y = 1,
-                Text = $"Active Torrents: {TorrentOperations.managers!.Count}"
+                Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
 
             header.Add(date, torrentCount);
@@ -84,7 +84,7 @@ namespace lain
             var sidebar = new FrameView()
             {
                 X = 0,
-                Y = Settings.HeaderHeight,
+                Y = SettingsData.HeaderHeight,
                 Width = 20,
                 Height = Dim.Fill(),
                 Border = new Border() { BorderStyle = BorderStyle.Rounded }
@@ -131,7 +131,7 @@ namespace lain
 
 
             // --- CONTENT PANELS ----------------------------------------------
-            torrentListView = new TorrentListView(TorrentOperations.managers);
+            torrentListView = new TorrentListView(TorrentOperations.Managers);
             downloadView = new DownloadView();
             createView = new CreateView();
             settingsView = new SettingsView();

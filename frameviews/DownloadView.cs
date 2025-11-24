@@ -10,7 +10,7 @@ namespace lain.frameviews
             : base("Download")
         {
             X = 20;
-            Y = Settings.HeaderHeight;
+            Y = SettingsData.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
 
@@ -53,7 +53,7 @@ namespace lain.frameviews
 
             // Download path
             scroll.Add(new Label("Download path:") { X = 1, Y = y });
-            var downloadPathInput = new TextField(Settings.DefaultDownloadPath) { X = 20, Y = y, Width = 40 };
+            var downloadPathInput = new TextField(Settings.Current.DefaultDownloadPath) { X = 20, Y = y, Width = 40 };
             scroll.Add(downloadPathInput);
             y += 2;
 
@@ -61,7 +61,7 @@ namespace lain.frameviews
 
             // Max Connections
             scroll.Add(new Label("Max connections:") { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.MaxConnections.ToString())
+            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString())
             {
                 X = 30,
                 Y = y,
@@ -72,7 +72,7 @@ namespace lain.frameviews
 
             // Max Download Speed
             scroll.Add(new Label("Max download speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString())
+            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString())
             {
                 X = 30,
                 Y = y,
@@ -83,7 +83,7 @@ namespace lain.frameviews
 
             // Max Upload Speed
             scroll.Add(new Label("Max upload speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString())
+            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString())
             {
                 X = 30,
                 Y = y,
@@ -123,10 +123,9 @@ namespace lain.frameviews
                     MagnetUrl = magnetInput.Text.ToString()!,
                     TorPath = fileInput.Text.ToString()!,
                     DownPath = downloadPathInput.Text.ToString()!,
-                    MaxConnections = int.TryParse(maxConnField.Text.ToString(), out int mc)  ? mc : Settings.MaxConnections,
-                    MaxDownloadRate = int.TryParse(maxDlField.Text.ToString(), out int mds) ? mds * 1024 : Settings.MaxDownloadSpeed,
-                    MaxUploadRate = int.TryParse(maxUpField.Text.ToString(), out int mus) ? mus * 1024 : Settings.MaxUploadSpeed,
-              
+                    MaxConnections = int.TryParse(maxConnField.Text.ToString(), out int mc)  ? mc : Settings.Current.MaxConnections,
+                    MaxDownloadRate = int.TryParse(maxDlField.Text.ToString(), out int mds) ? mds * 1024 : Settings.Current.MaxDownloadSpeed,
+                    MaxUploadRate = int.TryParse(maxUpField.Text.ToString(), out int mus) ? mus * 1024 : Settings.Current.MaxUploadSpeed,
                     UseDht = dhtCheckbox.Checked
                 };
 

@@ -32,7 +32,7 @@ namespace lain.frameviews
             : base("Settings")
         {
             X = 20;
-            Y = Settings.HeaderHeight;
+            Y = SettingsData.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
 
@@ -53,60 +53,60 @@ namespace lain.frameviews
 
             // Port
             scroll.Add(new Label("Port:") { X = 1, Y = y });
-            var portField = new TextField(Settings.Port.ToString()) { X = 30, Y = y, Width = 10 };
+            var portField = new TextField(Settings.Current.Port.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
             // Port
             scroll.Add(new Label("DHT port:") { X = 1, Y = y });
-            var dhtPortField = new TextField(Settings.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
+            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(dhtPortField);
             y += 2;
 
             // Max Connections
             scroll.Add(new Label("Max total connections:") { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.MaxConnections.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
             // Max Download Speed
             scroll.Add(new Label("Max total download speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.MaxDownloadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
             scroll.Add(new Label("Max total upload speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.MaxUploadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
+            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 30, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
 
-            var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.StopSeedingWhenFinished };
+            var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.Current.StopSeedingWhenFinished };
             scroll.Add(stopSeedCheckbox);
             y += 2;
 
-            var detailedLogging = new CheckBox("Enable detailed logging") { X = 1, Y = y, Checked = Settings.DetailedLogging };
+            var detailedLogging = new CheckBox("Enable detailed logging") { X = 1, Y = y, Checked = Settings.Current.DetailedLogging };
             scroll.Add(detailedLogging);
             y += 2;
 
-            var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.EnablePortForwarding };
+            var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.Current.EnablePortForwarding };
             scroll.Add(portFwdCheckbox);
             y += 2;
 
             // Paths
             scroll.Add(new Label("Default Download Path:") { X = 1, Y = y });
-            var downloadPathField = new TextField(Settings.DefaultDownloadPath ?? "") { X = 30, Y = y, Width = 40 };
+            var downloadPathField = new TextField(Settings.Current.DefaultDownloadPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(downloadPathField);
             y += 2;
 
             scroll.Add(new Label("Log Path:") { X = 1, Y = y });
-            var logPathField = new TextField(Settings.LogPath ?? "") { X = 30, Y = y, Width = 40 };
+            var logPathField = new TextField(Settings.Current.LogPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(logPathField);
             y += 2;
 
             scroll.Add(new Label("Settings Path:") { X = 1, Y = y });
-            var settingsPathField = new TextField(Settings.SettingsPath ?? "") { X = 30, Y = y, Width = 40 };
+            var settingsPathField = new TextField(Settings.Current.SettingsPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(settingsPathField);
             y += 3;
 
@@ -124,7 +124,7 @@ namespace lain.frameviews
                 Height = 8
             };
             bgColorCombo.SetSource(new List<string>(colors.Keys));
-            bgColorCombo.SelectedItem = (int)Settings.BackgroundColor!; // default
+            bgColorCombo.SelectedItem = (int)Settings.Current.BackgroundColor!; // default
             scroll.Add(bgColorCombo);
             y += 2;
 
@@ -140,7 +140,7 @@ namespace lain.frameviews
                 Height = 8
             };
             textColorCombo.SetSource(new List<string>(colors.Keys));
-            textColorCombo.SelectedItem = (int)Settings.TextColor!; // default
+            textColorCombo.SelectedItem = (int)Settings.Current.TextColor!; // default
             scroll.Add(textColorCombo);
             y += 2;
 
@@ -158,7 +158,7 @@ namespace lain.frameviews
                 Height = 8
             };
             backgroundFocusColorCombo.SetSource(new List<string>(colors.Keys));
-            backgroundFocusColorCombo.SelectedItem = (int)Settings.FocusBackgroundColor!; // default
+            backgroundFocusColorCombo.SelectedItem = (int)Settings.Current.FocusBackgroundColor!; // default
             scroll.Add(backgroundFocusColorCombo);
             y += 2;
 
@@ -174,7 +174,7 @@ namespace lain.frameviews
                 Height = 8
             };
             textFocusColorCombo.SetSource(new List<string>(colors.Keys));
-            textFocusColorCombo.SelectedItem = (int)Settings.FocusTextColor!; // default
+            textFocusColorCombo.SelectedItem = (int)Settings.Current.FocusTextColor!; // default
             scroll.Add(textFocusColorCombo);
             y += 2;
 
@@ -191,7 +191,7 @@ namespace lain.frameviews
                 Height = 8
             };
             hotTextColorCombo.SetSource(new List<string>(colors.Keys));
-            hotTextColorCombo.SelectedItem = (int)Settings.HotTextColor!; // default
+            hotTextColorCombo.SelectedItem = (int)Settings.Current.HotTextColor!; // default
             scroll.Add(hotTextColorCombo);
             y += 2;
 
@@ -207,46 +207,31 @@ namespace lain.frameviews
             saveBtn.Clicked += () =>
             {
                 // Numeric fields
-                if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.Port = port;
-                if (ushort.TryParse(portField.Text.ToString(), out var dhtPort)) Settings.DhtPort = dhtPort;
-                if (ushort.TryParse(maxConnField.Text.ToString(), out var maxConn)) Settings.MaxConnections = maxConn;
-                if (int.TryParse(maxDlField.Text.ToString(), out var maxDl)) Settings.MaxDownloadSpeed = maxDl;
-                if (int.TryParse(maxUpField.Text.ToString(), out var maxUp)) Settings.MaxUploadSpeed = maxUp;
+                if (ushort.TryParse(portField.Text.ToString(), out var port)) Settings.Current.Port = port;
+                if (ushort.TryParse(portField.Text.ToString(), out var dhtPort)) Settings.Current.DhtPort = dhtPort;
+                if (ushort.TryParse(maxConnField.Text.ToString(), out var maxConn)) Settings.Current.MaxConnections = maxConn;
+                if (int.TryParse(maxDlField.Text.ToString(), out var maxDl)) Settings.Current.MaxDownloadSpeed = maxDl;
+                if (int.TryParse(maxUpField.Text.ToString(), out var maxUp)) Settings.Current.MaxUploadSpeed = maxUp;
 
                 // Boolean fields
-                Settings.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
-                Settings.EnablePortForwarding = portFwdCheckbox.Checked;
-                Settings.DetailedLogging = detailedLogging.Checked;
+                Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
+                Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
+                Settings.Current.DetailedLogging = detailedLogging.Checked;
 
 
                 // String paths
-                Settings.DefaultDownloadPath = downloadPathField.Text.ToString();
-                Settings.LogPath = logPathField.Text.ToString();
-                Settings.SettingsPath = settingsPathField.Text.ToString();
+                Settings.Current.DefaultDownloadPath = downloadPathField.Text.ToString();
+                Settings.Current.LogPath = logPathField.Text.ToString();
+                Settings.Current.SettingsPath = settingsPathField.Text.ToString();
 
                 //Colors
-                Settings.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
-                Settings.TextColor = colors[textColorCombo.Text.ToString()!];
-                Settings.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
-                Settings.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
-                Settings.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
+                Settings.Current.BackgroundColor = colors[bgColorCombo.Text.ToString()!];
+                Settings.Current.TextColor = colors[textColorCombo.Text.ToString()!];
+                Settings.Current.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
+                Settings.Current.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
+                Settings.Current.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
 
-                //Edit Engine settings
-                Settings.EngineSettings = new MonoTorrent.Client.EngineSettingsBuilder
-                {
-
-                   
-                    AllowPortForwarding = Settings.EnablePortForwarding,
-                    ListenEndPoints = new Dictionary<string, System.Net.IPEndPoint> { { "main", new System.Net.IPEndPoint(System.Net.IPAddress.Any, Settings.Port) } },
-                    DhtEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, Settings.DhtPort),
-                    MaximumConnections = Settings.MaxConnections,
-                    MaximumDownloadRate = Settings.MaxDownloadSpeed * 1024,
-                    MaximumUploadRate = Settings.MaxUploadSpeed * 1024,
-                    
-
-                };
-
-                Settings.SaveSettings();
+                Settings.Save();
 
                 MessageBox.Query("Settings", "Settings saved.", "OK");
             };

@@ -22,7 +22,7 @@ namespace lain
         {
 
             //load settings
-            Settings.LoadSettings();
+            Settings.Load();
 
 
             //load tui
@@ -36,10 +36,10 @@ namespace lain
 
             ColorScheme myScheme = new ColorScheme()
             {
-                Normal = Application.Driver.MakeAttribute(Settings.TextColor, Settings.BackgroundColor), // text, background
-                Focus = Application.Driver.MakeAttribute(Settings.FocusTextColor, Settings.FocusBackgroundColor), // focused element
-                HotNormal = Application.Driver.MakeAttribute(Settings.HotTextColor, Settings.BackgroundColor), //hotkey text, background
-                HotFocus = Application.Driver.MakeAttribute(Settings.FocusTextColor, Settings.FocusBackgroundColor), // focused hotkey text, background
+                Normal = Application.Driver.MakeAttribute(Settings.Current.TextColor, Settings.Current.BackgroundColor), // text, background
+                Focus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused element
+                HotNormal = Application.Driver.MakeAttribute(Settings.Current.HotTextColor, Settings.Current.BackgroundColor), //hotkey text, background
+                HotFocus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused hotkey text, background
             };
 
             mainWin.ColorScheme = myScheme;

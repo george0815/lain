@@ -17,7 +17,7 @@ public class TorrentListView : FrameView
         _managers = managers;
 
         X = 20;
-        Y = Settings.HeaderHeight;
+        Y = SettingsData.HeaderHeight;
         Width = Dim.Fill();
         Height = Dim.Fill();
 

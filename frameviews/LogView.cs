@@ -10,7 +10,7 @@ internal class LogView : FrameView
         : base("Log")
     {
         X = 20;
-        Y = Settings.HeaderHeight;
+        Y = SettingsData.HeaderHeight;
         Width = Dim.Fill();
         Height = Dim.Fill();
 
