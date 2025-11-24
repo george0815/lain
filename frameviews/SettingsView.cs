@@ -207,6 +207,22 @@ namespace lain.frameviews
             scroll.Add(hotTextColorCombo);
             y += 2;
 
+            //Logo color
+            scroll.Add(new Label("ASCII color:") { X = 1, Y = y });
+
+            var logoColorCombo = new ComboBox()
+            {
+                X = 30,
+                Y = y,
+                Width = 15,
+                ReadOnly = true,
+                Height = 8
+            };
+            logoColorCombo.SetSource(new List<string>(colors.Keys));
+            logoColorCombo.SelectedItem = (int)Settings.Current.LogoColor!; // default
+            scroll.Add(logoColorCombo);
+            y += 2;
+
 
             #endregion
 
@@ -315,6 +331,8 @@ namespace lain.frameviews
                     Settings.Current.FocusBackgroundColor = colors[backgroundFocusColorCombo.Text.ToString()!];
                     Settings.Current.FocusTextColor = colors[textFocusColorCombo.Text.ToString()!];
                     Settings.Current.HotTextColor = colors[hotTextColorCombo.Text.ToString()!];
+                    Settings.Current.LogoColor = colors[logoColorCombo.Text.ToString()!];
+
 
                     Settings.Save();
 

@@ -56,7 +56,13 @@ namespace lain
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
-                Text = Helper.icons[0]
+                Text = Helper.icons[0],
+
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Settings.Current.LogoColor, Settings.Current.BackgroundColor), // text color, background color
+                    Focus = Application.Driver.MakeAttribute(Settings.Current.LogoColor, Settings.Current.BackgroundColor)
+                }
             };
 
             logoFrame.Add(logo);
