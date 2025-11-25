@@ -26,6 +26,7 @@ internal class SettingsData
     public bool DetailedLogging { get; set; } = true;
     public bool StopSeedingWhenFinished { get; set; } = true;
     public bool EnablePortForwarding { get; set; } = true;
+    public bool DisableASCII { get; set; } = false;
     public string? DefaultDownloadPath { get; set; } = "";
     public string? LogPath { get; set; } = "";
     public string SettingsPath { get; set; } = "cfg.json";
@@ -46,7 +47,7 @@ internal static class Settings
 {
     internal static SettingsData Current { get; private set; } = new();
 
-    private static readonly JsonSerializerOptions JsonOptions = new(){ WriteIndented = true,};
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
 
     internal static EngineSettingsBuilder BuildEngineSettings()
     {
@@ -90,9 +91,9 @@ internal static class Settings
             string json = File.ReadAllText(Current.SettingsPath);
             var loaded = JsonSerializer.Deserialize<SettingsData>(json, JsonOptions);
 
-            if (loaded != null){ Current = loaded;}
-            else { Settings.Save();}
-            
+            if (loaded != null) { Current = loaded; }
+            else { Settings.Save(); }
+
         }
         catch (Exception ex)
         {

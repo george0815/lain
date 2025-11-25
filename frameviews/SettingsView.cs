@@ -156,7 +156,7 @@ namespace lain.frameviews
             scroll.Add(textColorCombo);
             y += 2;
 
-            
+
 
             //Focus background color
             scroll.Add(new Label("Focus background color:") { X = 1, Y = y });
@@ -207,7 +207,7 @@ namespace lain.frameviews
             scroll.Add(hotTextColorCombo);
             y += 2;
 
-            //Logo color
+            //ASCII color
             scroll.Add(new Label("ASCII color:") { X = 1, Y = y });
 
             var logoColorCombo = new ComboBox()
@@ -221,6 +221,12 @@ namespace lain.frameviews
             logoColorCombo.SetSource(new List<string>(colors.Keys));
             logoColorCombo.SelectedItem = (int)Settings.Current.LogoColor!; // default
             scroll.Add(logoColorCombo);
+            y += 2;
+
+
+            //Enable/disable ASCII
+            var disableASCII = new CheckBox("Disable ASCII") { X = 1, Y = y, Checked = Settings.Current.DisableASCII };
+            scroll.Add(disableASCII);
             y += 2;
 
 
@@ -299,7 +305,7 @@ namespace lain.frameviews
                         return;
                     }
 
-                    
+
 
                     if (string.IsNullOrWhiteSpace(settingsPath))
                     {
@@ -307,7 +313,7 @@ namespace lain.frameviews
                         return;
                     }
 
-                   
+
 
 
 

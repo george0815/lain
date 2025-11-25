@@ -1,9 +1,13 @@
-﻿using MonoTorrent.Client;
+﻿using lain;
+using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Terminal.Gui;
+using TextCopy;
 
 namespace lain.frameviews
 {
@@ -16,6 +20,8 @@ namespace lain.frameviews
             Y = SettingsData.HeaderHeight;
             Width = Dim.Fill();
             Height = Dim.Fill();
+
+
 
             var scroll = new ScrollView()
             {
@@ -110,6 +116,16 @@ namespace lain.frameviews
             scroll.Add(privateTorrentCheckbox);
             y += 2;
 
+
+            var generateMagnetURLCheckbox = new CheckBox("Generate magnet link")
+            {
+                X = 1,
+                Y = y,
+                Checked = false
+            };
+            scroll.Add(generateMagnetURLCheckbox);
+            y += 2;
+
             #endregion
 
             #region METADATA
@@ -143,16 +159,31 @@ namespace lain.frameviews
 
             scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
 
+
+
+            // Shows magnet url
+            TorrentOperations.MagnetLinkGenerated += (url) =>
+            {
+                if (MessageBox.Query("Magnet URL Generated",
+                        "Magnet link copied to clipboard!",
+                        "OK") == 0)
+                {
+                    ClipboardService.SetText(url);
+                }
+            };
+
+
+
             //On click
-            createTorBtn.Clicked += async () =>
+            createTorBtn.Clicked += async() =>
             {
                 #region VALIDATION
 
                 //start validation
                 string inputPath = folderPath.Text.ToString()!.Trim();
-                string outPath = outputPath.Text.ToString()!.Trim();
-                string trackers = trackerLink.Text.ToString()!.Trim();
-                string torName = name.Text.ToString()!.Trim();
+        string outPath = outputPath.Text.ToString()!.Trim();
+        string trackers = trackerLink.Text.ToString()!.Trim();
+        string torName = name.Text.ToString()!.Trim();
 
                 // Check file/folder exists
                 if (string.IsNullOrWhiteSpace(inputPath) ||
@@ -169,61 +200,73 @@ namespace lain.frameviews
                     return;
                 }
 
-                // Check name
-                if (string.IsNullOrWhiteSpace(torName))
-                {
-                    MessageBox.ErrorQuery("Error", "Name cannot be empty.", "OK");
-                    return;
-                }
+// Check name
+if (string.IsNullOrWhiteSpace(torName))
+{
+    MessageBox.ErrorQuery("Error", "Name cannot be empty.", "OK");
+    return;
+}
 
-                // Validate trackers (optional)
-                List<string> trackerList = new();
-                if (!string.IsNullOrWhiteSpace(trackers))
-                {
-                    foreach (var line in trackers.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        string trimmed = line.Trim();
-                        if (Uri.IsWellFormedUriString(trimmed, UriKind.Absolute))
-                            trackerList.Add(trimmed);
-                        else
-                        {
-                            MessageBox.ErrorQuery("Error", $"Invalid tracker URL:\n{trimmed}", "OK");
-                            return;
-                        }
-                    }
-                }
 
-                int selectedPieceSize = pieceSizes[new List<string>(pieceSizes.Keys)[pieceSizeCombo.SelectedItem]];
 
-                #endregion
+// Validate trackers (optional)
+List<string> trackerList = new();
+if (!string.IsNullOrWhiteSpace(trackers))
+{
+    foreach (var line in trackers.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+    {
+        string trimmed = line.Trim();
+        if (Uri.IsWellFormedUriString(trimmed, UriKind.Absolute))
+            trackerList.Add(trimmed);
+        else
+        {
+            MessageBox.ErrorQuery("Error", $"Invalid tracker URL:\n{trimmed}", "OK");
+            return;
+        }
+    }
+}
 
-                //Create
-                try
-                {
-                    await Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await TorrentOperations.CreateTorrent(
-                                inputPath,
-                                outPath,
-                                trackers
-                            );
-                        }
-                        catch (Exception ex)
-                        {
-                            Application.MainLoop.Invoke(() =>
-                                MessageBox.ErrorQuery("Error", $"Torrent creation failed:\n{ex.Message}", "OK")
-                            );
-                        }
-                    });
+int selectedPieceSize = pieceSizes[new List<string>(pieceSizes.Keys)[pieceSizeCombo.SelectedItem]];
 
-                    MessageBox.Query("Success", "Torrent created successfully!", "OK");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.ErrorQuery("Error", $"Unexpected error:\n{ex.Message}", "OK");
-                }
+#endregion
+
+//Create
+try
+{
+
+    TorrentData settings = new TorrentData
+    {
+        UseMagnetLink = generateMagnetURLCheckbox.Checked,
+        TorPath = inputPath,
+        DownPath = outPath,
+        PieceSize = selectedPieceSize,
+        StartSeedingAfterCreation = startSeedingAfterCreationCheckbox.Checked,
+        IsPrivate = privateTorrentCheckbox.Checked,
+        Name = torName,
+        Comment = comment.Text.ToString() ?? "",
+        Publisher = publisher.Text.ToString() ?? ""
+    };
+
+    await Task.Run(async () =>
+    {
+        try
+        {
+            await TorrentOperations.CreateTorrent(settings);
+        }
+        catch (Exception ex)
+        {
+            Application.MainLoop.Invoke(() =>
+                MessageBox.ErrorQuery("Error", $"Torrent creation failed:\n{ex.Message}", "OK")
+            );
+        }
+    });
+
+    MessageBox.Query("Success", "Torrent created successfully!", "OK");
+}
+catch (Exception ex)
+{
+    MessageBox.ErrorQuery("Error", $"Unexpected error:\n{ex.Message}", "OK");
+}
             };
         }
     }

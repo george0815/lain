@@ -1,13 +1,15 @@
-﻿using System;
+﻿using lain.frameviews;
+using MonoTorrent.Client;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using Terminal.Gui;
-using lain.frameviews;
 
 namespace lain
 {
     public class LainUI : Window
     {
-        
+
 
         // Content views
         FrameView torrentListView;
@@ -15,14 +17,14 @@ namespace lain
         FrameView createView;
         FrameView settingsView;
         FrameView searchView;
-    
+
         internal FrameView logView;
 
 
         public bool ShouldExit { get; private set; }
 
 
-        
+
 
         public LainUI()
         {
@@ -35,7 +37,7 @@ namespace lain
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height = SettingsData.HeaderHeight,
+                Height = Settings.Current.DisableASCII ? 5 : SettingsData.HeaderHeight,
                 CanFocus = false,
                 Border = new Border() { BorderStyle = BorderStyle.None }
             };
@@ -45,7 +47,7 @@ namespace lain
             {
                 X = 0,
                 Y = 0,
-                Width = SettingsData.LogoWidth, // fixed width for logo
+                Width = Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth, // fixed width for logo
                 Height = SettingsData.HeaderHeight,
                 Border = new Border() { BorderStyle = BorderStyle.Single }
             };
@@ -65,8 +67,11 @@ namespace lain
                 }
             };
 
-            logoFrame.Add(logo);
-            header.Add(logoFrame);
+            if (!Settings.Current.DisableASCII)
+            {
+                logoFrame.Add(logo);
+                header.Add(logoFrame);
+            }
 
 
             #region EXTRA HEADER INFO
@@ -79,13 +84,47 @@ namespace lain
                 Text = DateTime.Now.ToString("yyyy-MM-dd")
             };
 
-            // Active torrents
+            // Active torrents count
             var torrentCount = new Label()
             {
-                X = Pos.Right(date) + 5,
-                Y = 1,
+                X = SettingsData.LogoWidth + 2,
+                Y = 3,
                 Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
+
+            // Active torrents preview
+            StringBuilder sb = new StringBuilder("", 30);
+            int count = 0;
+
+            if (TorrentOperations.Managers.Count() != 0)
+            {
+                for (int i = 0; i <= TorrentOperations.Managers.Count(); i++)
+                {
+
+                    if (TorrentOperations.Managers[i].State == TorrentState.Seeding || TorrentOperations.Managers[i].State == TorrentState.Downloading) { sb.Append(TorrentOperations.Managers[i].Torrent?.Name); }
+                    if (count == 3) { sb.Append("..."); break; }
+                    sb.Append("\n");
+
+                }
+            }
+            else { sb.Append("No active torrents"); }
+
+            var torrentPreview = new Label()
+                {
+                    X = SettingsData.LogoWidth + 2,
+                    Y = 3,
+                    Text = sb.ToString()
+                };
+
+            // Port
+            var portDisplay = new Label()
+            {
+                X = SettingsData.LogoWidth + 2,
+                Y = 5,
+                Text = $"Operating on port: {Settings.Current.Port}"
+            };
+
+
 
             #endregion
 
@@ -204,7 +243,7 @@ namespace lain
                 // Stop main UI loop (if running)
                 Application.RequestStop();
 
-               
+
             }
         }
 
@@ -219,7 +258,7 @@ namespace lain
             Remove(searchView);
             Remove(logView);
 
-            logo.Text = Helper.icons[index];   
+            logo.Text = Helper.icons[index];
 
             switch (index)
             {

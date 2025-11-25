@@ -107,7 +107,7 @@ namespace lain.frameviews
             {
                 X = 1,
                 Y = y,
-                Checked = false
+                Checked = true
             };
             scroll.Add(dhtCheckbox);
             y += 2;
@@ -170,11 +170,11 @@ namespace lain.frameviews
                             "Yes", "No") == 0)
                         {
                             Directory.CreateDirectory(downloadDir);
-                            
+
                         }
                         else return;
                     }
-     
+
                 }
 
                 // Parse numeric fields safely
