@@ -1,4 +1,5 @@
-﻿using MonoTorrent;
+﻿using lain.helpers;
+using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using System;
@@ -189,6 +190,7 @@ namespace lain
                 if (Settings.Current.DetailedLogging)
                 {
                     Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+             
                 }
             };
         }
@@ -291,6 +293,7 @@ namespace lain
                 {
                     await manager.StopAsync();
                     Log.Write($"Stopped seeding: {manager.Torrent?.Name}");
+                   
                 }
                 catch (Exception ex)
                 {

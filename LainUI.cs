@@ -208,6 +208,8 @@ namespace lain
 
         #region HELPER METHODS
 
+
+
         // Shows exit confirmation dialog
         private void ShowExitDialog()
         {

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace lain
+
+
+namespace lain.helpers
 {
     internal class Log
     {
 
         // Event fired whenever a new log entry is added
         public static event Action? OnLogAdded;
+
 
         // Internal log storage
         static internal List<string> log { get; set; } = [];
@@ -23,28 +26,14 @@ namespace lain
 
         }
 
-        // Loads the log from persistent storage
-        static void LoadLog()
-        {
-
-        }
 
         // Saves the log to persistent storage
-        static void SaveLog()
-        {
-
-
+        static internal void Save(){ 
+            using StreamWriter writer = new StreamWriter(Settings.Current.LogPath!, false, Encoding.UTF8);
+            writer.Write(String.Join("\n",log));
         }
 
-        //Clears the log
-        static void ClearLog()
-        {
-            log.Clear();
-            // Fire event to notify UI
-            OnLogAdded?.Invoke();
-        }
-
-
+   
 
 
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MonoTorrent.Client;
 using MonoTorrent;
 using System.Net.Sockets;
+using lain.helpers;
 using System.Net;
 
 
@@ -45,7 +46,16 @@ namespace lain
             top.Add(mainWin);
 
             // Run the app
-            Application.Run();
+            try
+            {
+                Application.Run();
+            }
+            finally
+            {
+                // Cleanup code here
+                Log.Save();
+            }
+
 
 
         }
