@@ -51,7 +51,13 @@ namespace lain.frameviews
             scroll.Add(new Label("Torrent file path:") { X = 1, Y = y });
             var fileInput = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(fileInput);
+            
+
+            var torFileDialogBtn = new Button("...") { X = 61, Y = y };
+            scroll.Add(torFileDialogBtn);
+
             y += 2;
+
 
             // Download path
             scroll.Add(new Label("Download path:") { X = 1, Y = y });
@@ -62,6 +68,10 @@ namespace lain.frameviews
                 Width = 40
             };
             scroll.Add(downloadPathInput);
+
+            var downloadFolderDialogBtn = new Button("...") { X = 61, Y = y };
+            scroll.Add(downloadFolderDialogBtn);
+
             y += 2;
 
             #endregion
@@ -72,7 +82,7 @@ namespace lain.frameviews
             scroll.Add(new Label("Max connections:") { X = 1, Y = y });
             var maxConnField = new TextField(Settings.Current.MaxConnections.ToString())
             {
-                X = 30,
+                X = 22,
                 Y = y,
                 Width = 10
             };
@@ -83,7 +93,7 @@ namespace lain.frameviews
             scroll.Add(new Label("Max download (kB/s):") { X = 1, Y = y });
             var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString())
             {
-                X = 30,
+                X = 22,
                 Y = y,
                 Width = 10
             };
@@ -94,7 +104,7 @@ namespace lain.frameviews
             scroll.Add(new Label("Max upload (kB/s):") { X = 1, Y = y });
             var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString())
             {
-                X = 30,
+                X = 22,
                 Y = y,
                 Width = 10
             };
@@ -117,6 +127,30 @@ namespace lain.frameviews
             y += 2;
 
             scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
+
+            #region BUTTON EVENTS
+
+            torFileDialogBtn.Clicked += () =>
+            {
+                string? path = DialogHelpers.ShowFileDialog("Select torrent file", "Select a .torrent file", [".torrent"], false);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    fileInput.Text = path;
+                }
+            };
+
+
+            downloadFolderDialogBtn.Clicked += () =>
+            {
+                string? path = DialogHelpers.ShowSaveFileDialog("Select download folder", "Select download folder", [""], "Select Folder");
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    // Get directory from full path
+                    string dir = Path.GetDirectoryName(path) ?? path;
+                    downloadPathInput.Text = path;
+                }
+            };
+
 
             downloadBtn.Clicked += async () =>
             {
@@ -233,6 +267,8 @@ namespace lain.frameviews
                 #endregion
 
             };
+
+            #endregion
         }
     }
 }

@@ -108,16 +108,22 @@ namespace lain.frameviews
             scroll.Add(new Label("Default Download Path:") { X = 1, Y = y });
             var downloadPathField = new TextField(Settings.Current.DefaultDownloadPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(downloadPathField);
+            var downloadFolderDialogBtn = new Button("...") { X = 71, Y = y };
+            scroll.Add(downloadFolderDialogBtn);
             y += 2;
 
             scroll.Add(new Label("Log Path:") { X = 1, Y = y });
             var logPathField = new TextField(Settings.Current.LogPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(logPathField);
+            var logFileDialogBtn = new Button("...") { X = 71, Y = y };
+            scroll.Add(logFileDialogBtn);
             y += 2;
 
             scroll.Add(new Label("Settings Path:") { X = 1, Y = y });
             var settingsPathField = new TextField(Settings.Current.SettingsPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(settingsPathField);
+            var settingsFileDialogBtn = new Button("...") { X = 71, Y = y };
+            scroll.Add(settingsFileDialogBtn);
             y += 3;
 
             #endregion
@@ -240,6 +246,42 @@ namespace lain.frameviews
             // Set the content size so scroll bars work
             scroll.ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 2, y);
 
+            #region EVENT HANDLERS
+
+            logFileDialogBtn.Clicked += () =>
+            {
+                string? path = DialogHelpers.ShowSaveFileDialog("Select log file path", "Select filename for the log file.", [".txt"]);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    // Get directory from full path
+                    logPathField.Text = path;
+                }
+            };
+
+            settingsFileDialogBtn.Clicked += () =>
+            {
+                string? path = DialogHelpers.ShowSaveFileDialog("Select config file path", "Select filename for the config file.", [".json"]);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    // Get directory from full path
+                    settingsPathField.Text = path;
+                }
+            };
+
+
+            downloadFolderDialogBtn.Clicked += () =>
+            {
+                string? path = DialogHelpers.ShowSaveFileDialog("Select default download folder", "Select the default download folder path.", [""]);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    // Get directory from full path
+                    string dir = Path.GetDirectoryName(path) ?? path;
+                    downloadPathField.Text = path;
+                }
+            };
+
+
+
             saveBtn.Clicked += () =>
             {
                 try
@@ -350,6 +392,8 @@ namespace lain.frameviews
                 }
             };
 
+
+            #endregion
         }
     }
 }

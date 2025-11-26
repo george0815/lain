@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace lain
+namespace lain.helpers
 {
 
     //Static helper class for storing constants and utility functions, in addtion to ASCII art icons

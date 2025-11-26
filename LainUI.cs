@@ -1,4 +1,5 @@
 ﻿using lain.frameviews;
+using lain.helpers;
 using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
@@ -125,13 +126,14 @@ namespace lain
             };
 
 
+            header.Add(date, torrentCount, torrentPreview, portDisplay);
+            Add(header);
 
             #endregion
 
 
 
-            header.Add(date, torrentCount);
-            Add(header);
+
 
             #endregion
 
