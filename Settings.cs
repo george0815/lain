@@ -1,7 +1,9 @@
-﻿using MonoTorrent.Client;
+﻿using lain.helpers;
+using MonoTorrent.Client;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Terminal.Gui;
 
 namespace lain;
 
@@ -13,7 +15,7 @@ internal class SettingsData
     public static ushort HeaderHeight { get; set; } = 15;
     public static ushort LogoWidth { get; set; } = 55;
 
-    // Ports
+    //Ports
     public ushort Port { get; set; } = 55123;
     public ushort DhtPort { get; set; } = 55124;
 
@@ -38,6 +40,19 @@ internal class SettingsData
     public Terminal.Gui.Color FocusTextColor { get; set; } = Terminal.Gui.Color.Black;
     public Terminal.Gui.Color HotTextColor { get; set; } = Terminal.Gui.Color.BrightYellow;
     public Terminal.Gui.Color LogoColor { get; set; } = Terminal.Gui.Color.White;
+
+    //Controls
+    public TorrentHotkeys Controls { get; set; } = new TorrentHotkeys
+    {
+        StartDownload = Key.CtrlMask | Key.D,
+        StopDownload = Key.CtrlMask | Key.Q,
+        RemoveTorrent = Key.Delete,
+        StartSeeding = Key.CtrlMask | Key.ShiftMask | Key.S,
+        StopSeeding = Key.CtrlMask | Key.ShiftMask | Key.Q
+    };
+
+    //Icons
+    public List<string> icons { get; set; } = ASCII.icons;
 
 }
 

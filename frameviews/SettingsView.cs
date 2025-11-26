@@ -369,6 +369,8 @@ namespace lain.frameviews
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                     Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
                     Settings.Current.DetailedLogging = detailedLogging.Checked;
+                    Settings.Current.DisableASCII = disableASCII.Checked;
+
 
                     Settings.Current.DefaultDownloadPath = downloadPath;
                     Settings.Current.LogPath = logPath;

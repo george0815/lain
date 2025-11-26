@@ -59,7 +59,7 @@ namespace lain
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
-                Text = Helper.icons[0],
+                Text = Settings.Current.icons[0],
 
                 ColorScheme = new ColorScheme()
                 {
@@ -80,7 +80,7 @@ namespace lain
             // Date
             var date = new Label()
             {
-                X = SettingsData.LogoWidth + 2,
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
                 Y = 1,
                 Text = DateTime.Now.ToString("yyyy-MM-dd")
             };
@@ -88,7 +88,7 @@ namespace lain
             // Active torrents count
             var torrentCount = new Label()
             {
-                X = SettingsData.LogoWidth + 2,
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
                 Y = 3,
                 Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
@@ -112,22 +112,40 @@ namespace lain
 
             var torrentPreview = new Label()
                 {
-                    X = SettingsData.LogoWidth + 2,
-                    Y = 3,
+                    X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
+                    Y = 5,
                     Text = sb.ToString()
                 };
 
             // Port
             var portDisplay = new Label()
             {
-                X = SettingsData.LogoWidth + 2,
-                Y = 5,
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
+                Y = 7,
                 Text = $"Operating on port: {Settings.Current.Port}"
             };
 
 
+            #region HOTKEY INFO
+
+
+            header.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 1 });
+            header.Add(new Label($"Stop: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 3 });
+            header.Add(new Label($"Start seeding: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 5 });
+            header.Add(new Label($"Stop seeding: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 7 });
+            header.Add(new Label($"Delete: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 9 });
+
+
+
+
+            #endregion
+
+
             header.Add(date, torrentCount, torrentPreview, portDisplay);
             Add(header);
+
+
+
 
             #endregion
 
@@ -262,7 +280,7 @@ namespace lain
             Remove(searchView);
             Remove(logView);
 
-            logo.Text = Helper.icons[index];
+            logo.Text = ASCII.icons[index];
 
             switch (index)
             {

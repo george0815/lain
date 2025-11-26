@@ -6,7 +6,7 @@ namespace lain.helpers
 {
 
     //Static helper class for storing constants and utility functions, in addtion to ASCII art icons
-    internal static class Helper
+    internal static class ASCII
     {
 
         static internal List<string> icons = new List<string>() {@"⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⣠⣣⣿⣿⣿⣿⢏⠀⣼⠀⠀⠀⣤⡀⠀⠀⠀⡘⣠⡀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼
