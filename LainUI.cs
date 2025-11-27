@@ -30,6 +30,9 @@ namespace lain
         public LainUI()
         {
 
+
+      
+
             #region HEADER
 
             //Header
@@ -129,11 +132,38 @@ namespace lain
             #region HOTKEY INFO
 
 
-            header.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 1 });
-            header.Add(new Label($"Stop: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 3 });
-            header.Add(new Label($"Start seeding: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 5 });
-            header.Add(new Label($"Stop seeding: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 7 });
-            header.Add(new Label($"Delete: {Settings.Current.Controls.StartDownload}") { X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 9 });
+            header.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") {
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.Green, Settings.Current.BackgroundColor), // text color, background color
+                },
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 1
+
+            });
+            header.Add(new Label($"Stop: {Settings.Current.Controls.StopDownload}") {
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.Red, Settings.Current.BackgroundColor), // text color, background color
+                },
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 3 });
+            header.Add(new Label($"Start seeding: {Settings.Current.Controls.StartSeeding}") {
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.BrightYellow, Settings.Current.BackgroundColor), // text color, background color
+                },
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 5 });
+            header.Add(new Label($"Stop seeding: {Settings.Current.Controls.StopSeeding}") {
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.Blue, Settings.Current.BackgroundColor), // text color, background color
+                },
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 7 });
+            header.Add(new Label($"Delete: {Settings.Current.Controls.RemoveTorrent}") {
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.Magenta, Settings.Current.BackgroundColor), // text color, background color
+                },
+                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 9 });
 
 
 

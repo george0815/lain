@@ -7,10 +7,14 @@ namespace lain.helpers
 {
     public struct TorrentHotkeys
     {
-        public Key StartDownload { get; set; }
-        public Key StopDownload { get; set; }
-        public Key RemoveTorrent { get; set; }
-        public Key StartSeeding { get; set; }
-        public Key StopSeeding { get; set; }
+        public TorrentHotkeys()
+        {
+        }
+
+        public Key StartDownload { get; set; } = Key.F3;
+        public Key StopDownload { get; set; } = Key.F4;
+        public Key RemoveTorrent { get; set; } = Key.F5;
+        public Key StartSeeding { get; set; } = Key.F6;
+        public Key StopSeeding { get; set; } = Key.F7;
     }
 }

@@ -29,8 +29,8 @@ internal class SettingsData
     public bool StopSeedingWhenFinished { get; set; } = true;
     public bool EnablePortForwarding { get; set; } = true;
     public bool DisableASCII { get; set; } = false;
-    public string? DefaultDownloadPath { get; set; } = "";
-    public string? LogPath { get; set; } = "";
+    public string? DefaultDownloadPath { get; set; } = "./";
+    public string? LogPath { get; set; } = "./log.txt";
     public string SettingsPath { get; set; } = "cfg.json";
 
     // Colors
@@ -44,11 +44,11 @@ internal class SettingsData
     //Controls
     public TorrentHotkeys Controls { get; set; } = new TorrentHotkeys
     {
-        StartDownload = Key.CtrlMask | Key.D,
-        StopDownload = Key.CtrlMask | Key.Q,
-        RemoveTorrent = Key.Delete,
-        StartSeeding = Key.CtrlMask | Key.ShiftMask | Key.S,
-        StopSeeding = Key.CtrlMask | Key.ShiftMask | Key.Q
+        StartDownload = Key.F3,
+        StopDownload = Key.F4,
+        RemoveTorrent = Key.F5,
+        StartSeeding = Key.F6,
+        StopSeeding = Key.F7,
     };
 
     //Icons
