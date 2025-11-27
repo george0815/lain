@@ -3,6 +3,7 @@ using MonoTorrent.Client;
 using System;
 using System.Data;
 using System.Xml.Linq;
+using lain.helpers;
 using Terminal.Gui;
 
 public class TorrentListView : FrameView
@@ -54,6 +55,68 @@ public class TorrentListView : FrameView
         TorrentOperations.UpdateProgress += Refresh;
     }
 
+    //process key events for start/stop/remove/etc
+    public override bool ProcessKey(KeyEvent keyEvent)
+    {
+        if (keyEvent.Key == Settings.Current.Controls.StartDownload)
+        {
+            Task.Run(async () =>
+            {
+                await TorrentOperations.ResumeTorrentAsync(_table.SelectedRow);
+            });
+
+            Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+        else if (keyEvent.Key == Settings.Current.Controls.StopDownload)
+        {
+            Task.Run(async () =>
+            {
+                await TorrentOperations.PauseTorrentAsync(_table.SelectedRow);
+            });
+            Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+        else if (keyEvent.Key == Settings.Current.Controls.StartSeeding)
+        {
+            Task.Run(async () =>
+            {
+                await TorrentOperations.StartSeedingAsync(_table.SelectedRow);
+            });
+            Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+        else if (keyEvent.Key == Settings.Current.Controls.StopSeeding)
+        {
+            Task.Run(async () =>
+            {
+                await TorrentOperations.StopSeedingAsync(_table.SelectedRow);
+            });
+            Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+        else if (keyEvent.Key == Settings.Current.Controls.RemoveTorrent)
+        {
+            bool deleteFiles = false;
+
+            if (MessageBox.Query("Delete downloaded files?",
+                            "",
+                            "Yes", "No") == 0)
+            {
+              
+                deleteFiles = true;
+            }
+
+            Task.Run(async () =>
+            {
+                await TorrentOperations.DeleteTorrentAsync(_table.SelectedRow, deleteFiles);
+            });
+            Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+
+        return base.ProcessKey(keyEvent);
+    }
 
     // Method to refresh the torrent list display
     public void Refresh()

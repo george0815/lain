@@ -46,9 +46,9 @@ internal class SettingsData
     {
         StartDownload = Key.F3,
         StopDownload = Key.F4,
-        RemoveTorrent = Key.F5,
-        StartSeeding = Key.F6,
-        StopSeeding = Key.F7,
+        StartSeeding = Key.F5,
+        StopSeeding = Key.F6,
+        RemoveTorrent = Key.F7
     };
 
     //Icons

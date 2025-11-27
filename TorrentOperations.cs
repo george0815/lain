@@ -229,7 +229,7 @@ namespace lain
         #endregion
 
 
-        internal async Task PauseTorrentAsync(short index)
+        internal static async Task PauseTorrentAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
@@ -247,7 +247,7 @@ namespace lain
             }
         }
 
-        internal async Task ResumeTorrentAsync(short index)
+        internal static async Task ResumeTorrentAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
@@ -265,7 +265,7 @@ namespace lain
             }
         }
 
-        internal async Task StartSeedingAsync(short index)
+        internal static async Task StartSeedingAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
@@ -283,7 +283,7 @@ namespace lain
             }
         }
 
-        internal async Task StopSeedingAsync(short index)
+        internal static async Task StopSeedingAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
@@ -302,7 +302,7 @@ namespace lain
             }
         }
 
-        internal async Task DeleteTorrentAsync(short index, bool deleteFiles = true)
+        internal static async Task DeleteTorrentAsync(int index, bool deleteFiles = true)
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
