@@ -123,14 +123,7 @@ namespace lain.frameviews
             y += 2;
 
 
-            var generateMagnetURLCheckbox = new CheckBox("Generate magnet link")
-            {
-                X = 1,
-                Y = y,
-                Checked = false
-            };
-            scroll.Add(generateMagnetURLCheckbox);
-            y += 2;
+          
 
             #endregion
 
@@ -167,18 +160,7 @@ namespace lain.frameviews
 
 
 
-            // Shows magnet url
-            TorrentOperations.MagnetLinkGenerated += (url) =>
-            {
-                if (MessageBox.Query("Magnet URL Generated",
-                        "Magnet link copied to clipboard!",
-                        "OK") == 0)
-                {
-                    ClipboardService.SetText(url);
-                }
-            };
-
-
+            
             #region BUTTON EVENTS
 
             filesDialogBtn.Clicked += () =>
@@ -263,7 +245,7 @@ namespace lain.frameviews
 
                     TorrentData settings = new TorrentData
                     {
-                        UseMagnetLink = generateMagnetURLCheckbox.Checked,
+                        UseMagnetLink = false,
                         TorPath = inputPath,
                         DownPath = outPath,
                         Trackers = trackerList,

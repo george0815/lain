@@ -32,7 +32,7 @@ namespace lain.frameviews
 
 
             // Magnet URL
-            scroll.Add(new Label("Magnet URL:") { X = 1, Y = y });
+            scroll.Add(new Label("Magnet link:") { X = 1, Y = y });
             var magnetInput = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(magnetInput);
             y += 2;

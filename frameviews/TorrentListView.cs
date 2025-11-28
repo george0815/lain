@@ -1,10 +1,12 @@
 ﻿using lain;
+using lain.helpers;
+using MonoTorrent;
 using MonoTorrent.Client;
 using System;
 using System.Data;
 using System.Xml.Linq;
-using lain.helpers;
 using Terminal.Gui;
+using TextCopy;
 
 public class TorrentListView : FrameView
 {
@@ -93,6 +95,22 @@ public class TorrentListView : FrameView
                 await TorrentOperations.StopSeedingAsync(_table.SelectedRow);
             });
             Log.Write(_table.SelectedRow.ToString());
+            return true; // handled
+        }
+        else if (keyEvent.Key == Settings.Current.Controls.GenMagLink)
+        {
+            var magnet = new MagnetLink(_managers[_table.SelectedRow].Torrent!.InfoHashes, _managers[_table.SelectedRow].Torrent!.Name,
+                    _managers[_table.SelectedRow].Torrent!.AnnounceUrls.SelectMany(t => t.ToArray()).ToList());
+
+            Log.Write($"Magnet link generated: {magnet.ToV1String()}");
+
+            if (MessageBox.Query($"", "Magnet link copied to clipboard.",
+                        "OK") == 0)
+            {
+                ClipboardService.SetText(magnet.ToV1String());
+            }
+  
+
             return true; // handled
         }
         else if (keyEvent.Key == Settings.Current.Controls.RemoveTorrent)

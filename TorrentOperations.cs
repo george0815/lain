@@ -8,6 +8,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal.Gui;
+using TextCopy;
 
 namespace lain
 {
@@ -99,16 +101,6 @@ namespace lain
             Log.Write("Creating...");
             await manager.StartAsync();
 
-            if (data.UseMagnetLink)
-            {
-                var magnet = new MagnetLink(torrent.InfoHashes, torrent.Name,
-                    torrent.AnnounceUrls.SelectMany(t => t.ToArray()).ToList());
-
-                Log.Write($"Magnet link generated: {magnet}");
-
-                MagnetLinkGenerated?.Invoke(magnet.ToString()!);
-            }
-
 
 
 
@@ -178,7 +170,7 @@ namespace lain
             {
                 Log.Write($"State changed: {e.OldState} -> {e.NewState}");
 
-                if (e.NewState == TorrentState.Seeding &&
+                if (e.OldState== TorrentState.Downloading && e.NewState == TorrentState.Seeding &&
                     Settings.Current.StopSeedingWhenFinished)
                 {
                     await manager.StopAsync();
@@ -221,13 +213,14 @@ namespace lain
                     }
 
                     UpdateProgress?.Invoke();
-                    await Task.Delay(5000);
+                    await Task.Delay(Settings.Current.RefreshInterval);
                 }
             });
         }
 
         #endregion
 
+        #region MANAGE TORRENTS
 
         internal static async Task PauseTorrentAsync(int index)
         {
@@ -336,6 +329,8 @@ namespace lain
                 }
             }
         }
+
+        #endregion
 
     }
 }

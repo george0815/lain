@@ -23,11 +23,14 @@ internal class SettingsData
     public ushort MaxConnections { get; set; } = 100;
     public int MaxDownloadSpeed { get; set; } = 1000;
     public int MaxUploadSpeed { get; set; } = 1000;
+    public int RefreshInterval { get; set; } = 1000;
 
     // Client settings
     public bool DetailedLogging { get; set; } = true;
     public bool StopSeedingWhenFinished { get; set; } = true;
     public bool EnablePortForwarding { get; set; } = true;
+
+    public bool DisableColoredHotkeyInfo { get; set; } = false;
     public bool DisableASCII { get; set; } = false;
     public string? DefaultDownloadPath { get; set; } = "./";
     public string? LogPath { get; set; } = "./log.txt";
@@ -106,7 +109,7 @@ internal static class Settings
             string json = File.ReadAllText(Current.SettingsPath);
             var loaded = JsonSerializer.Deserialize<SettingsData>(json, JsonOptions);
 
-            if (loaded != null) { Current = loaded; }
+            if (loaded != null) { Current = loaded; if (Current.DisableASCII) SettingsData.HeaderHeight = 5; }
             else { Settings.Save(); }
 
         }

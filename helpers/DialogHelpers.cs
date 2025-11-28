@@ -1,9 +1,66 @@
 ﻿using Terminal.Gui;
 using System;
 using System.IO;
+using lain;
 
 public static class DialogHelpers
 {
+
+    public static Color PickColorGrid()
+    {
+        var colors = Enum.GetValues<Color>().ToArray();
+        var dlg = new Dialog("Choose Color", 50, 8);
+
+        dlg.ColorScheme = new ColorScheme()
+        {
+            Normal = Application.Driver.MakeAttribute(Settings.Current.TextColor, Color.Black), // text, background
+            Focus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Color.Black), // focused element
+            HotNormal = Application.Driver.MakeAttribute(Settings.Current.HotTextColor, Color.Black), //hotkey text, background
+            HotFocus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Color.Black), // focused hotkey text, background
+        };
+
+        Color result = Color.Black;
+
+        int x = 0, y = 0;
+        foreach (var c in colors)
+        {
+
+
+            var textColor = c;
+            if (c == Color.Black) { 
+                textColor = Color.White; 
+            }
+
+            var box = new Button($" {c} ")
+            {
+                X = x * 15,
+                Y = y,
+                ColorScheme = new ColorScheme()
+                {
+                    Normal = new Terminal.Gui.Attribute(textColor, Color.Black),
+                    Focus = Application.Driver.MakeAttribute(textColor, Color.Black), // focused element
+                    HotNormal = Application.Driver.MakeAttribute(textColor, Color.Black), //hotkey text, background
+                    HotFocus = Application.Driver.MakeAttribute(textColor, Color.Black), // focused hotkey text
+                }
+            };
+
+            box.Clicked += () =>
+            {
+                result = c;
+                Application.RequestStop();
+            };
+
+            dlg.Add(box);
+
+            x++;
+            if (x == 3) { x = 0; y++; }
+        }
+
+        Application.Run(dlg);
+        return result;
+    }
+
+
     public static string? ShowSaveFileDialog(string title, string message, string[] allowedExtensions,
                                              string defaultFileName = "")
     {

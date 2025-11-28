@@ -31,9 +31,9 @@ namespace lain
         {
 
 
-      
 
             #region HEADER
+
 
             //Header
             var header = new FrameView()
@@ -91,8 +91,8 @@ namespace lain
             // Active torrents count
             var torrentCount = new Label()
             {
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
-                Y = 3,
+                X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 2,
+                Y = (Settings.Current.DisableASCII ? 1 : 3),
                 Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
 
@@ -115,8 +115,8 @@ namespace lain
 
             var torrentPreview = new Label()
                 {
-                    X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
-                    Y = 5,
+                    X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 2,
+                    Y = (Settings.Current.DisableASCII ? 3 : 5),
                     Text = sb.ToString()
                 };
 
@@ -124,7 +124,7 @@ namespace lain
             var portDisplay = new Label()
             {
                 X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
-                Y = 7,
+                Y = (Settings.Current.DisableASCII ? 3 : 7),
                 Text = $"Operating on port: {Settings.Current.Port}"
             };
 
@@ -133,37 +133,49 @@ namespace lain
 
 
             header.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") {
-                ColorScheme = new ColorScheme()
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Green, Settings.Current.BackgroundColor), // text color, background color
-                },
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 1
+                }),
+                X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 1
 
             });
             header.Add(new Label($"Stop: {Settings.Current.Controls.StopDownload}") {
-                ColorScheme = new ColorScheme()
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Red, Settings.Current.BackgroundColor), // text color, background color
-                },
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 3 });
+                }),
+                X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 3 });
             header.Add(new Label($"Start seeding: {Settings.Current.Controls.StartSeeding}") {
-                ColorScheme = new ColorScheme()
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.BrightYellow, Settings.Current.BackgroundColor), // text color, background color
-                },
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 5 });
+                }),
+                X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 5)
+            });
             header.Add(new Label($"Stop seeding: {Settings.Current.Controls.StopSeeding}") {
-                ColorScheme = new ColorScheme()
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Blue, Settings.Current.BackgroundColor), // text color, background color
-                },
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 7 });
+                }),
+                X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 3 : 7)
+            });
             header.Add(new Label($"Delete: {Settings.Current.Controls.RemoveTorrent}") {
-                ColorScheme = new ColorScheme()
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Magenta, Settings.Current.BackgroundColor), // text color, background color
-                },
-                X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 30, Y = 9 });
+                }),
+                X = (Settings.Current.DisableASCII ? 62 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 9) });
+
+            header.Add(new Label($"Generate magnet link: {Settings.Current.Controls.GenMagLink}")
+            {
+                ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
+                {
+                    Normal = Application.Driver.MakeAttribute(Color.BrightCyan, Settings.Current.BackgroundColor), // text color, background color
+                }),
+                X = (Settings.Current.DisableASCII ? 62 : SettingsData.LogoWidth) + 30,
+                Y = (Settings.Current.DisableASCII ? 3 : 11)
+            });
 
 
 
@@ -255,7 +267,6 @@ namespace lain
 
 
         #region HELPER METHODS
-
 
 
         // Shows exit confirmation dialog

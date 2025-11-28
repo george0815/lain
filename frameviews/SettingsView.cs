@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Terminal.Gui;
+using lain.helpers;
 
 namespace lain.frameviews
 {
@@ -19,12 +20,12 @@ namespace lain.frameviews
             { "Brown", Terminal.Gui.Color.Brown   },
             { "Gray", Terminal.Gui.Color.Gray },
             { "DarkGray", Terminal.Gui.Color.DarkGray },
-            { "Bright Blue", Terminal.Gui.Color.BrightBlue },
-            { "Bright Green", Terminal.Gui.Color.BrightGreen },
-            { "Bright Cyan", Terminal.Gui.Color.BrightCyan },
-            { "Bright Red", Terminal.Gui.Color.BrightRed },
-            { "Bright Magenta", Terminal.Gui.Color.BrightMagenta },
-            { "Bright Yellow", Terminal.Gui.Color.BrightYellow},
+            { "BrightBlue", Terminal.Gui.Color.BrightBlue },
+            { "BrightGreen", Terminal.Gui.Color.BrightGreen },
+            { "BrightCyan", Terminal.Gui.Color.BrightCyan },
+            { "BrightRed", Terminal.Gui.Color.BrightRed },
+            { "BrightMagenta", Terminal.Gui.Color.BrightMagenta },
+            { "BrightYellow", Terminal.Gui.Color.BrightYellow},
             { "White", Terminal.Gui.Color.White }
         };
 
@@ -84,12 +85,23 @@ namespace lain.frameviews
             scroll.Add(maxUpField);
             y += 2;
 
+            // Progress Refresh rate
+            scroll.Add(new Label("Progress refresh rate (ms):") { X = 1, Y = y });
+            var refreshRateField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
+            scroll.Add(refreshRateField);
+            y += 2;
+
+
             #endregion
 
             #region BOOLEAN OPTIONS
 
             var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.Current.StopSeedingWhenFinished };
             scroll.Add(stopSeedCheckbox);
+            y += 2;
+
+            var disableHotKeyColors = new CheckBox("Disable colored hotkey information") { X = 1, Y = y, Checked = Settings.Current.DisableColoredHotkeyInfo };
+            scroll.Add(disableHotKeyColors);
             y += 2;
 
             var detailedLogging = new CheckBox("Enable detailed logging") { X = 1, Y = y, Checked = Settings.Current.DetailedLogging };
@@ -130,35 +142,65 @@ namespace lain.frameviews
 
             #region COLOR SETTINGS
 
+            
             // Background Color
             scroll.Add(new Label("Background color:") { X = 1, Y = y });
 
-            var bgColorCombo = new ComboBox()
+            var bgColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+        
+                Height = 1,
+                Text = Settings.Current.BackgroundColor.ToString()
             };
-            bgColorCombo.SetSource(new List<string>(colors.Keys));
-            bgColorCombo.SelectedItem = (int)Settings.Current.BackgroundColor!; // default
-            scroll.Add(bgColorCombo);
+            
+
+            bgColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.BackgroundColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                bgColorCombo.Text = Settings.Current.BackgroundColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                bgColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
+
+            scroll.Add(bgColorCombo); 
             y += 2;
 
             // Text Color
             scroll.Add(new Label("Text color:") { X = 1, Y = y });
 
-            var textColorCombo = new ComboBox()
+            var textColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.TextColor.ToString()
             };
-            textColorCombo.SetSource(new List<string>(colors.Keys));
-            textColorCombo.SelectedItem = (int)Settings.Current.TextColor!; // default
+
+
+            textColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.TextColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                textColorCombo.Text = Settings.Current.TextColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                textColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
             scroll.Add(textColorCombo);
             y += 2;
 
@@ -167,32 +209,60 @@ namespace lain.frameviews
             //Focus background color
             scroll.Add(new Label("Focus background color:") { X = 1, Y = y });
 
-            var backgroundFocusColorCombo = new ComboBox()
+            var backgroundFocusColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.FocusBackgroundColor.ToString()
             };
-            backgroundFocusColorCombo.SetSource(new List<string>(colors.Keys));
-            backgroundFocusColorCombo.SelectedItem = (int)Settings.Current.FocusBackgroundColor!; // default
+
+
+            backgroundFocusColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.FocusBackgroundColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                backgroundFocusColorCombo.Text = Settings.Current.FocusBackgroundColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                backgroundFocusColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
             scroll.Add(backgroundFocusColorCombo);
             y += 2;
 
             //Focus text color
             scroll.Add(new Label("Focus text color:") { X = 1, Y = y });
 
-            var textFocusColorCombo = new ComboBox()
+            var textFocusColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.FocusTextColor.ToString()
             };
-            textFocusColorCombo.SetSource(new List<string>(colors.Keys));
-            textFocusColorCombo.SelectedItem = (int)Settings.Current.FocusTextColor!; // default
+
+
+            textFocusColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.FocusTextColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                textFocusColorCombo.Text = Settings.Current.FocusTextColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                textFocusColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
             scroll.Add(textFocusColorCombo);
             y += 2;
 
@@ -200,32 +270,60 @@ namespace lain.frameviews
             //Hot text color
             scroll.Add(new Label("Hotkey text color:") { X = 1, Y = y });
 
-            var hotTextColorCombo = new ComboBox()
+            var hotTextColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.HotTextColor.ToString()
             };
-            hotTextColorCombo.SetSource(new List<string>(colors.Keys));
-            hotTextColorCombo.SelectedItem = (int)Settings.Current.HotTextColor!; // default
+
+
+            hotTextColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.HotTextColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                hotTextColorCombo.Text = Settings.Current.HotTextColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                hotTextColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
             scroll.Add(hotTextColorCombo);
             y += 2;
 
             //ASCII color
             scroll.Add(new Label("ASCII color:") { X = 1, Y = y });
 
-            var logoColorCombo = new ComboBox()
+            var logoColorCombo = new Button()
             {
                 X = 30,
                 Y = y,
-                Width = 15,
-                ReadOnly = true,
-                Height = 8
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.LogoColor.ToString()
             };
-            logoColorCombo.SetSource(new List<string>(colors.Keys));
-            logoColorCombo.SelectedItem = (int)Settings.Current.LogoColor!; // default
+
+
+            logoColorCombo.Clicked += () =>
+            {
+                // Open your color picker
+                Settings.Current.LogoColor = DialogHelpers.PickColorGrid();
+
+                // Update *the button's* text, not `Text = ...`
+                logoColorCombo.Text = Settings.Current.LogoColor.ToString();
+
+                // Force redraw the button *and its parent view*
+                logoColorCombo.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
             scroll.Add(logoColorCombo);
             y += 2;
 
@@ -234,6 +332,7 @@ namespace lain.frameviews
             var disableASCII = new CheckBox("Disable ASCII") { X = 1, Y = y, Checked = Settings.Current.DisableASCII };
             scroll.Add(disableASCII);
             y += 2;
+
 
 
             #endregion
@@ -318,6 +417,19 @@ namespace lain.frameviews
                         return;
                     }
 
+                    if (!int.TryParse(refreshRateField.Text.ToString(), out var refRate))
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid progress refresh rate.", "OK");
+                        return;
+                    }
+
+                    if (refRate > 1000)
+                    {
+                        MessageBox.ErrorQuery("Error", "Invalid progress refresh rate. Must be over 1000ms.", "OK");
+                        return;
+                    }
+
+
                     // Paths
                     string downloadPath = downloadPathField.Text.ToString()!.Trim();
                     string logPath = logPathField.Text.ToString()!.Trim()!;
@@ -365,11 +477,13 @@ namespace lain.frameviews
                     Settings.Current.MaxConnections = maxConn;
                     Settings.Current.MaxDownloadSpeed = maxDl;
                     Settings.Current.MaxUploadSpeed = maxUp;
+                    Settings.Current.RefreshInterval = refRate;
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                     Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
                     Settings.Current.DetailedLogging = detailedLogging.Checked;
                     Settings.Current.DisableASCII = disableASCII.Checked;
+                    Settings.Current.DisableColoredHotkeyInfo = disableHotKeyColors.Checked;
 
 
                     Settings.Current.DefaultDownloadPath = downloadPath;
@@ -386,7 +500,8 @@ namespace lain.frameviews
 
                     Settings.Save();
 
-                    MessageBox.Query("Settings", "Settings saved successfully.", "OK");
+                    MessageBox.Query("Settings", "Settings saved successfully.\n Some changes will take effect after restarting.", "OK");
+                    Log.Write("Settings saved.");
                 }
                 catch (Exception ex)
                 {
