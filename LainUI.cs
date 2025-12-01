@@ -32,6 +32,8 @@ namespace lain
 
 
 
+
+
             #region HEADER
 
 
@@ -42,9 +44,26 @@ namespace lain
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Settings.Current.DisableASCII ? 5 : SettingsData.HeaderHeight,
-                CanFocus = false,
                 Border = new Border() { BorderStyle = BorderStyle.None }
             };
+
+            // Scrollable area inside header
+            var headerScroll = new ScrollView()
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+
+                ContentSize = new Size(120, SettingsData.HeaderHeight), // Adjust to your max width
+                ShowHorizontalScrollIndicator = false,
+                ShowVerticalScrollIndicator = false,
+                Border = new Border() { BorderStyle = BorderStyle.None }
+
+            };
+
+            header.Add(headerScroll);
+
 
             // Wrap ASCII art in a FrameView to give it a border
             var logoFrame = new FrameView()
@@ -96,35 +115,13 @@ namespace lain
                 Text = $"Active Torrents: {TorrentOperations.Managers!.Count}"
             };
 
-            // Active torrents preview
-            StringBuilder sb = new StringBuilder("", 30);
-            int count = 0;
-
-            if (TorrentOperations.Managers.Count() != 0)
-            {
-                for (int i = 0; i <= TorrentOperations.Managers.Count(); i++)
-                {
-
-                    if (TorrentOperations.Managers[i].State == TorrentState.Seeding || TorrentOperations.Managers[i].State == TorrentState.Downloading) { sb.Append(TorrentOperations.Managers[i].Torrent?.Name); }
-                    if (count == 3) { sb.Append("..."); break; }
-                    sb.Append("\n");
-
-                }
-            }
-            else { sb.Append("No active torrents"); }
-
-            var torrentPreview = new Label()
-                {
-                    X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 2,
-                    Y = (Settings.Current.DisableASCII ? 3 : 5),
-                    Text = sb.ToString()
-                };
+          
 
             // Port
             var portDisplay = new Label()
             {
                 X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
-                Y = (Settings.Current.DisableASCII ? 3 : 7),
+                Y = (Settings.Current.DisableASCII ? 3 : 5),
                 Text = $"Operating on port: {Settings.Current.Port}"
             };
 
@@ -132,7 +129,7 @@ namespace lain
             #region HOTKEY INFO
 
 
-            header.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") {
+            headerScroll.Add(new Label($"Start: {Settings.Current.Controls.StartDownload}") {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Green, Settings.Current.BackgroundColor), // text color, background color
@@ -140,34 +137,34 @@ namespace lain
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 1
 
             });
-            header.Add(new Label($"Stop: {Settings.Current.Controls.StopDownload}") {
+            headerScroll.Add(new Label($"Stop: {Settings.Current.Controls.StopDownload}") {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Red, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 3 });
-            header.Add(new Label($"Start seeding: {Settings.Current.Controls.StartSeeding}") {
+            headerScroll.Add(new Label($"Start seeding: {Settings.Current.Controls.StartSeeding}") {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.BrightYellow, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 5)
             });
-            header.Add(new Label($"Stop seeding: {Settings.Current.Controls.StopSeeding}") {
+            headerScroll.Add(new Label($"Stop seeding: {Settings.Current.Controls.StopSeeding}") {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Blue, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 3 : 7)
             });
-            header.Add(new Label($"Delete: {Settings.Current.Controls.RemoveTorrent}") {
+            headerScroll.Add(new Label($"Delete: {Settings.Current.Controls.RemoveTorrent}") {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Magenta, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 62 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 9) });
 
-            header.Add(new Label($"Generate magnet link: {Settings.Current.Controls.GenMagLink}")
+            headerScroll.Add(new Label($"Generate magnet link: {Settings.Current.Controls.GenMagLink}")
             {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
@@ -183,7 +180,7 @@ namespace lain
             #endregion
 
 
-            header.Add(date, torrentCount, torrentPreview, portDisplay);
+            headerScroll.Add(date, torrentCount, portDisplay);
             Add(header);
 
 
@@ -335,6 +332,10 @@ namespace lain
 
             SetNeedsDisplay();
         }
+
+        
+
+
 
         #endregion
 

@@ -8,6 +8,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Terminal.Gui;
 using TextCopy;
 
@@ -47,6 +49,9 @@ namespace lain
 
         //list of all torrents
         internal static List<TorrentManager> Managers { get; } = new();
+
+        //list of all torrentdata for serialization
+        public static List<TorrentData> TorrentDataDTOList { get; set; } = new();
 
         internal TorrentOperations() { }
 
@@ -97,9 +102,13 @@ namespace lain
 
             WireUpManagerEvents(manager);
             Managers.Add(manager);
+            TorrentDataDTOList.Add(data);
+            SaveTorrentData();
 
             Log.Write("Creating...");
             await manager.StartAsync();
+            StartProgressLoop();
+            AutosaveLoop();
 
 
 
@@ -108,7 +117,7 @@ namespace lain
 
 
         // Add torrent
-        internal static async Task AddTorrent(TorrentData data)
+        internal static async Task AddTorrent(TorrentData data, bool loading)
         {
             // Build torrent settings
             var tSettings = new TorrentSettingsBuilder
@@ -130,11 +139,14 @@ namespace lain
 
                 WireUpManagerEvents(manager);
                 Managers.Add(manager);
+                if (!loading){ TorrentDataDTOList.Add(data); };
+                SaveTorrentData();
 
                 Log.Write("Downloading from magnet link...");
                 await manager.StartAsync();
 
-                StartProgressLoop();
+                StartProgressLoop();      
+                AutosaveLoop();
             }
             else
             {
@@ -145,11 +157,14 @@ namespace lain
 
                 WireUpManagerEvents(manager);
                 Managers.Add(manager);
+                if (!loading) { TorrentDataDTOList.Add(data); }         
+                SaveTorrentData();
 
                 Log.Write("Downloading from torrent file...");
                 await manager.StartAsync();
 
                 StartProgressLoop();
+                AutosaveLoop();
             }
         }
 
@@ -185,6 +200,34 @@ namespace lain
              
                 }
             };
+        }
+        //Autosave loop
+        private static bool _autoLoopRunning = false;
+        private static void AutosaveLoop()
+        {
+            if (_autoLoopRunning)
+                return;
+
+            _autoLoopRunning = true;
+
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    try
+                    {
+                        Log.Write("Saved fast resume data");
+                        await Engine.SaveStateAsync();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Write($"Error saving fastresume data: {ex}");
+                    }
+                    
+                }
+            });
         }
 
         // Progress loop
@@ -222,6 +265,84 @@ namespace lain
 
         #region MANAGE TORRENTS
 
+        internal async static void LoadAllTorrents()
+        {
+
+            JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
+
+            try
+            {
+                if (!File.Exists("torrents.json")) {  return; }
+
+                string json = File.ReadAllText("torrents.json");
+                var loaded = JsonSerializer.Deserialize<List<TorrentData>>(json, JsonOptions);
+
+                if (loaded != null) { TorrentDataDTOList = loaded; }
+
+                //for each torrent add it to manager
+                for (int i = 0; i < TorrentDataDTOList.Count; i++)
+                {
+                    await AddTorrent(TorrentDataDTOList[i], true);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading settings: {ex.Message}");
+                Settings.Save();
+            }
+        }
+
+
+        internal static void SaveTorrentData()
+        {
+            JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
+
+            try
+            {
+                var json = JsonSerializer.Serialize(TorrentDataDTOList, JsonOptions);
+                File.WriteAllText("torrents.json", json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving torrents: {ex.Message}");
+            }
+        }
+
+      
+
+        internal static async Task SaveTorrentAsync(int index)
+        {
+
+            var fastResumeData = (await Managers[index].SaveFastResumeAsync()).Encode();
+
+            var fastResumePath = Engine.Settings.GetFastResumePath(Managers[index].InfoHashes);
+            var parentDirectory = Path.GetDirectoryName(fastResumePath)!;
+            Directory.CreateDirectory(parentDirectory);
+            File.WriteAllBytes(fastResumePath, fastResumeData);
+
+            if (Settings.Current.DetailedLogging == true)
+            {
+                Log.Write($"Fast resume data saved for torrent: {Managers[index].Torrent?.Name}");
+            }
+        }
+
+        internal static async Task LoadTorrentAsync(int index)
+        {
+          
+            var fastResumePath = Engine.Settings.GetFastResumePath(Managers[index].InfoHashes);
+            var parentDirectory = Path.GetDirectoryName(fastResumePath)!;
+
+            if (File.Exists(fastResumePath) &&
+                FastResume.TryLoad(fastResumePath, out FastResume? fastResume) &&
+                Managers[index].InfoHashes.Contains(fastResume.InfoHashes.V1OrV2))
+            {
+                await Managers[index].LoadFastResumeAsync(fastResume);
+            }
+
+        }
+
         internal static async Task PauseTorrentAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
@@ -230,8 +351,11 @@ namespace lain
             {
                 try
                 {
+
                     await manager.PauseAsync();
                     Log.Write($"Paused torrent: {manager.Torrent?.Name}");
+                    await SaveTorrentAsync(index);
+                   
                 }
                 catch (Exception ex)
                 {
@@ -313,6 +437,8 @@ namespace lain
 
                     // Remove from list
                     Managers.RemoveAt(index);
+                    TorrentDataDTOList.RemoveAt(index);
+                    SaveTorrentData();
 
                     Log.Write($"Deleted torrent: {manager.Torrent?.Name}");
 

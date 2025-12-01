@@ -251,7 +251,7 @@ namespace lain.frameviews
                 {
                     try
                     {
-                        await TorrentOperations.AddTorrent(settings);
+                        await TorrentOperations.AddTorrent(settings, false);
                     }
                     catch (Exception ex)
                     {
@@ -269,6 +269,12 @@ namespace lain.frameviews
             };
 
             #endregion
+
+
+
         }
+
+
+       
     }
 }

@@ -52,9 +52,12 @@ public class TorrentListView : FrameView
 
         Add(_table);
 
+        TorrentOperations.LoadAllTorrents();
 
         // Subscribe to log updates
         TorrentOperations.UpdateProgress += Refresh;
+
+
     }
 
     //process key events for start/stop/remove/etc
