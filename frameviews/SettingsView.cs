@@ -75,13 +75,13 @@ namespace lain.frameviews
 
             // Max Download Speed
             scroll.Add(new Label("Max total download speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
+            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / 1024).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
             scroll.Add(new Label("Max total upload speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
+            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / 1024).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
@@ -475,8 +475,8 @@ namespace lain.frameviews
                     Settings.Current.Port = port;
                     Settings.Current.DhtPort = dhtPort;
                     Settings.Current.MaxConnections = maxConn;
-                    Settings.Current.MaxDownloadSpeed = maxDl;
-                    Settings.Current.MaxUploadSpeed = maxUp;
+                    Settings.Current.MaxDownloadSpeed = maxDl * 1024;
+                    Settings.Current.MaxUploadSpeed = maxUp * 1024;
                     Settings.Current.RefreshInterval = refRate;
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;

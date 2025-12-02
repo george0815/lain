@@ -124,9 +124,9 @@ namespace lain.frameviews
 
             var downloadBtn = new Button("Download") { X = 1, Y = y };
             scroll.Add(downloadBtn);
-            y += 2;
 
-            scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
+
+            scroll.ContentSize = new Terminal.Gui.Size(200, y + 2);
 
             #region BUTTON EVENTS
 
@@ -251,7 +251,7 @@ namespace lain.frameviews
                 {
                     try
                     {
-                        await TorrentOperations.AddTorrent(settings, false);
+                        await TorrentOperations.AddTorrent(settings, false, false);
                     }
                     catch (Exception ex)
                     {

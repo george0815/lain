@@ -77,6 +77,7 @@ namespace lain
             var tSettings = new TorrentSettingsBuilder
             {
                 AllowInitialSeeding = data.StartSeedingAfterCreation,
+                
             }.ToSettings();
 
 
@@ -93,23 +94,22 @@ namespace lain
             ITorrentFileSource files = new TorrentFileSource(data.TorPath);
 
             BEncodedDictionary dict = await creator.CreateAsync(files);
-            Torrent torrent = Torrent.Load(dict);
-
-            
-            var manager = await Engine.AddAsync(torrent, data.DownPath, tSettings);
-
             
 
-            WireUpManagerEvents(manager);
-            Managers.Add(manager);
-            TorrentDataDTOList.Add(data);
-            SaveTorrentData();
+            File.WriteAllBytes(data.DownPath, dict.Encode());
 
-            Log.Write("Creating...");
-            await manager.StartAsync();
-            StartProgressLoop();
-            AutosaveLoop();
 
+            data.MaxConnections = Settings.Current.MaxConnections;
+            data.MaxDownloadRate = Settings.Current.MaxDownloadSpeed;
+            data.MaxUploadRate = Settings.Current.MaxUploadSpeed;
+            data.UseDht = true;
+
+            data.TorPath = data.DownPath;
+            data.DownPath = "./";
+            
+
+
+            await AddTorrent(data, false, true);
 
 
 
@@ -117,7 +117,7 @@ namespace lain
 
 
         // Add torrent
-        internal static async Task AddTorrent(TorrentData data, bool loading)
+        internal static async Task AddTorrent(TorrentData data, bool loading, bool create)
         {
             // Build torrent settings
             var tSettings = new TorrentSettingsBuilder
@@ -160,7 +160,9 @@ namespace lain
                 if (!loading) { TorrentDataDTOList.Add(data); }         
                 SaveTorrentData();
 
-                Log.Write("Downloading from torrent file...");
+
+                
+                Log.Write(create ? "Creating..." : "Downloading from torrent file...");
                 await manager.StartAsync();
 
                 StartProgressLoop();
@@ -282,7 +284,7 @@ namespace lain
                 //for each torrent add it to manager
                 for (int i = 0; i < TorrentDataDTOList.Count; i++)
                 {
-                    await AddTorrent(TorrentDataDTOList[i], true);
+                    await AddTorrent(TorrentDataDTOList[i], true, false);
                 }
 
 

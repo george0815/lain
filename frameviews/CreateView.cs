@@ -148,15 +148,15 @@ namespace lain.frameviews
                 Height = 5
             };
             scroll.Add(comment);
-            y += 6;
+            y += 2;
 
             #endregion
 
             var createTorBtn = new Button("Create") { X = 1, Y = y };
             scroll.Add(createTorBtn);
-            y += 2;
+         
 
-            scroll.ContentSize = new Terminal.Gui.Size(200, y + 5);
+            scroll.ContentSize = new Terminal.Gui.Size(200, y + 2);
 
 
 
