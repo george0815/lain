@@ -129,11 +129,6 @@ namespace lain.frameviews
 
             #region METADATA
 
-            scroll.Add(new Label("Name:") { X = 1, Y = y });
-            var name = new TextField("") { X = 20, Y = y, Width = 40 };
-            scroll.Add(name);
-            y += 2;
-
             scroll.Add(new Label("Publisher:") { X = 1, Y = y });
             var publisher = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(publisher);
@@ -192,7 +187,6 @@ namespace lain.frameviews
                 string inputPath = folderPath.Text.ToString()!.Trim();
                 string outPath = outputPath.Text.ToString()!.Trim();
                 string trackers = trackerLink.Text.ToString()!.Trim();
-                string torName = name.Text.ToString()!.Trim();
 
                 // Check file/folder exists
                 if (string.IsNullOrWhiteSpace(inputPath) ||
@@ -209,12 +203,6 @@ namespace lain.frameviews
                     return;
                 }
 
-                // Check name
-                if (string.IsNullOrWhiteSpace(torName))
-                {
-                    MessageBox.ErrorQuery("Error", "Name cannot be empty.", "OK");
-                    return;
-                }
 
 
 
@@ -252,7 +240,6 @@ namespace lain.frameviews
                         PieceSize = selectedPieceSize,
                         StartSeedingAfterCreation = startSeedingAfterCreationCheckbox.Checked,
                         IsPrivate = privateTorrentCheckbox.Checked,
-                        Name = torName,
                         Comment = comment.Text.ToString() ?? "",
                         Publisher = publisher.Text.ToString() ?? ""
                     };

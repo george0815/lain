@@ -28,7 +28,6 @@ namespace lain
         public string MagnetUrl { get; set; }
         public string TorPath { get; set; }
         public string DownPath { get; set; }
-        public string Name { get; set; }
         public string Publisher { get; set; }
         public string Comment { get; set; }
         public int MaxConnections { get; set; }

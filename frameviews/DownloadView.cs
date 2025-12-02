@@ -15,6 +15,8 @@ namespace lain.frameviews
             Width = Dim.Fill();
             Height = Dim.Fill();
 
+  
+
             var scroll = new ScrollView()
             {
                 X = 0,

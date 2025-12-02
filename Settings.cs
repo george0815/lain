@@ -29,7 +29,7 @@ internal class SettingsData
     public bool DetailedLogging { get; set; } = true;
     public bool StopSeedingWhenFinished { get; set; } = true;
     public bool EnablePortForwarding { get; set; } = true;
-
+    public bool HidetextCursor { get; set; } = true;    
     public bool DisableColoredHotkeyInfo { get; set; } = false;
     public bool DisableASCII { get; set; } = false;
     public string? DefaultDownloadPath { get; set; } = "./";

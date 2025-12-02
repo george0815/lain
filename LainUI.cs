@@ -22,16 +22,12 @@ namespace lain
         internal FrameView logView;
 
 
-        public bool ShouldExit { get; private set; }
 
 
 
 
         public LainUI()
         {
-
-
-
 
 
             #region HEADER
@@ -333,8 +329,17 @@ namespace lain
             SetNeedsDisplay();
         }
 
-        
 
+        public override void PositionCursor()
+        {
+            if (Settings.Current.HidetextCursor)
+            {
+                Application.Driver.SetCursorVisibility(CursorVisibility.Invisible);
+                return;
+            }
+
+            base.PositionCursor();
+        }
 
 
         #endregion

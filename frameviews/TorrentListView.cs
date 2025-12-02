@@ -150,7 +150,7 @@ public class TorrentListView : FrameView
 
             foreach (var m in _managers)
             {
-                string name = m.Torrent?.Name ?? "Unknown";
+                string name = m.Torrent!.Name ?? "Unknown";
                 string state = m.State.ToString();
                 string progress = $"{m.Progress:0.0}%";
                 string peers = m.OpenConnections.ToString() ?? "0";

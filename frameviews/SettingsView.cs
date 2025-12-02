@@ -87,7 +87,7 @@ namespace lain.frameviews
 
             // Progress Refresh rate
             scroll.Add(new Label("Progress refresh rate (ms):") { X = 1, Y = y });
-            var refreshRateField = new TextField(Settings.Current.MaxUploadSpeed.ToString()) { X = 35, Y = y, Width = 10 };
+            var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(refreshRateField);
             y += 2;
 
@@ -110,6 +110,10 @@ namespace lain.frameviews
 
             var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.Current.EnablePortForwarding };
             scroll.Add(portFwdCheckbox);
+            y += 2;
+
+            var hideTextCursor = new CheckBox("Hide text cursor") { X = 1, Y = y, Checked = Settings.Current.HidetextCursor };
+            scroll.Add(hideTextCursor);
             y += 2;
 
             #endregion
@@ -340,10 +344,10 @@ namespace lain.frameviews
             // Save button
             var saveBtn = new Button("Save") { X = 1, Y = y };
             scroll.Add(saveBtn);
-            y += 2;
+            
 
             // Set the content size so scroll bars work
-            scroll.ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 2, y);
+            scroll.ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 2, y + 2);
 
             #region EVENT HANDLERS
 
@@ -484,6 +488,8 @@ namespace lain.frameviews
                     Settings.Current.DetailedLogging = detailedLogging.Checked;
                     Settings.Current.DisableASCII = disableASCII.Checked;
                     Settings.Current.DisableColoredHotkeyInfo = disableHotKeyColors.Checked;
+                    Settings.Current.HidetextCursor = hideTextCursor.Checked;
+
 
 
                     Settings.Current.DefaultDownloadPath = downloadPath;
