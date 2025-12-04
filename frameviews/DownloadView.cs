@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonoTorrent;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Terminal.Gui;
@@ -8,7 +9,7 @@ namespace lain.frameviews
     internal class DownloadView : FrameView
     {
         public DownloadView()
-            : base("Download")
+            : base(Resources.Download)
         {
             X = 20;
             Y = SettingsData.HeaderHeight;
@@ -34,12 +35,12 @@ namespace lain.frameviews
 
 
             // Magnet URL
-            scroll.Add(new Label("Magnet link:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Magnetlink) { X = 1, Y = y });
             var magnetInput = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(magnetInput);
             y += 2;
 
-            var magnetCheckbox = new CheckBox("Use magnet link")
+            var magnetCheckbox = new CheckBox(Resources.Usemagnetlink)
             {
                 X = 1,
                 Y = y,
@@ -50,7 +51,7 @@ namespace lain.frameviews
 
 
             //Torrent file path
-            scroll.Add(new Label("Torrent file path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Torrentfilepath) { X = 1, Y = y });
             var fileInput = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(fileInput);
             
@@ -62,7 +63,7 @@ namespace lain.frameviews
 
 
             // Download path
-            scroll.Add(new Label("Download path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Downloadpath) { X = 1, Y = y });
             var downloadPathInput = new TextField(Settings.Current.DefaultDownloadPath)
             {
                 X = 20,
@@ -81,7 +82,7 @@ namespace lain.frameviews
             #region LIMITS
 
             // Max connections
-            scroll.Add(new Label("Max connections:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxconnections) { X = 1, Y = y });
             var maxConnField = new TextField(Settings.Current.MaxConnections.ToString())
             {
                 X = 22,
@@ -92,7 +93,7 @@ namespace lain.frameviews
             y += 2;
 
             // Max download speed
-            scroll.Add(new Label("Max download (MB/s):") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxdownload_MB_s_) { X = 1, Y = y });
             var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString())
             {
                 X = 22,
@@ -103,7 +104,7 @@ namespace lain.frameviews
             y += 2;
 
             // Max upload speed
-            scroll.Add(new Label("Max upload (MB/s):") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxupload_MB_s_) { X = 1, Y = y });
             var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString())
             {
                 X = 22,
@@ -115,7 +116,7 @@ namespace lain.frameviews
 
             #endregion
 
-            var dhtCheckbox = new CheckBox("Enable DHT")
+            var dhtCheckbox = new CheckBox(Resources.EnableDHT)
             {
                 X = 1,
                 Y = y,
@@ -124,7 +125,7 @@ namespace lain.frameviews
             scroll.Add(dhtCheckbox);
             y += 2;
 
-            var downloadBtn = new Button("Download") { X = 1, Y = y };
+            var downloadBtn = new Button(Resources.Download) { X = 1, Y = y };
             scroll.Add(downloadBtn);
 
 
@@ -134,7 +135,7 @@ namespace lain.frameviews
 
             torFileDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowFileDialog("Select torrent file", "Select a .torrent file", [".torrent"], false);
+                string? path = DialogHelpers.ShowFileDialog(Resources.Selecttorrentfile, Resources.Selectatorrentfile, [".torrent"], false);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     fileInput.Text = path;
@@ -144,7 +145,7 @@ namespace lain.frameviews
 
             downloadFolderDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select download folder", "Select download folder", [""], "Select Folder");
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectdownloadfolder, Resources.Selectdownloadfolder, [""], Resources.Selectfolder);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     // Get directory from full path
@@ -166,7 +167,7 @@ namespace lain.frameviews
                 // Must use either magnet or torrent file
                 if (!useMagnet && string.IsNullOrWhiteSpace(fileText))
                 {
-                    MessageBox.ErrorQuery("Error", "You must select either a magnet link or a torrent file.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Youmustselecteitheramagnetlinkoratorrentfile, Resources.OK);
                     return;
                 }
 
@@ -175,12 +176,12 @@ namespace lain.frameviews
                 {
                     if (string.IsNullOrWhiteSpace(magnetText))
                     {
-                        MessageBox.ErrorQuery("Error", "Magnet link is empty.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Magnetlinkisempty, Resources.OK);
                         return;
                     }
                     if (!magnetText.StartsWith("magnet:?"))
                     {
-                        MessageBox.ErrorQuery("Error", "This does not appear to be a valid magnet link.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Thisdoesnotappeartobeavalidmagnetlink, Resources.OK);
                         return;
                     }
                 }
@@ -190,7 +191,7 @@ namespace lain.frameviews
                 {
                     if (!File.Exists(fileText))
                     {
-                        MessageBox.ErrorQuery("Error", "Torrent file does not exist.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Torrentfiledoesnotexist, Resources.OK);
                         return;
                     }
                 }
@@ -201,9 +202,9 @@ namespace lain.frameviews
 
                     if (!Directory.Exists(downloadDir) && !string.IsNullOrWhiteSpace(downloadDir))
                     {
-                        if (MessageBox.Query("Missing Directory",
-                            "Download path does not exist. Create it?",
-                            "Yes", "No") == 0)
+                        if (MessageBox.Query(Resources.MissingDirectory,
+                            Resources.DownloadpathdoesnotexistCreateit_,
+                            Resources.Yes, Resources.No) == 0)
                         {
                             Directory.CreateDirectory(downloadDir);
 
@@ -216,19 +217,19 @@ namespace lain.frameviews
                 // Parse numeric fields safely
                 if (!int.TryParse(maxConnField.Text.ToString(), out int maxConn) || maxConn <= 0 || maxConn > 50000 || maxConn < 0)
                 {
-                    MessageBox.ErrorQuery("Error", "Invalid maximum connections value.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Invalidmaxconnections, Resources.OK);
                     return;
                 }
 
                 if (!int.TryParse(maxDlField.Text.ToString(), out int maxDl) || maxDl < 0 || (maxDl > (Int32.MaxValue / 1048576)))
                 {
-                    MessageBox.ErrorQuery("Error", "Invalid download speed limit.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Invaliddownloadspeedlimit, Resources.OK);
                     return;
                 }
 
                 if (!int.TryParse(maxUpField.Text.ToString(), out int maxUp) || maxUp < 0 || (maxUp > (Int32.MaxValue / 1048576)))
                 {
-                    MessageBox.ErrorQuery("Error", "Invalid upload speed limit.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Invaliduploadspeedlimit, Resources.OK);
                     return;
                 }
 
@@ -248,7 +249,7 @@ namespace lain.frameviews
                     UseDht = dhtCheckbox.Checked
                 };
 
-                MessageBox.Query("Download", "Torrent download started.", "OK");
+                MessageBox.Query(Resources.Download, Resources.Torrentdownloadstarted, Resources.OK);
 
 
                 //Add torrent asynchronously
@@ -262,7 +263,7 @@ namespace lain.frameviews
                     {
                         Application.MainLoop.Invoke(() =>
                         {
-                            MessageBox.ErrorQuery("Error", $"Torrent startup failed:\n{ex.Message}", "OK");
+                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentdownloadfailed}:\n{ex.Message}", Resources.OK); //CHECK
                         });
                     }
                 });

@@ -11,27 +11,27 @@ namespace lain.frameviews
         //Color options
         Dictionary<string, Terminal.Gui.Color> colors = new Dictionary<string, Terminal.Gui.Color>
         {
-            { "Black", Terminal.Gui.Color.Black },
-            { "Blue", Terminal.Gui.Color.Blue  },
-            { "Green", Terminal.Gui.Color.Green },
-            { "Cyan", Terminal.Gui.Color.Cyan },
-            { "Red", Terminal.Gui.Color.Red },
-            { "Magenta", Terminal.Gui.Color.Magenta },
-            { "Brown", Terminal.Gui.Color.Brown   },
-            { "Gray", Terminal.Gui.Color.Gray },
-            { "DarkGray", Terminal.Gui.Color.DarkGray },
-            { "BrightBlue", Terminal.Gui.Color.BrightBlue },
-            { "BrightGreen", Terminal.Gui.Color.BrightGreen },
-            { "BrightCyan", Terminal.Gui.Color.BrightCyan },
-            { "BrightRed", Terminal.Gui.Color.BrightRed },
-            { "BrightMagenta", Terminal.Gui.Color.BrightMagenta },
-            { "BrightYellow", Terminal.Gui.Color.BrightYellow},
-            { "White", Terminal.Gui.Color.White }
+            { Resources.Black,          Terminal.Gui.Color.Black },
+            { Resources.Blue,           Terminal.Gui.Color.Blue },
+            { Resources.Green,          Terminal.Gui.Color.Green },
+            { Resources.Cyan,           Terminal.Gui.Color.Cyan },
+            { Resources.Red,            Terminal.Gui.Color.Red },
+            { Resources.Magenta,        Terminal.Gui.Color.Magenta },
+            { Resources.Brown,          Terminal.Gui.Color.Brown },
+            { Resources.Gray,           Terminal.Gui.Color.Gray },
+            { Resources.DarkGray,       Terminal.Gui.Color.DarkGray },
+            { Resources.BrightBlue,     Terminal.Gui.Color.BrightBlue },
+            { Resources.BrightGreen,    Terminal.Gui.Color.BrightGreen },
+            { Resources.BrightCyan,     Terminal.Gui.Color.BrightCyan },
+            { Resources.BrightRed,      Terminal.Gui.Color.BrightRed },
+            { Resources.BrightMagenta,  Terminal.Gui.Color.BrightMagenta },
+            { Resources.BrightYellow,   Terminal.Gui.Color.BrightYellow },
+            { Resources.White,          Terminal.Gui.Color.White }
         };
 
 
         public SettingsView()
-            : base("Settings")
+            : base(Resources.Settings)
         {
             X = 20;
             Y = SettingsData.HeaderHeight;
@@ -342,7 +342,7 @@ namespace lain.frameviews
             #endregion
 
             // Save button
-            var saveBtn = new Button("Save") { X = 1, Y = y };
+            var saveBtn = new Button(Resources.Save) { X = 1, Y = y };
             scroll.Add(saveBtn);
             
 
