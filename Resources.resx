@@ -1,0 +1,677 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="File/Folder" xml:space="preserve">
+    <value>File/Folder:</value>
+  </data>
+  <data name="Outputpath" xml:space="preserve">
+    <value>Output path:</value>
+  </data>
+  <data name="Trackers" xml:space="preserve">
+    <value>Trackers:</value>
+  </data>
+  <data name="PieceSize" xml:space="preserve">
+    <value>Piece Size:</value>
+  </data>
+  <data name="16KB" xml:space="preserve">
+    <value>16 KB</value>
+  </data>
+  <data name="32KB" xml:space="preserve">
+    <value>32 KB</value>
+  </data>
+  <data name="64KB" xml:space="preserve">
+    <value>64 KB</value>
+  </data>
+  <data name="128KB" xml:space="preserve">
+    <value>128 KB</value>
+  </data>
+  <data name="256KB" xml:space="preserve">
+    <value>256 KB</value>
+  </data>
+  <data name="512KB" xml:space="preserve">
+    <value>512 KB</value>
+  </data>
+  <data name="1MB" xml:space="preserve">
+    <value>1 MB</value>
+  </data>
+  <data name="2MB" xml:space="preserve">
+    <value>2 MB</value>
+  </data>
+  <data name="Startseedingaftercreation" xml:space="preserve">
+    <value>Start seeding after creation</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="Publisher" xml:space="preserve">
+    <value>Publisher:</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment:</value>
+  </data>
+  <data name="Selectfolder" xml:space="preserve">
+    <value>Select Folder</value>
+  </data>
+  <data name="Selectthefolderthatcontainsyourfiles" xml:space="preserve">
+    <value>Select the folder that contains your files.</value>
+  </data>
+  <data name="Selectoutputfile" xml:space="preserve">
+    <value>Select output file</value>
+  </data>
+  <data name="Selecttheoutputtorrentfilepath" xml:space="preserve">
+    <value>Select the output .torrent file path.</value>
+  </data>
+  <data name="torrent" xml:space="preserve">
+    <value>.torrent</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Invalidfile/folderpath" xml:space="preserve">
+    <value>Invalid file/folder path.</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Outputpathdoesnotexist" xml:space="preserve">
+    <value>Output path does not exist.</value>
+  </data>
+  <data name="InvalidtrackerURL" xml:space="preserve">
+    <value>Invalid tracker URL:</value>
+  </data>
+  <data name="trimmed" xml:space="preserve">
+    <value>{trimmed}</value>
+  </data>
+  <data name="Torrentcreationfailed" xml:space="preserve">
+    <value>Torrent creation failed:</value>
+  </data>
+  <data name="exMessage" xml:space="preserve">
+    <value>{ex.Message}</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Torrentcreatedsuccessfully!" xml:space="preserve">
+    <value>Torrent created successfully!</value>
+  </data>
+  <data name="Unexpectederror" xml:space="preserve">
+    <value>Unexpected error:</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Magnetlink" xml:space="preserve">
+    <value>Magnet link:</value>
+  </data>
+  <data name="Usemagnetlink" xml:space="preserve">
+    <value>Use magnet link</value>
+  </data>
+  <data name="Torrentfilepath" xml:space="preserve">
+    <value>Torrent file path:</value>
+  </data>
+  <data name="Downloadpath" xml:space="preserve">
+    <value>Download path:</value>
+  </data>
+  <data name="Maxconnections" xml:space="preserve">
+    <value>Max connections:</value>
+  </data>
+  <data name="Maxdownload(MB/s)" xml:space="preserve">
+    <value>Max download (MB/s):</value>
+  </data>
+  <data name="Maxupload(MB/s)" xml:space="preserve">
+    <value>Max upload (MB/s):</value>
+  </data>
+  <data name="EnableDHT" xml:space="preserve">
+    <value>Enable DHT</value>
+  </data>
+  <data name="Selecttorrentfile" xml:space="preserve">
+    <value>Select torrent file</value>
+  </data>
+  <data name="Selectatorrentfile" xml:space="preserve">
+    <value>Select a .torrent file</value>
+  </data>
+  <data name="Selectdownloadfolder" xml:space="preserve">
+    <value>Select download folder</value>
+  </data>
+  <data name="Youmustselecteitheramagnetlinkoratorrentfile" xml:space="preserve">
+    <value>You must select either a magnet link or a torrent file.</value>
+  </data>
+  <data name="Magnetlinkisempty" xml:space="preserve">
+    <value>Magnet link is empty.</value>
+  </data>
+  <data name="Thisdoesnotappeartobeavalidmagnetlink" xml:space="preserve">
+    <value>This does not appear to be a valid magnet link.</value>
+  </data>
+  <data name="Torrentfiledoesnotexist" xml:space="preserve">
+    <value>Torrent file does not exist.</value>
+  </data>
+  <data name="MissingDirectory" xml:space="preserve">
+    <value>Missing Directory</value>
+  </data>
+  <data name="DownloadpathdoesnotexistCreateit?" xml:space="preserve">
+    <value>Download path does not exist. Create it?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Invalidmaximumconnectionsvalue" xml:space="preserve">
+    <value>Invalid maximum connections value.</value>
+  </data>
+  <data name="Invaliddownloadspeedlimit" xml:space="preserve">
+    <value>Invalid download speed limit.</value>
+  </data>
+  <data name="Invaliduploadspeedlimit" xml:space="preserve">
+    <value>Invalid upload speed limit.</value>
+  </data>
+  <data name="Torrentdownloadstarted" xml:space="preserve">
+    <value>Torrent download started.</value>
+  </data>
+  <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
+    <value>Torrent startup failed:
+{ex.Message}</value>
+  </data>
+  <data name="yyyy-MM-dd" xml:space="preserve">
+    <value>yyyy-MM-dd</value>
+  </data>
+  <data name="ActiveTorrents" xml:space="preserve">
+    <value>Active Torrents: </value>
+  </data>
+  <data name="Noactivetorrents" xml:space="preserve">
+    <value>No active torrents</value>
+  </data>
+  <data name="Operatingonport" xml:space="preserve">
+    <value>Operating on port: </value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start: </value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop: </value>
+  </data>
+  <data name="Startseeding" xml:space="preserve">
+    <value>Start seeding: </value>
+  </data>
+  <data name="Stopseeding" xml:space="preserve">
+    <value>Stop seeding: </value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete: </value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="Blue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="Green" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="Cyan" xml:space="preserve">
+    <value>Cyan</value>
+  </data>
+  <data name="Red" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Magenta" xml:space="preserve">
+    <value>Magenta</value>
+  </data>
+  <data name="Brown" xml:space="preserve">
+    <value>Brown</value>
+  </data>
+  <data name="Gray" xml:space="preserve">
+    <value>Gray</value>
+  </data>
+  <data name="DarkGray" xml:space="preserve">
+    <value>DarkGray</value>
+  </data>
+  <data name="BrightBlue" xml:space="preserve">
+    <value>BrightBlue</value>
+  </data>
+  <data name="BrightGreen" xml:space="preserve">
+    <value>BrightGreen</value>
+  </data>
+  <data name="BrightCyan" xml:space="preserve">
+    <value>BrightCyan</value>
+  </data>
+  <data name="BrightRed" xml:space="preserve">
+    <value>BrightRed</value>
+  </data>
+  <data name="BrightMagenta" xml:space="preserve">
+    <value>BrightMagenta</value>
+  </data>
+  <data name="BrightYellow" xml:space="preserve">
+    <value>BrightYellow</value>
+  </data>
+  <data name="White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="DHTport" xml:space="preserve">
+    <value>DHT port:</value>
+  </data>
+  <data name="Maxtotalconnections" xml:space="preserve">
+    <value>Max total connections:</value>
+  </data>
+  <data name="Maxtotaldownloadspeed(MB/s)" xml:space="preserve">
+    <value>Max total download speed (MB/s):</value>
+  </data>
+  <data name="Maxtotaluploadspeed(MB/s)" xml:space="preserve">
+    <value>Max total upload speed (MB/s):</value>
+  </data>
+  <data name="Progressrefreshrate(ms)" xml:space="preserve">
+    <value>Progress refresh rate (ms):</value>
+  </data>
+  <data name="StopSeedingWhenFinished" xml:space="preserve">
+    <value>Stop Seeding When Finished</value>
+  </data>
+  <data name="Disablecoloredhotkeyinformation" xml:space="preserve">
+    <value>Disable colored hotkey information</value>
+  </data>
+  <data name="Enabledetailedlogging" xml:space="preserve">
+    <value>Enable detailed logging</value>
+  </data>
+  <data name="EnablePortForwarding" xml:space="preserve">
+    <value>Enable Port Forwarding</value>
+  </data>
+  <data name="Hidetextcursor" xml:space="preserve">
+    <value>Hide text cursor</value>
+  </data>
+  <data name="DefaultDownloadPath" xml:space="preserve">
+    <value>Default Download Path:</value>
+  </data>
+  <data name="LogPath" xml:space="preserve">
+    <value>Log Path:</value>
+  </data>
+  <data name="SettingsPath" xml:space="preserve">
+    <value>Settings Path:</value>
+  </data>
+  <data name="Backgroundcolor" xml:space="preserve">
+    <value>Background color:</value>
+  </data>
+  <data name="Textcolor" xml:space="preserve">
+    <value>Text color:</value>
+  </data>
+  <data name="Focusbackgroundcolor" xml:space="preserve">
+    <value>Focus background color:</value>
+  </data>
+  <data name="Focustextcolor" xml:space="preserve">
+    <value>Focus text color:</value>
+  </data>
+  <data name="Hotkeytextcolor" xml:space="preserve">
+    <value>Hotkey text color:</value>
+  </data>
+  <data name="ASCIIcolor" xml:space="preserve">
+    <value>ASCII color:</value>
+  </data>
+  <data name="DisableASCII" xml:space="preserve">
+    <value>Disable ASCII</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Selectlogfilepath" xml:space="preserve">
+    <value>Select log file path</value>
+  </data>
+  <data name="Selectfilenameforthelogfile" xml:space="preserve">
+    <value>Select filename for the log file.</value>
+  </data>
+  <data name="Selectconfigfilepath" xml:space="preserve">
+    <value>Select config file path</value>
+  </data>
+  <data name="Selectfilenamefortheconfigfile" xml:space="preserve">
+    <value>Select filename for the config file.</value>
+  </data>
+  <data name="Selectdefaultdownloadfolder" xml:space="preserve">
+    <value>Select default download folder</value>
+  </data>
+  <data name="Selectthedefaultdownloadfolderpath" xml:space="preserve">
+    <value>Select the default download folder path.</value>
+  </data>
+  <data name="Invalidportnumber" xml:space="preserve">
+    <value>Invalid port number.</value>
+  </data>
+  <data name="InvalidDHTportnumber" xml:space="preserve">
+    <value>Invalid DHT port number.</value>
+  </data>
+  <data name="Invalidmaxconnections" xml:space="preserve">
+    <value>Invalid max connections.</value>
+  </data>
+  <data name="Invalidmaxdownloadspeed" xml:space="preserve">
+    <value>Invalid max download speed.</value>
+  </data>
+  <data name="Invalidmaxuploadspeed" xml:space="preserve">
+    <value>Invalid max upload speed.</value>
+  </data>
+  <data name="Invalidprogressrefreshrate" xml:space="preserve">
+    <value>Invalid progress refresh rate.</value>
+  </data>
+  <data name="Downloadpathcannotbeempty" xml:space="preserve">
+    <value>Download path cannot be empty.</value>
+  </data>
+  <data name="Logpathcannotbeempty" xml:space="preserve">
+    <value>Log path cannot be empty.</value>
+  </data>
+  <data name="Settingspathcannotbeempty" xml:space="preserve">
+    <value>Settings path cannot be empty.</value>
+  </data>
+  <data name="Settingssavedsuccessfully&#xA;Somechangeswilltakeeffectafterrestarting" xml:space="preserve">
+    <value>Settings saved successfully.
+ Some changes will take effect after restarting.</value>
+  </data>
+  <data name="FatalError" xml:space="preserve">
+    <value>Fatal Error</value>
+  </data>
+  <data name="Torrents" xml:space="preserve">
+    <value>Torrents</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Peers" xml:space="preserve">
+    <value>Peers</value>
+  </data>
+  <data name="Leechers" xml:space="preserve">
+    <value>Leechers</value>
+  </data>
+  <data name="Seeders" xml:space="preserve">
+    <value>Seeders</value>
+  </data>
+  <data name="Downloadrate" xml:space="preserve">
+    <value>Download rate</value>
+  </data>
+  <data name="Uploadrate" xml:space="preserve">
+    <value>Upload rate</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="MagnetlinkgeneratedmagnetToV1String()" xml:space="preserve">
+    <value>Magnet link generated: {magnet.ToV1String()}</value>
+  </data>
+  <data name="Magnetlinkcopiedtoclipboard" xml:space="preserve">
+    <value>Magnet link copied to clipboard.</value>
+  </data>
+  <data name="Deletedownloadedfiles?" xml:space="preserve">
+    <value>Delete downloaded files?</value>
+  </data>
+  <data name="0" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ChooseColor" xml:space="preserve">
+    <value>Choose Color</value>
+  </data>
+  <data name="c" xml:space="preserve">
+    <value> {c} </value>
+  </data>
+  <data name="Invalidpath" xml:space="preserve">
+    <value>Invalid path.</value>
+  </data>
+  <data name="InvalidFile" xml:space="preserve">
+    <value>Invalid File</value>
+  </data>
+  <data name="Selectedfiledoesnotexist" xml:space="preserve">
+    <value>Selected file does not exist.</value>
+  </data>
+  <data name="InvalidFolder" xml:space="preserve">
+    <value>Invalid Folder</value>
+  </data>
+  <data name="Selectedfolderdoesnotexist" xml:space="preserve">
+    <value>Selected folder does not exist.</value>
+  </data>
+  <data name="HEADER" xml:space="preserve">
+    <value>HEADER</value>
+  </data>
+  <data name="StartSettingsCurrentControlsStartDownload" xml:space="preserve">
+    <value>Start: {Settings.Current.Controls.StartDownload}</value>
+  </data>
+  <data name="StopSettingsCurrentControlsStopDownload" xml:space="preserve">
+    <value>Stop: {Settings.Current.Controls.StopDownload}</value>
+  </data>
+  <data name="StartseedingSettingsCurrentControlsStartSeeding" xml:space="preserve">
+    <value>Start seeding: {Settings.Current.Controls.StartSeeding}</value>
+  </data>
+  <data name="StopseedingSettingsCurrentControlsStopSeeding" xml:space="preserve">
+    <value>Stop seeding: {Settings.Current.Controls.StopSeeding}</value>
+  </data>
+  <data name="DeleteSettingsCurrentControlsRemoveTorrent" xml:space="preserve">
+    <value>Delete: {Settings.Current.Controls.RemoveTorrent}</value>
+  </data>
+  <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
+    <value>Generate magnet link: {Settings.Current.Controls.GenMagLink}</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Exit?" xml:space="preserve">
+    <value>Exit?</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="OperatingonportSettingsCurrentPort" xml:space="preserve">
+    <value>Operating on port: {Settings.Current.Port}</value>
+  </data>
+  <data name="ActiveTorrentsTorrentOperationsManagers!Count" xml:space="preserve">
+    <value>Active Torrents: {TorrentOperations.Managers!.Count}</value>
+  </data>
+  <data name="/logtxt" xml:space="preserve">
+    <value>./log.txt</value>
+  </data>
+  <data name="cfgjson" xml:space="preserve">
+    <value>cfg.json</value>
+  </data>
+  <data name="main" xml:space="preserve">
+    <value>main</value>
+  </data>
+  <data name="ErrorsavingsettingsexMessage" xml:space="preserve">
+    <value>Error saving settings: {ex.Message}</value>
+  </data>
+  <data name="ErrorloadingsettingsexMessage" xml:space="preserve">
+    <value>Error loading settings: {ex.Message}</value>
+  </data>
+  <data name="LainTorrentClient" xml:space="preserve">
+    <value>Lain Torrent Client</value>
+  </data>
+  <data name="Downloadingfrommagnetlink" xml:space="preserve">
+    <value>Downloading from magnet link...</value>
+  </data>
+  <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
+    <value>State changed: {e.OldState} -&gt; {e.NewState}</value>
+  </data>
+  <data name="DHTEngineDhtState" xml:space="preserve">
+    <value>DHT: {Engine.Dht.State}</value>
+  </data>
+  <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
+    <value>Piece hashed: {e.PieceIndex} - {e.HashPassed}</value>
+  </data>
+  <data name="Savedfastresumedata" xml:space="preserve">
+    <value>Saved fast resume data</value>
+  </data>
+  <data name="Errorsavingfastresumedataex" xml:space="preserve">
+    <value>Error saving fastresume data: {ex}</value>
+  </data>
+  <data name="[mTorrentName]mProgress000%DLmMonitorDownloadRate/102400kB/sULmMonitorUploadRate/102400kB/s" xml:space="preserve">
+    <value>[{m.Torrent.Name}] {m.Progress:0.00}% DL: {m.Monitor.DownloadRate / 1024:0.0}kB/s UL: {m.Monitor.UploadRate / 1024:0.0}kB/s</value>
+  </data>
+  <data name="torrentsjson" xml:space="preserve">
+    <value>torrents.json</value>
+  </data>
+  <data name="ErrorsavingtorrentsexMessage" xml:space="preserve">
+    <value>Error saving torrents: {ex.Message}</value>
+  </data>
+  <data name="FastresumedatasavedfortorrentManagers[index]Torrent?Name" xml:space="preserve">
+    <value>Fast resume data saved for torrent: {Managers[index].Torrent?.Name}</value>
+  </data>
+  <data name="PausedtorrentmanagerTorrent?Name" xml:space="preserve">
+    <value>Paused torrent: {manager.Torrent?.Name}</value>
+  </data>
+  <data name="ErrorpausingtorrentexMessage" xml:space="preserve">
+    <value>Error pausing torrent: {ex.Message}</value>
+  </data>
+  <data name="ResumedtorrentmanagerTorrent?Name" xml:space="preserve">
+    <value>Resumed torrent: {manager.Torrent?.Name}</value>
+  </data>
+  <data name="ErrorresumingtorrentexMessage" xml:space="preserve">
+    <value>Error resuming torrent: {ex.Message}</value>
+  </data>
+  <data name="StartedseedingmanagerTorrent?Name" xml:space="preserve">
+    <value>Started seeding: {manager.Torrent?.Name}</value>
+  </data>
+  <data name="ErrorstartingseedingexMessage" xml:space="preserve">
+    <value>Error starting seeding: {ex.Message}</value>
+  </data>
+  <data name="StoppedseedingmanagerTorrent?Name" xml:space="preserve">
+    <value>Stopped seeding: {manager.Torrent?.Name}</value>
+  </data>
+  <data name="ErrorstoppingseedingexMessage" xml:space="preserve">
+    <value>Error stopping seeding: {ex.Message}</value>
+  </data>
+  <data name="DeletedtorrentmanagerTorrent?Name" xml:space="preserve">
+    <value>Deleted torrent: {manager.Torrent?.Name}</value>
+  </data>
+  <data name="DeletedfilesatmanagerSavePath" xml:space="preserve">
+    <value>Deleted files at: {manager.SavePath}</value>
+  </data>
+  <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
+    <value>Error deleting torrent: {ex.Message}</value>
+  </data>
+</root>

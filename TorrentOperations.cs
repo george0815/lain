@@ -42,6 +42,7 @@ namespace lain
     {
         #region DECLARATIONS
 
+
         // Shared engine instance (rebuilt on startup using settings)
         private static readonly ClientEngine Engine =
             new ClientEngine(Settings.BuildEngineSettings().ToSettings());
@@ -142,7 +143,11 @@ namespace lain
                 SaveTorrentData();
 
                 Log.Write("Downloading from magnet link...");
-                await manager.StartAsync();
+
+                if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
+                {
+                    await manager.StartAsync();
+                }
 
                 StartProgressLoop();      
                 AutosaveLoop();
@@ -150,6 +155,9 @@ namespace lain
             else
             {
                 // Fallback: load from .torrent file
+
+                if (!Path.Exists(data.TorPath)) { return; }
+
                 Torrent torrent = await Torrent.LoadAsync(data.TorPath);
 
                 var manager = await Engine.AddAsync(torrent, data.DownPath, tSettings);
@@ -162,8 +170,13 @@ namespace lain
 
                 
                 Log.Write(create ? "Creating..." : "Downloading from torrent file...");
-                await manager.StartAsync();
 
+
+                if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
+                {
+                    await manager.StartAsync();
+                }
+                
                 StartProgressLoop();
                 AutosaveLoop();
             }
@@ -186,10 +199,19 @@ namespace lain
             {
                 Log.Write($"State changed: {e.OldState} -> {e.NewState}");
 
-                if (e.OldState== TorrentState.Downloading && e.NewState == TorrentState.Seeding &&
+                if ((e.OldState== TorrentState.Downloading) && e.NewState == TorrentState.Seeding &&
                     Settings.Current.StopSeedingWhenFinished)
                 {
                     await manager.StopAsync();
+                  
+                }
+            };
+
+            Engine.Dht.StateChanged += async (o, e) =>
+            {
+                if (Settings.Current.DetailedLogging)
+                {
+                    Log.Write($"DHT: {Engine.Dht.State}");
                 }
             };
 
@@ -373,8 +395,10 @@ namespace lain
             {
                 try
                 {
+              
                     await manager.StartAsync();
                     Log.Write($"Resumed torrent: {manager.Torrent?.Name}");
+                    
                 }
                 catch (Exception ex)
                 {
@@ -391,8 +415,11 @@ namespace lain
             {
                 try
                 {
+               
                     await manager.StartAsync();
                     Log.Write($"Started seeding: {manager.Torrent?.Name}");
+             
+
                 }
                 catch (Exception ex)
                 {
@@ -405,7 +432,7 @@ namespace lain
         {
             if (index < 0 || index >= Managers.Count) return;
             var manager = Managers[index];
-            if (manager != null && manager.State == TorrentState.Seeding)
+            if (manager != null && manager.State == TorrentState.Seeding && manager.State != TorrentState.Stopping && manager.State != TorrentState.Stopped)
             {
                 try
                 {
@@ -430,7 +457,7 @@ namespace lain
                 try
                 {
                     // Stop the torrent if it’s active
-                    if (manager.State != TorrentState.Stopped)
+                    if (manager.State != TorrentState.Stopped && manager.State != TorrentState.Stopping)
                         await manager.StopAsync();
 
                     // Remove from engine

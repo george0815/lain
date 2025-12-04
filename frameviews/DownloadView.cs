@@ -92,8 +92,8 @@ namespace lain.frameviews
             y += 2;
 
             // Max download speed
-            scroll.Add(new Label("Max download (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField(Settings.Current.MaxDownloadSpeed.ToString())
+            scroll.Add(new Label("Max download (MB/s):") { X = 1, Y = y });
+            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString())
             {
                 X = 22,
                 Y = y,
@@ -103,8 +103,8 @@ namespace lain.frameviews
             y += 2;
 
             // Max upload speed
-            scroll.Add(new Label("Max upload (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField(Settings.Current.MaxUploadSpeed.ToString())
+            scroll.Add(new Label("Max upload (MB/s):") { X = 1, Y = y });
+            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString())
             {
                 X = 22,
                 Y = y,
@@ -214,19 +214,19 @@ namespace lain.frameviews
                 }
 
                 // Parse numeric fields safely
-                if (!int.TryParse(maxConnField.Text.ToString(), out int maxConn) || maxConn <= 0)
+                if (!int.TryParse(maxConnField.Text.ToString(), out int maxConn) || maxConn <= 0 || maxConn > 50000 || maxConn < 0)
                 {
                     MessageBox.ErrorQuery("Error", "Invalid maximum connections value.", "OK");
                     return;
                 }
 
-                if (!int.TryParse(maxDlField.Text.ToString(), out int maxDl) || maxDl < 0)
+                if (!int.TryParse(maxDlField.Text.ToString(), out int maxDl) || maxDl < 0 || (maxDl > (Int32.MaxValue / 1048576)))
                 {
                     MessageBox.ErrorQuery("Error", "Invalid download speed limit.", "OK");
                     return;
                 }
 
-                if (!int.TryParse(maxUpField.Text.ToString(), out int maxUp) || maxUp < 0)
+                if (!int.TryParse(maxUpField.Text.ToString(), out int maxUp) || maxUp < 0 || (maxUp > (Int32.MaxValue / 1048576)))
                 {
                     MessageBox.ErrorQuery("Error", "Invalid upload speed limit.", "OK");
                     return;
@@ -243,10 +243,13 @@ namespace lain.frameviews
                     TorPath = fileText,
                     DownPath = downloadDir,
                     MaxConnections = maxConn,
-                    MaxDownloadRate = maxDl * 1024,
-                    MaxUploadRate = maxUp * 1024,
+                    MaxDownloadRate = maxDl /* to KB*/ * 1024 /* to MB*/ * 1024,
+                    MaxUploadRate = maxUp /* to KB*/ * 1024 /* to MB*/ * 1024,
                     UseDht = dhtCheckbox.Checked
                 };
+
+                MessageBox.Query("Download", "Torrent download started.", "OK");
+
 
                 //Add torrent asynchronously
                 await Task.Run(async () =>
@@ -264,7 +267,7 @@ namespace lain.frameviews
                     }
                 });
 
-                MessageBox.Query("Download", "Torrent download started.", "OK");
+               
 
                 #endregion
 

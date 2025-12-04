@@ -65,6 +65,8 @@ public class TorrentListView : FrameView
     {
         if (keyEvent.Key == Settings.Current.Controls.StartDownload)
         {
+
+            
             Task.Run(async () =>
             {
                 await TorrentOperations.ResumeTorrentAsync(_table.SelectedRow);
@@ -84,6 +86,7 @@ public class TorrentListView : FrameView
         }
         else if (keyEvent.Key == Settings.Current.Controls.StartSeeding)
         {
+           
             Task.Run(async () =>
             {
                 await TorrentOperations.StartSeedingAsync(_table.SelectedRow);
@@ -150,7 +153,7 @@ public class TorrentListView : FrameView
 
             foreach (var m in _managers)
             {
-                string name = m.Torrent!.Name ?? "Unknown";
+                string name = m.Name ?? "Unknown";
                 string state = m.State.ToString();
                 string progress = $"{m.Progress:0.0}%";
                 string peers = m.OpenConnections.ToString() ?? "0";

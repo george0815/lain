@@ -21,8 +21,8 @@ internal class SettingsData
 
     // Max connections / rates
     public ushort MaxConnections { get; set; } = 100;
-    public int MaxDownloadSpeed { get; set; } = 1000 * 1024;
-    public int MaxUploadSpeed { get; set; } = 1000 * 1024;
+    public int MaxDownloadSpeed { get; set; } = 100 /* to KB*/ * 1024 /* to MB*/ * 1024;
+    public int MaxUploadSpeed { get; set; } = 100 /* to KB*/ * 1024 /* to MB*/ * 1024;
     public int RefreshInterval { get; set; } = 1000;
 
     // Client settings

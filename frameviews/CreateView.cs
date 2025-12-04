@@ -14,7 +14,7 @@ namespace lain.frameviews
     internal class CreateView : FrameView
     {
         public CreateView()
-            : base("Create")
+            : base(Resources.Create)
         {
             X = 20;
             Y = SettingsData.HeaderHeight;
@@ -38,7 +38,7 @@ namespace lain.frameviews
 
             #region PATHS
 
-            scroll.Add(new Label("File/Folder:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.File_Folder) { X = 1, Y = y });
             var folderPath = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(folderPath);
             var filesDialogBtn = new Button("...") { X = 61, Y = y };
@@ -47,7 +47,7 @@ namespace lain.frameviews
 
             
 
-            scroll.Add(new Label("Output path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Outputpath) { X = 1, Y = y });
             var outputPath = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(outputPath);
             var outputFolderDialogBtn = new Button("...") { X = 61, Y = y };
@@ -58,7 +58,7 @@ namespace lain.frameviews
 
             #region TRACKERS
 
-            scroll.Add(new Label("Trackers:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Trackers) { X = 1, Y = y });
             var trackerLink = new TextView()
             {
                 X = 20,
@@ -73,7 +73,7 @@ namespace lain.frameviews
 
             #region PIECE SIZE
 
-            scroll.Add(new Label("Piece Size:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.PieceSize) { X = 1, Y = y });
 
             var pieceSizes = new Dictionary<string, int>
             {
@@ -104,7 +104,7 @@ namespace lain.frameviews
 
             #region CHECKBOXES
 
-            var startSeedingAfterCreationCheckbox = new CheckBox("Start seeding after creation")
+            var startSeedingAfterCreationCheckbox = new CheckBox(Resources.Startseedingaftercreation)
             {
                 X = 1,
                 Y = y,
@@ -113,7 +113,7 @@ namespace lain.frameviews
             scroll.Add(startSeedingAfterCreationCheckbox);
             y += 2;
 
-            var privateTorrentCheckbox = new CheckBox("Private")
+            var privateTorrentCheckbox = new CheckBox(Resources.Private)
             {
                 X = 1,
                 Y = y,
@@ -129,12 +129,12 @@ namespace lain.frameviews
 
             #region METADATA
 
-            scroll.Add(new Label("Publisher:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Publisher) { X = 1, Y = y });
             var publisher = new TextField("") { X = 20, Y = y, Width = 40 };
             scroll.Add(publisher);
             y += 2;
 
-            scroll.Add(new Label("Comment:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Comment) { X = 1, Y = y });
             var comment = new TextView()
             {
                 X = 20,
@@ -147,7 +147,7 @@ namespace lain.frameviews
 
             #endregion
 
-            var createTorBtn = new Button("Create") { X = 1, Y = y };
+            var createTorBtn = new Button(Resources.Create) { X = 1, Y = y };
             scroll.Add(createTorBtn);
          
 
@@ -160,7 +160,7 @@ namespace lain.frameviews
 
             filesDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select folder", "Select the folder that contains your files.", new string[] { "" });
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectfolder, Resources.Selectthefolderthatcontainsyourfiles, new string[] { "" });
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     folderPath.Text = path;
@@ -169,7 +169,7 @@ namespace lain.frameviews
 
             outputFolderDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select output file", "Select the output .torrent file path.", [".torrent"]);
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectoutputfile, Resources.Selecttheoutputtorrentfilepath, [".torrent"]);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     // Get directory from full path
@@ -192,14 +192,14 @@ namespace lain.frameviews
                 if (string.IsNullOrWhiteSpace(inputPath) ||
                     (!File.Exists(inputPath) && !Directory.Exists(inputPath)))
                 {
-                    MessageBox.ErrorQuery("Error", "Invalid file/folder path.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Invalidfile_folderpath, Resources.OK);
                     return;
                 }
 
                 // Check output directory
                 if (string.IsNullOrWhiteSpace(outPath))
                 {
-                    MessageBox.ErrorQuery("Error", "Output path does not exist.", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, Resources.Outputpathdoesnotexist, Resources.OK);
                     return;
                 }
 
@@ -217,7 +217,7 @@ namespace lain.frameviews
                             trackerList.Add(trimmed);
                         else
                         {
-                            MessageBox.ErrorQuery("Error", $"Invalid tracker URL:\n{trimmed}", "OK");
+                            MessageBox.ErrorQuery(Resources.Error, $"Invalid tracker URL:\n{trimmed}", "OK");
                             return;
                         }
                     }
@@ -253,7 +253,7 @@ namespace lain.frameviews
                         catch (Exception ex)
                         {
                             Application.MainLoop.Invoke(() =>
-                                MessageBox.ErrorQuery("Error", $"Torrent creation failed:\n{ex.Message}", "OK")
+                                MessageBox.ErrorQuery(Resources.Error, $"Torrent creation failed:\n{ex.Message}", "OK")
                             );
                         }
                     });
@@ -262,7 +262,7 @@ namespace lain.frameviews
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.ErrorQuery("Error", $"Unexpected error:\n{ex.Message}", "OK");
+                    MessageBox.ErrorQuery(Resources.Error, $"Unexpected error:\n{ex.Message}", "OK");
                 }
             };
 

@@ -74,14 +74,14 @@ namespace lain.frameviews
             y += 2;
 
             // Max Download Speed
-            scroll.Add(new Label("Max total download speed (kB/s):") { X = 1, Y = y });
-            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / 1024).ToString()) { X = 35, Y = y, Width = 10 };
+            scroll.Add(new Label("Max total download speed (MB/s):") { X = 1, Y = y });
+            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
-            scroll.Add(new Label("Max total upload speed (kB/s):") { X = 1, Y = y });
-            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / 1024).ToString()) { X = 35, Y = y, Width = 10 };
+            scroll.Add(new Label("Max total upload speed (MB/s):") { X = 1, Y = y });
+            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
@@ -403,35 +403,32 @@ namespace lain.frameviews
                     }
 
                     // Parse limits
-                    if (!ushort.TryParse(maxConnField.Text.ToString(), out var maxConn))
+                    if (!ushort.TryParse(maxConnField.Text.ToString(), out var maxConn) || maxConn > 50000 || maxConn < 0)
                     {
                         MessageBox.ErrorQuery("Error", "Invalid max connections.", "OK");
                         return;
                     }
 
-                    if (!int.TryParse(maxDlField.Text.ToString(), out var maxDl))
+                    if (!int.TryParse(maxDlField.Text.ToString(), out var maxDl) || (maxDl > (Int32.MaxValue / 1048576)))
                     {
                         MessageBox.ErrorQuery("Error", "Invalid max download speed.", "OK");
                         return;
                     }
 
-                    if (!int.TryParse(maxUpField.Text.ToString(), out var maxUp))
+                    if (!int.TryParse(maxUpField.Text.ToString(), out var maxUp) || (maxUp > (Int32.MaxValue / 1048576)))
                     {
                         MessageBox.ErrorQuery("Error", "Invalid max upload speed.", "OK");
                         return;
                     }
 
-                    if (!int.TryParse(refreshRateField.Text.ToString(), out var refRate))
+                    if (!int.TryParse(refreshRateField.Text.ToString(), out var refRate) || refRate > 50000 || refRate < 0)
                     {
                         MessageBox.ErrorQuery("Error", "Invalid progress refresh rate.", "OK");
                         return;
                     }
 
-                    if (refRate > 1000)
-                    {
-                        MessageBox.ErrorQuery("Error", "Invalid progress refresh rate. Must be over 1000ms.", "OK");
-                        return;
-                    }
+                   
+                 
 
 
                     // Paths
@@ -479,8 +476,8 @@ namespace lain.frameviews
                     Settings.Current.Port = port;
                     Settings.Current.DhtPort = dhtPort;
                     Settings.Current.MaxConnections = maxConn;
-                    Settings.Current.MaxDownloadSpeed = maxDl * 1024;
-                    Settings.Current.MaxUploadSpeed = maxUp * 1024;
+                    Settings.Current.MaxDownloadSpeed = maxDl /* to KB*/ * 1024 /* to MB*/ * 1024;
+                    Settings.Current.MaxUploadSpeed = maxUp /* to KB*/ * 1024 /* to MB*/ * 1024;
                     Settings.Current.RefreshInterval = refRate;
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;

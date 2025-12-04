@@ -9,7 +9,7 @@ namespace lain.frameviews
     {
 
         public SearchView()
-            : base("Search")
+            : base(Resources.Search)
         {
 
             X = 20;
