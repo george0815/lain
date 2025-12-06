@@ -9,7 +9,7 @@ namespace lain.frameviews
     {
 
         //Color options
-        Dictionary<string, Terminal.Gui.Color> colors = new Dictionary<string, Terminal.Gui.Color>
+        internal static Dictionary<string, Terminal.Gui.Color> colors = new Dictionary<string, Terminal.Gui.Color>
         {
             { Resources.Black,          Terminal.Gui.Color.Black },
             { Resources.Blue,           Terminal.Gui.Color.Blue },
@@ -57,37 +57,37 @@ namespace lain.frameviews
 
             // Port
             scroll.Add(new Label(Resources.Port) { X = 1, Y = y });
-            var portField = new TextField(Settings.Current.Port.ToString()) { X = 34, Y = y, Width = 10 };
+            var portField = new TextField(Settings.Current.Port.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
             //DHT port
             scroll.Add(new Label(Resources.DHTport) { X = 1, Y = y });
-            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 34, Y = y, Width = 10 };
+            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(dhtPortField);
             y += 2;
 
             // Max Connections
             scroll.Add(new Label(Resources.Maxtotalconnections) { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 34, Y = y, Width = 10 };
+            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
             // Max Download Speed
             scroll.Add(new Label(Resources.Maxtotaldownloadspeed_MB_s_) { X = 1, Y = y });
-            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = 34, Y = y, Width = 10 };
+            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
             scroll.Add(new Label(Resources.Maxtotaluploadspeed_MB_s_) { X = 1, Y = y });
-            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = 34, Y = y, Width = 10 };
+            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
             // Progress Refresh rate
             scroll.Add(new Label(Resources.Progressrefreshrate_ms_) { X = 1, Y = y });
-            var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = 34, Y = y, Width = 10 };
+            var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(refreshRateField);
             y += 2;
 
@@ -149,7 +149,7 @@ namespace lain.frameviews
             
             // Background Color
             scroll.Add(new Label(Resources.Backgroundcolor) { X = 1, Y = y });
-
+            var myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.BackgroundColor).Key;
             var bgColorCombo = new Button()
             {
                 X = 30,
@@ -157,17 +157,18 @@ namespace lain.frameviews
                 Width = 3,
         
                 Height = 1,
-                Text = Settings.Current.BackgroundColor.ToString()
+                Text = myKey
             };
             
 
             bgColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.BackgroundColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.BackgroundColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                bgColorCombo.Text = Settings.Current.BackgroundColor.ToString();
+                bgColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 bgColorCombo.SetNeedsDisplay();
@@ -180,7 +181,7 @@ namespace lain.frameviews
 
             // Text Color
             scroll.Add(new Label(Resources.Textcolor) { X = 1, Y = y });
-
+            myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.TextColor).Key;
             var textColorCombo = new Button()
             {
                 X = 30,
@@ -188,17 +189,18 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.TextColor.ToString()
+                Text = myKey
             };
 
 
             textColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.TextColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.TextColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                textColorCombo.Text = Settings.Current.TextColor.ToString();
+                textColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 textColorCombo.SetNeedsDisplay();
@@ -212,7 +214,7 @@ namespace lain.frameviews
 
             //Focus background color
             scroll.Add(new Label(Resources.Focusbackgroundcolor) { X = 1, Y = y });
-
+            myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.FocusBackgroundColor).Key;
             var backgroundFocusColorCombo = new Button()
             {
                 X = 30,
@@ -220,17 +222,18 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.FocusBackgroundColor.ToString()
+                Text = myKey
             };
 
 
             backgroundFocusColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.FocusBackgroundColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.FocusBackgroundColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                backgroundFocusColorCombo.Text = Settings.Current.FocusBackgroundColor.ToString();
+                backgroundFocusColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 backgroundFocusColorCombo.SetNeedsDisplay();
@@ -242,7 +245,7 @@ namespace lain.frameviews
 
             //Focus text color
             scroll.Add(new Label(Resources.Focustextcolor) { X = 1, Y = y });
-
+            myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.FocusTextColor).Key;
             var textFocusColorCombo = new Button()
             {
                 X = 30,
@@ -250,17 +253,18 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.FocusTextColor.ToString()
+                Text = myKey
             };
 
 
             textFocusColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.FocusTextColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.FocusTextColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                textFocusColorCombo.Text = Settings.Current.FocusTextColor.ToString();
+                textFocusColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 textFocusColorCombo.SetNeedsDisplay();
@@ -273,7 +277,7 @@ namespace lain.frameviews
 
             //Hot text color
             scroll.Add(new Label(Resources.Hotkeytextcolor) { X = 1, Y = y });
-
+            myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.HotTextColor).Key;
             var hotTextColorCombo = new Button()
             {
                 X = 30,
@@ -281,17 +285,18 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.HotTextColor.ToString()
+                Text = myKey
             };
 
 
             hotTextColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.HotTextColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.HotTextColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                hotTextColorCombo.Text = Settings.Current.HotTextColor.ToString();
+                hotTextColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 hotTextColorCombo.SetNeedsDisplay();
@@ -303,7 +308,7 @@ namespace lain.frameviews
 
             //ASCII color
             scroll.Add(new Label(Resources.ASCIIcolor) { X = 1, Y = y });
-
+            myKey = colors.FirstOrDefault(x => x.Value == Settings.Current.LogoColor).Key;
             var logoColorCombo = new Button()
             {
                 X = 30,
@@ -311,17 +316,18 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.LogoColor.ToString()
+                Text = myKey
             };
 
 
             logoColorCombo.Clicked += () =>
             {
                 // Open your color picker
-                Settings.Current.LogoColor = DialogHelpers.PickColorGrid();
+                string tmp = DialogHelpers.PickColorGrid();
+                Settings.Current.LogoColor = colors[tmp];
 
                 // Update *the button's* text, not `Text = ...`
-                logoColorCombo.Text = Settings.Current.LogoColor.ToString();
+                logoColorCombo.Text = tmp;
 
                 // Force redraw the button *and its parent view*
                 logoColorCombo.SetNeedsDisplay();

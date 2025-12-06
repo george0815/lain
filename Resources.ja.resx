@@ -562,7 +562,7 @@
     <value>削除:</value>
   </data>
   <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
-    <value>マグネットリンクを生成:</value>
+    <value>マグネットリンクを生成: </value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>終了</value>

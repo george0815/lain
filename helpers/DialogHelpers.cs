@@ -2,13 +2,14 @@
 using System;
 using System.IO;
 using lain;
+using lain.frameviews;
 
 public static class DialogHelpers
 {
 
-    public static Color PickColorGrid()
+    public static string PickColorGrid()
     {
-        var colors = Enum.GetValues<Color>().ToArray();
+        var colors = SettingsView.colors;
         var dlg = new Dialog(Resources.ChooseColor, 50, 8);
 
         dlg.ColorScheme = new ColorScheme()
@@ -19,19 +20,19 @@ public static class DialogHelpers
             HotFocus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Color.Black), // focused hotkey text, background
         };
 
-        Color result = Color.Black;
+        string result = Resources.Black;
 
         int x = 0, y = 0;
         foreach (var c in colors)
         {
 
 
-            var textColor = c;
-            if (c == Color.Black) { 
+            var textColor = c.Value;
+            if (c.Value == Color.Black) { 
                 textColor = Color.White; 
             }
 
-            var box = new Button($" {c} ")
+            var box = new Button($" {c.Key} ")
             {
                 X = x * 15,
                 Y = y,
@@ -46,7 +47,7 @@ public static class DialogHelpers
 
             box.Clicked += () =>
             {
-                result = c;
+                result = c.Key;
                 Application.RequestStop();
             };
 

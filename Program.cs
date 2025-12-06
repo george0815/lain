@@ -1,11 +1,16 @@
-﻿using System;
-using Terminal.Gui;
-using System.Threading.Tasks;
-using MonoTorrent.Client;
+﻿using lain.helpers;
 using MonoTorrent;
-using System.Net.Sockets;
-using lain.helpers;
+using MonoTorrent.Client;
+using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Terminal.Gui;
+
 
 
 
@@ -20,6 +25,16 @@ namespace lain
 
         public static async Task Main(string[] args)
         {
+
+            // Change to Japanese (Japan)
+            CultureInfo ci = new CultureInfo("ja-JP");
+
+            //Thread.CurrentThread.CurrentUICulture = ci;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            Console.OutputEncoding = Encoding.GetEncoding(932);
+
+
 
             //load settings
             Settings.Load();

@@ -745,7 +745,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid download speed limit..
+        ///   Looks up a localized string similar to Invalid download rate limit..
         /// </summary>
         internal static string Invaliddownloadspeedlimit {
             get {
@@ -781,7 +781,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid max connections..
+        ///   Looks up a localized string similar to Invalid maximum connections value..
         /// </summary>
         internal static string Invalidmaxconnections {
             get {
@@ -790,7 +790,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid max download speed..
+        ///   Looks up a localized string similar to Invalid maximum download rate value..
         /// </summary>
         internal static string Invalidmaxdownloadspeed {
             get {
@@ -808,7 +808,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid max upload speed..
+        ///   Looks up a localized string similar to Invalid maximum upload rate value..
         /// </summary>
         internal static string Invalidmaxuploadspeed {
             get {
@@ -853,7 +853,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid upload speed limit..
+        ///   Looks up a localized string similar to Invalid upload rate limit..
         /// </summary>
         internal static string Invaliduploadspeedlimit {
             get {
@@ -961,7 +961,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max connections:.
+        ///   Looks up a localized string similar to Maximum connections:.
         /// </summary>
         internal static string Maxconnections {
             get {
@@ -970,7 +970,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max download speed (MB/s):.
+        ///   Looks up a localized string similar to Maximum download rate (MB/s):.
         /// </summary>
         internal static string Maxdownload_MB_s_ {
             get {
@@ -979,7 +979,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max total connections:.
+        ///   Looks up a localized string similar to Maximum total connections:.
         /// </summary>
         internal static string Maxtotalconnections {
             get {
@@ -988,7 +988,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max total download speed (MB/s):.
+        ///   Looks up a localized string similar to Total download rate limit (MB/s):.
         /// </summary>
         internal static string Maxtotaldownloadspeed_MB_s_ {
             get {
@@ -997,7 +997,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max total upload speed (MB/s):.
+        ///   Looks up a localized string similar to Total upload rate limit (MB/s):.
         /// </summary>
         internal static string Maxtotaluploadspeed_MB_s_ {
             get {
@@ -1006,7 +1006,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max upload speed (MB/s):.
+        ///   Looks up a localized string similar to Maximum upload rate (MB/s):.
         /// </summary>
         internal static string Maxupload_MB_s_ {
             get {

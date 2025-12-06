@@ -1,6 +1,7 @@
 ﻿using MonoTorrent;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
@@ -36,7 +37,7 @@ namespace lain.frameviews
 
             // Magnet URL
             scroll.Add(new Label(Resources.Magnetlink) { X = 1, Y = y });
-            var magnetInput = new TextField("") { X = 20, Y = y, Width = 40 };
+            var magnetInput = new TextField("") { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 25 : 20), Y = y, Width = 40 };
             scroll.Add(magnetInput);
             y += 2;
 
@@ -52,11 +53,11 @@ namespace lain.frameviews
 
             //Torrent file path
             scroll.Add(new Label(Resources.Torrentfilepath) { X = 1, Y = y });
-            var fileInput = new TextField("") { X = 20, Y = y, Width = 40 };
+            var fileInput = new TextField("") { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 25 : 20), Y = y, Width = 40 };
             scroll.Add(fileInput);
             
 
-            var torFileDialogBtn = new Button("...") { X = 61, Y = y };
+            var torFileDialogBtn = new Button("...") { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 66 : 61), Y = y };
             scroll.Add(torFileDialogBtn);
 
             y += 2;
@@ -66,13 +67,13 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Downloadpath) { X = 1, Y = y });
             var downloadPathInput = new TextField(Settings.Current.DefaultDownloadPath)
             {
-                X = 20,
+                X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 25 : 20),
                 Y = y,
                 Width = 40
             };
             scroll.Add(downloadPathInput);
 
-            var downloadFolderDialogBtn = new Button("...") { X = 61, Y = y };
+            var downloadFolderDialogBtn = new Button("...") { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 66 : 61), Y = y };
             scroll.Add(downloadFolderDialogBtn);
 
             y += 2;
@@ -85,7 +86,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxconnections) { X = 1, Y = y });
             var maxConnField = new TextField(Settings.Current.MaxConnections.ToString())
             {
-                X = 28,
+                X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 30 : 31),
                 Y = y,
                 Width = 10
             };
@@ -96,7 +97,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxdownload_MB_s_) { X = 1, Y = y });
             var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString())
             {
-                X = 28,
+                X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 30 : 31),
                 Y = y,
                 Width = 10
             };
@@ -107,7 +108,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxupload_MB_s_) { X = 1, Y = y });
             var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString())
             {
-                X = 28,
+                X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 30 : 31),
                 Y = y,
                 Width = 10
             };

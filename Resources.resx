@@ -229,13 +229,13 @@
     <value>Download path:</value>
   </data>
   <data name="Maxconnections" xml:space="preserve">
-    <value>Max connections:</value>
+    <value>Maximum connections:</value>
   </data>
   <data name="Maxdownload(MB/s)" xml:space="preserve">
-    <value>Max download speed (MB/s):</value>
+    <value>Maximum download rate (MB/s):</value>
   </data>
   <data name="Maxupload(MB/s)" xml:space="preserve">
-    <value>Max upload speed (MB/s):</value>
+    <value>Maximum upload rate (MB/s):</value>
   </data>
   <data name="EnableDHT" xml:space="preserve">
     <value>Enable DHT</value>
@@ -277,10 +277,10 @@
     <value>Invalid maximum connections value.</value>
   </data>
   <data name="Invaliddownloadspeedlimit" xml:space="preserve">
-    <value>Invalid download speed limit.</value>
+    <value>Invalid download rate limit.</value>
   </data>
   <data name="Invaliduploadspeedlimit" xml:space="preserve">
-    <value>Invalid upload speed limit.</value>
+    <value>Invalid upload rate limit.</value>
   </data>
   <data name="Torrentdownloadstarted" xml:space="preserve">
     <value>Torrent download started.</value>
@@ -379,13 +379,13 @@
     <value>DHT port:</value>
   </data>
   <data name="Maxtotalconnections" xml:space="preserve">
-    <value>Max total connections:</value>
+    <value>Maximum total connections:</value>
   </data>
   <data name="Maxtotaldownloadspeed(MB/s)" xml:space="preserve">
-    <value>Max total download speed (MB/s):</value>
+    <value>Total download rate limit (MB/s):</value>
   </data>
   <data name="Maxtotaluploadspeed(MB/s)" xml:space="preserve">
-    <value>Max total upload speed (MB/s):</value>
+    <value>Total upload rate limit (MB/s):</value>
   </data>
   <data name="Progressrefreshrate(ms)" xml:space="preserve">
     <value>Progress refresh rate (ms):</value>
@@ -463,13 +463,13 @@
     <value>Invalid DHT port number.</value>
   </data>
   <data name="Invalidmaxconnections" xml:space="preserve">
-    <value>Invalid max connections.</value>
+    <value>Invalid maximum connections value.</value>
   </data>
   <data name="Invalidmaxdownloadspeed" xml:space="preserve">
-    <value>Invalid max download speed.</value>
+    <value>Invalid maximum download rate value.</value>
   </data>
   <data name="Invalidmaxuploadspeed" xml:space="preserve">
-    <value>Invalid max upload speed.</value>
+    <value>Invalid maximum upload rate value.</value>
   </data>
   <data name="Invalidprogressrefreshrate" xml:space="preserve">
     <value>Invalid progress refresh rate.</value>
