@@ -15,7 +15,7 @@ public class TorrentListView : FrameView
     private readonly DataTable _tableData;
 
     public TorrentListView(List<TorrentManager> managers)
-        : base("Torrents")
+        : base(Resources.Torrents)
     {
         _managers = managers;
 
@@ -30,14 +30,14 @@ public class TorrentListView : FrameView
 
 
         // Define columns
-        _tableData.Columns.Add("Name", typeof(string));
-        _tableData.Columns.Add("State", typeof(string));
-        _tableData.Columns.Add("Progress", typeof(string));
-        _tableData.Columns.Add("Peers", typeof(string));
-        _tableData.Columns.Add("Leechers", typeof(string));
-        _tableData.Columns.Add("Seeders", typeof(string));
-        _tableData.Columns.Add("Download rate", typeof(string));
-        _tableData.Columns.Add("Upload rate", typeof(string));
+        _tableData.Columns.Add(Resources.Name, typeof(string));
+        _tableData.Columns.Add(Resources.State, typeof(string));
+        _tableData.Columns.Add(Resources.Progress, typeof(string));
+        _tableData.Columns.Add(Resources.Peers, typeof(string));
+        _tableData.Columns.Add(Resources.Leechers, typeof(string));
+        _tableData.Columns.Add(Resources.Seeders, typeof(string));
+        _tableData.Columns.Add(Resources.Downloadrate, typeof(string));
+        _tableData.Columns.Add(Resources.Uploadrate, typeof(string));
 
 
         // Create the TableView
@@ -108,10 +108,10 @@ public class TorrentListView : FrameView
             var magnet = new MagnetLink(_managers[_table.SelectedRow].Torrent!.InfoHashes, _managers[_table.SelectedRow].Torrent!.Name,
                     _managers[_table.SelectedRow].Torrent!.AnnounceUrls.SelectMany(t => t.ToArray()).ToList());
 
-            Log.Write($"Magnet link generated: {magnet.ToV1String()}");
+            Log.Write($"{Resources.MagnetlinkgeneratedmagnetToV1String__}: {magnet.ToV1String()}"); //CHECK
 
-            if (MessageBox.Query($"", "Magnet link copied to clipboard.",
-                        "OK") == 0)
+            if (MessageBox.Query($"", Resources.Magnetlinkcopiedtoclipboard,
+                        Resources.OK) == 0)
             {
                 ClipboardService.SetText(magnet.ToV1String());
             }
@@ -123,9 +123,9 @@ public class TorrentListView : FrameView
         {
             bool deleteFiles = false;
 
-            if (MessageBox.Query("Delete downloaded files?",
+            if (MessageBox.Query(Resources.Deletedownloadedfiles_,
                             "",
-                            "Yes", "No") == 0)
+                            Resources.Yes, Resources.No) == 0)
             {
               
                 deleteFiles = true;

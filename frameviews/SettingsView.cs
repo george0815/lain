@@ -56,37 +56,37 @@ namespace lain.frameviews
             #region PORTS AND LIMITS
 
             // Port
-            scroll.Add(new Label("Port:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Port) { X = 1, Y = y });
             var portField = new TextField(Settings.Current.Port.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
             //DHT port
-            scroll.Add(new Label("DHT port:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.DHTport) { X = 1, Y = y });
             var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(dhtPortField);
             y += 2;
 
             // Max Connections
-            scroll.Add(new Label("Max total connections:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxtotalconnections) { X = 1, Y = y });
             var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
             // Max Download Speed
-            scroll.Add(new Label("Max total download speed (MB/s):") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxtotaldownloadspeed_MB_s_) { X = 1, Y = y });
             var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
-            scroll.Add(new Label("Max total upload speed (MB/s):") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Maxtotaluploadspeed_MB_s_) { X = 1, Y = y });
             var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
             // Progress Refresh rate
-            scroll.Add(new Label("Progress refresh rate (ms):") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Progressrefreshrate_ms_) { X = 1, Y = y });
             var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = 35, Y = y, Width = 10 };
             scroll.Add(refreshRateField);
             y += 2;
@@ -96,23 +96,23 @@ namespace lain.frameviews
 
             #region BOOLEAN OPTIONS
 
-            var stopSeedCheckbox = new CheckBox("Stop Seeding When Finished") { X = 1, Y = y, Checked = Settings.Current.StopSeedingWhenFinished };
+            var stopSeedCheckbox = new CheckBox(Resources.StopSeedingWhenFinished) { X = 1, Y = y, Checked = Settings.Current.StopSeedingWhenFinished };
             scroll.Add(stopSeedCheckbox);
             y += 2;
 
-            var disableHotKeyColors = new CheckBox("Disable colored hotkey information") { X = 1, Y = y, Checked = Settings.Current.DisableColoredHotkeyInfo };
+            var disableHotKeyColors = new CheckBox(Resources.Disablecoloredhotkeyinformation) { X = 1, Y = y, Checked = Settings.Current.DisableColoredHotkeyInfo };
             scroll.Add(disableHotKeyColors);
             y += 2;
 
-            var detailedLogging = new CheckBox("Enable detailed logging") { X = 1, Y = y, Checked = Settings.Current.DetailedLogging };
+            var detailedLogging = new CheckBox(Resources.Enabledetailedlogging) { X = 1, Y = y, Checked = Settings.Current.DetailedLogging };
             scroll.Add(detailedLogging);
             y += 2;
 
-            var portFwdCheckbox = new CheckBox("Enable Port Forwarding") { X = 1, Y = y, Checked = Settings.Current.EnablePortForwarding };
+            var portFwdCheckbox = new CheckBox(Resources.EnablePortForwarding) { X = 1, Y = y, Checked = Settings.Current.EnablePortForwarding };
             scroll.Add(portFwdCheckbox);
             y += 2;
 
-            var hideTextCursor = new CheckBox("Hide text cursor") { X = 1, Y = y, Checked = Settings.Current.HidetextCursor };
+            var hideTextCursor = new CheckBox(Resources.Hidetextcursor) { X = 1, Y = y, Checked = Settings.Current.HidetextCursor };
             scroll.Add(hideTextCursor);
             y += 2;
 
@@ -121,21 +121,21 @@ namespace lain.frameviews
             #region PATHS
 
             // Paths
-            scroll.Add(new Label("Default Download Path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.DefaultDownloadPath) { X = 1, Y = y });
             var downloadPathField = new TextField(Settings.Current.DefaultDownloadPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(downloadPathField);
             var downloadFolderDialogBtn = new Button("...") { X = 71, Y = y };
             scroll.Add(downloadFolderDialogBtn);
             y += 2;
 
-            scroll.Add(new Label("Log Path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.LogPath) { X = 1, Y = y });
             var logPathField = new TextField(Settings.Current.LogPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(logPathField);
             var logFileDialogBtn = new Button("...") { X = 71, Y = y };
             scroll.Add(logFileDialogBtn);
             y += 2;
 
-            scroll.Add(new Label("Settings Path:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.SettingsPath) { X = 1, Y = y });
             var settingsPathField = new TextField(Settings.Current.SettingsPath ?? "") { X = 30, Y = y, Width = 40 };
             scroll.Add(settingsPathField);
             var settingsFileDialogBtn = new Button("...") { X = 71, Y = y };
@@ -148,7 +148,7 @@ namespace lain.frameviews
 
             
             // Background Color
-            scroll.Add(new Label("Background color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Backgroundcolor) { X = 1, Y = y });
 
             var bgColorCombo = new Button()
             {
@@ -179,7 +179,7 @@ namespace lain.frameviews
             y += 2;
 
             // Text Color
-            scroll.Add(new Label("Text color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Textcolor) { X = 1, Y = y });
 
             var textColorCombo = new Button()
             {
@@ -211,7 +211,7 @@ namespace lain.frameviews
 
 
             //Focus background color
-            scroll.Add(new Label("Focus background color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Focusbackgroundcolor) { X = 1, Y = y });
 
             var backgroundFocusColorCombo = new Button()
             {
@@ -241,7 +241,7 @@ namespace lain.frameviews
             y += 2;
 
             //Focus text color
-            scroll.Add(new Label("Focus text color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Focustextcolor) { X = 1, Y = y });
 
             var textFocusColorCombo = new Button()
             {
@@ -272,7 +272,7 @@ namespace lain.frameviews
 
 
             //Hot text color
-            scroll.Add(new Label("Hotkey text color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Hotkeytextcolor) { X = 1, Y = y });
 
             var hotTextColorCombo = new Button()
             {
@@ -302,7 +302,7 @@ namespace lain.frameviews
             y += 2;
 
             //ASCII color
-            scroll.Add(new Label("ASCII color:") { X = 1, Y = y });
+            scroll.Add(new Label(Resources.ASCIIcolor) { X = 1, Y = y });
 
             var logoColorCombo = new Button()
             {
@@ -333,7 +333,7 @@ namespace lain.frameviews
 
 
             //Enable/disable ASCII
-            var disableASCII = new CheckBox("Disable ASCII") { X = 1, Y = y, Checked = Settings.Current.DisableASCII };
+            var disableASCII = new CheckBox(Resources.DisableASCII) { X = 1, Y = y, Checked = Settings.Current.DisableASCII };
             scroll.Add(disableASCII);
             y += 2;
 
@@ -353,7 +353,7 @@ namespace lain.frameviews
 
             logFileDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select log file path", "Select filename for the log file.", [".txt"]);
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectlogfilepath, Resources.Selectfilenameforthelogfile, [".txt"]);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     // Get directory from full path
@@ -363,7 +363,7 @@ namespace lain.frameviews
 
             settingsFileDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select config file path", "Select filename for the config file.", [".json"]);
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectconfigfilepath, Resources.Selectfilenamefortheconfigfile, [".json"]);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     // Get directory from full path
@@ -374,7 +374,7 @@ namespace lain.frameviews
 
             downloadFolderDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog("Select default download folder", "Select the default download folder path.", [""]);
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectdefaultdownloadfolder, Resources.Selectthedefaultdownloadfolderpath, [""]);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     // Get directory from full path
@@ -392,38 +392,38 @@ namespace lain.frameviews
                     // Parse ports
                     if (!ushort.TryParse(portField.Text.ToString(), out var port))
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid port number.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidportnumber, Resources.OK);
                         return;
                     }
 
                     if (!ushort.TryParse(dhtPortField.Text.ToString(), out var dhtPort))
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid DHT port number.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.InvalidDHTportnumber, Resources.OK);
                         return;
                     }
 
                     // Parse limits
                     if (!ushort.TryParse(maxConnField.Text.ToString(), out var maxConn) || maxConn > 50000 || maxConn < 0)
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid max connections.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidmaximumconnectionsvalue, Resources.OK);
                         return;
                     }
 
                     if (!int.TryParse(maxDlField.Text.ToString(), out var maxDl) || (maxDl > (Int32.MaxValue / 1048576)))
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid max download speed.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidmaxdownloadspeed, Resources.OK);
                         return;
                     }
 
                     if (!int.TryParse(maxUpField.Text.ToString(), out var maxUp) || (maxUp > (Int32.MaxValue / 1048576)))
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid max upload speed.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidmaxuploadspeed, Resources.OK);
                         return;
                     }
 
                     if (!int.TryParse(refreshRateField.Text.ToString(), out var refRate) || refRate > 50000 || refRate < 0)
                     {
-                        MessageBox.ErrorQuery("Error", "Invalid progress refresh rate.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidprogressrefreshrate, Resources.OK);
                         return;
                     }
 
@@ -438,15 +438,15 @@ namespace lain.frameviews
 
                     if (string.IsNullOrWhiteSpace(downloadPath))
                     {
-                        MessageBox.ErrorQuery("Error", "Download path cannot be empty.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Downloadpathcannotbeempty, Resources.OK);
                         return;
                     }
 
                     if (!Directory.Exists(downloadPath))
                     {
-                        if (MessageBox.Query("Missing Directory",
-                            "Download path does not exist. Create it?",
-                            "Yes", "No") == 0)
+                        if (MessageBox.Query(Resources.MissingDirectory,
+                            Resources.DownloadpathdoesnotexistCreateit_,
+                            Resources.Yes, Resources.No) == 0)
                         {
                             Directory.CreateDirectory(downloadPath);
                         }
@@ -456,7 +456,7 @@ namespace lain.frameviews
 
                     if (string.IsNullOrWhiteSpace(logPath))
                     {
-                        MessageBox.ErrorQuery("Error", "Log path cannot be empty.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Logpathcannotbeempty, Resources.OK);
                         return;
                     }
 
@@ -464,7 +464,7 @@ namespace lain.frameviews
 
                     if (string.IsNullOrWhiteSpace(settingsPath))
                     {
-                        MessageBox.ErrorQuery("Error", "Settings path cannot be empty.", "OK");
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Settingspathcannotbeempty, Resources.OK);
                         return;
                     }
 
@@ -503,12 +503,12 @@ namespace lain.frameviews
 
                     Settings.Save();
 
-                    MessageBox.Query("Settings", "Settings saved successfully.\n Some changes will take effect after restarting.", "OK");
-                    Log.Write("Settings saved.");
+                    MessageBox.Query(Resources.Settings, Resources.Settingssavedsuccessfully, Resources.OK);
+                    Log.Write(Resources.Settingssaved);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.ErrorQuery("Fatal Error", ex.Message, "OK");
+                    MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
                 }
             };
 

@@ -86,7 +86,8 @@ namespace lain
             creator.Comment = data.Comment;
             creator.Publisher = data.Publisher; 
             creator.PieceLength = data.PieceSize > 0 ? data.PieceSize : creator.PieceLength;
-            creator.CreatedBy = "Lain Torrent Client";
+            creator.CreatedBy = { Resources.Createdby}
+            ;
            
 
 
@@ -142,7 +143,7 @@ namespace lain
                 if (!loading){ TorrentDataDTOList.Add(data); };
                 SaveTorrentData();
 
-                Log.Write("Downloading from magnet link...");
+                Log.Write(Resources.Downloadingfrommagnetlink);
 
                 if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
                 {
@@ -169,7 +170,7 @@ namespace lain
 
 
                 
-                Log.Write(create ? "Creating..." : "Downloading from torrent file...");
+                Log.Write(create ? { Resources.Creating} : { Resources.Downloadingfromtorrentfile});
 
 
                 if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
@@ -197,7 +198,7 @@ namespace lain
         {
             manager.TorrentStateChanged += async (o, e) =>
             {
-                Log.Write($"State changed: {e.OldState} -> {e.NewState}");
+                Log.Write($"{Resources.StatechangedeOldState__eNewState}: {e.OldState} -> {e.NewState}"); //CHECK
 
                 if ((e.OldState== TorrentState.Downloading) && e.NewState == TorrentState.Seeding &&
                     Settings.Current.StopSeedingWhenFinished)
@@ -219,7 +220,7 @@ namespace lain
             {
                 if (Settings.Current.DetailedLogging)
                 {
-                    Log.Write($"Piece hashed: {e.PieceIndex} - {e.HashPassed}");
+                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed}: {e.PieceIndex} - {e.HashPassed}"); //CHECK
              
                 }
             };
@@ -240,13 +241,13 @@ namespace lain
                     await Task.Delay(TimeSpan.FromMinutes(1));
                     try
                     {
-                        Log.Write("Saved fast resume data");
+                        Log.Write(Resources.Savedfastresumedata);
                         await Engine.SaveStateAsync();
 
                     }
                     catch (Exception ex)
                     {
-                        Log.Write($"Error saving fastresume data: {ex}");
+                        Log.Write($"{Resources.Errorsavingfastresumedataex}: {ex}"); //CHECK
                     }
                     
                 }
@@ -312,7 +313,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading settings: {ex.Message}");
+                Console.WriteLine($"{Resources.Errorloadingtorrents}: {ex.Message}"); //CHECK
                 Settings.Save();
             }
         }
@@ -329,7 +330,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving torrents: {ex.Message}");
+                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage}: {ex.Message}"); //CHECK
             }
         }
 
@@ -347,7 +348,7 @@ namespace lain
 
             if (Settings.Current.DetailedLogging == true)
             {
-                Log.Write($"Fast resume data saved for torrent: {Managers[index].Torrent?.Name}");
+                Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name}: {Managers[index].Torrent?.Name}"); //CHECK
             }
         }
 
@@ -376,13 +377,13 @@ namespace lain
                 {
 
                     await manager.PauseAsync();
-                    Log.Write($"Paused torrent: {manager.Torrent?.Name}");
+                    Log.Write($"{Resources.PausedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
                     await SaveTorrentAsync(index);
                    
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"Error pausing torrent: {ex.Message}");
+                    Log.Write($"{Resources.ErrorpausingtorrentexMessage}: {ex.Message}"); //CHECK
                 }
             }
         }
@@ -397,12 +398,12 @@ namespace lain
                 {
               
                     await manager.StartAsync();
-                    Log.Write($"Resumed torrent: {manager.Torrent?.Name}");
-                    
+                    Log.Write($"{Resources.ResumedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"Error resuming torrent: {ex.Message}");
+                    Log.Write($"{Resources.ErrorresumingtorrentexMessage}: {ex.Message}"); //CHECK
                 }
             }
         }
@@ -417,13 +418,13 @@ namespace lain
                 {
                
                     await manager.StartAsync();
-                    Log.Write($"Started seeding: {manager.Torrent?.Name}");
-             
+                    Log.Write($"{Resources.Startseeding}: {manager.Torrent?.Name}"); //CHECK
+
 
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"Error starting seeding: {ex.Message}");
+                    Log.Write($"{Resources.ErrorstartingseedingexMessage}: {ex.Message}"); //CHECK
                 }
             }
         }
@@ -437,12 +438,12 @@ namespace lain
                 try
                 {
                     await manager.StopAsync();
-                    Log.Write($"Stopped seeding: {manager.Torrent?.Name}");
-                   
+                    Log.Write($"{Resources.StoppedseedingmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"Error stopping seeding: {ex.Message}");
+                    Log.Write($"{Resources.ErrorstoppingseedingexMessage}: {ex.Message}"); //CHECK
                 }
             }
         }
@@ -468,18 +469,18 @@ namespace lain
                     TorrentDataDTOList.RemoveAt(index);
                     SaveTorrentData();
 
-                    Log.Write($"Deleted torrent: {manager.Torrent?.Name}");
+                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
 
                     // Optionally delete downloaded files
                     if (deleteFiles && Directory.Exists(manager.SavePath))
                     {
                         Directory.Delete(manager.SavePath, true);
-                        Log.Write($"Deleted files at: {manager.SavePath}");
+                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath}: {manager.SavePath}"); //CHECK
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"Error deleting torrent: {ex.Message}");
+                    Log.Write($"{Resources.ErrordeletingtorrentexMessage}: {ex.Message}"); //CHECK
                 }
             }
         }
