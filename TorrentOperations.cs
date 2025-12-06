@@ -347,7 +347,7 @@ namespace lain
 
             if (Settings.Current.DetailedLogging == true)
             {
-                Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name} {Managers[index].Torrent?.Name}");
+                Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name}{Managers[index].Torrent?.Name}");
             }
         }
 
@@ -468,13 +468,13 @@ namespace lain
                     TorrentDataDTOList.RemoveAt(index);
                     SaveTorrentData();
 
-                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
+                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name}{manager.Torrent?.Name}"); 
 
                     // Optionally delete downloaded files
                     if (deleteFiles && Directory.Exists(manager.SavePath))
                     {
                         Directory.Delete(manager.SavePath, true);
-                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath} {manager.SavePath}"); 
+                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath}{manager.SavePath}"); 
                     }
                 }
                 catch (Exception ex)

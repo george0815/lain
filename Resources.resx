@@ -616,7 +616,7 @@
     <value>Error saving torrents:</value>
   </data>
   <data name="FastresumedatasavedfortorrentManagers[index]Torrent?Name" xml:space="preserve">
-    <value>Fast resume data saved for torrent: {Managers[index].Torrent?.Name}</value>
+    <value>Fast resume data saved for torrent: </value>
   </data>
   <data name="PausedtorrentmanagerTorrent?Name" xml:space="preserve">
     <value>Paused torrent:</value>

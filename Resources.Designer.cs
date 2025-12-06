@@ -637,7 +637,7 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fast resume data saved for torrent: {Managers[index].Torrent?.Name}.
+        ///   Looks up a localized string similar to Fast resume data saved for torrent: .
         /// </summary>
         internal static string FastresumedatasavedfortorrentManagers_index_Torrent_Name {
             get {
