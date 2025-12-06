@@ -483,10 +483,6 @@
   <data name="Settingspathcannotbeempty" xml:space="preserve">
     <value>設定のパスを空にすることはできません。</value>
   </data>
-  <data name="Settingssavedsuccessfully" xml:space="preserve">
-    <value>設定が正常に保存されました。
-一部の変更は再起動後に有効になります。</value>
-  </data>
   <data name="FatalError" xml:space="preserve">
     <value>致命的なエラー</value>
   </data>
@@ -655,6 +651,10 @@
   <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
     <value>トレントの削除中にエラーが発生しました:</value>
   </data>
+  <data name="Settingssavedsuccessfully" xml:space="preserve">
+    <value>設定が正常に保存されました。
+一部の変更は再起動後に有効になります。</value>
+  </data>
   <data name="Torrentdownloadfailed" xml:space="preserve">
     <value>トレントのダウンロードが失敗しました:</value>
   </data>
@@ -669,5 +669,8 @@
   </data>
   <data name="Errorloadingtorrents" xml:space="preserve">
     <value>トレントの読み込み中にエラーが発生しました:</value>
+  </data>
+  <data name="Selectthedownloadfolder" xml:space="preserve">
+    <value>ダウンロードフォルダを選択してください</value>
   </data>
 </root>

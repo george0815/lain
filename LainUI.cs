@@ -108,7 +108,7 @@ namespace lain
             {
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 2,
                 Y = (Settings.Current.DisableASCII ? 1 : 3),
-                Text = $"{Resources.ActiveTorrents} {TorrentOperations.Managers!.Count}"  
+                Text = $"{Resources.ActiveTorrents}{TorrentOperations.Managers!.Count}"  
             };
 
           
@@ -118,14 +118,14 @@ namespace lain
             {
                 X = (Settings.Current.DisableASCII ? 0 : SettingsData.LogoWidth) + 2,
                 Y = (Settings.Current.DisableASCII ? 3 : 5),
-                Text = $"{Resources.Operatingonport} {Settings.Current.Port}"  
+                Text = $"{Resources.Operatingonport}{Settings.Current.Port}"  
             };
 
 
             #region HOTKEY INFO
 
 
-            headerScroll.Add(new Label($"{Resources.Start} {Settings.Current.Controls.StartDownload}") { 
+            headerScroll.Add(new Label($"{Resources.Start}{Settings.Current.Controls.StartDownload}") { 
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Green, Settings.Current.BackgroundColor), // text color, background color
@@ -133,34 +133,34 @@ namespace lain
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 1
 
             });
-            headerScroll.Add(new Label($"{Resources.Stop} {Settings.Current.Controls.StopDownload}") { 
+            headerScroll.Add(new Label($"{Resources.Stop}{Settings.Current.Controls.StopDownload}") { 
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Red, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 30, Y = 3 });
-            headerScroll.Add(new Label($"{Resources.Startseeding} {Settings.Current.Controls.StartSeeding}") {   
+            headerScroll.Add(new Label($"{Resources.Startseeding}{Settings.Current.Controls.StartSeeding}") {   
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.BrightYellow, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 5)
             });
-            headerScroll.Add(new Label($"{Resources.Stopseeding} {Settings.Current.Controls.StopSeeding}") { 
+            headerScroll.Add(new Label($"{Resources.Stopseeding}{Settings.Current.Controls.StopSeeding}") { 
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Blue, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 42 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 3 : 7)
             });
-            headerScroll.Add(new Label($"{Resources.Delete} {Settings.Current.Controls.RemoveTorrent}") {  
+            headerScroll.Add(new Label($"{Resources.Delete}{Settings.Current.Controls.RemoveTorrent}") {  
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {
                     Normal = Application.Driver.MakeAttribute(Color.Magenta, Settings.Current.BackgroundColor), // text color, background color
                 }),
                 X = (Settings.Current.DisableASCII ? 62 : SettingsData.LogoWidth) + 30, Y = (Settings.Current.DisableASCII ? 1 : 9) });
 
-            headerScroll.Add(new Label($"{Resources.GeneratemagnetlinkSettingsCurrentControlsGenMagLink} {Settings.Current.Controls.GenMagLink}") 
+            headerScroll.Add(new Label($"{Resources.GeneratemagnetlinkSettingsCurrentControlsGenMagLink}{Settings.Current.Controls.GenMagLink}") 
             {
                 ColorScheme = (Settings.Current.DisableColoredHotkeyInfo ? this.SuperView?.ColorScheme : new ColorScheme()
                 {

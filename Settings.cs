@@ -51,7 +51,8 @@ internal class SettingsData
         StopDownload = Key.F4,
         StartSeeding = Key.F5,
         StopSeeding = Key.F6,
-        RemoveTorrent = Key.F7
+        RemoveTorrent = Key.F7,
+        GenMagLink = Key.F8
     };
 
     //Icons

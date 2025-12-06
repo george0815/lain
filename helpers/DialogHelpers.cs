@@ -9,7 +9,7 @@ public static class DialogHelpers
     public static Color PickColorGrid()
     {
         var colors = Enum.GetValues<Color>().ToArray();
-        var dlg = new Dialog("Choose Color", 50, 8);
+        var dlg = new Dialog(Resources.ChooseColor, 50, 8);
 
         dlg.ColorScheme = new ColorScheme()
         {
@@ -84,7 +84,7 @@ public static class DialogHelpers
             // Validate directory exists or can be created
             var dir = Path.GetDirectoryName(path);
             if (string.IsNullOrWhiteSpace(dir))
-                throw new Exception("Invalid path.");
+                throw new Exception(Resources.Invalidfile_folderpath);
 
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir); 
@@ -93,7 +93,7 @@ public static class DialogHelpers
         }
         catch (Exception ex)
         {
-            MessageBox.ErrorQuery(40, 10, "Error", ex.Message, "OK");
+            MessageBox.ErrorQuery(40, 10, Resources.Error, ex.Message, Resources.OK);
             return null;
         }
     }
@@ -119,7 +119,7 @@ public static class DialogHelpers
             {
 
                 if (File.Exists(path)) { return path; }
-                else{MessageBox.ErrorQuery("Invalid File", "Selected file does not exist.", "OK");}
+                else{MessageBox.ErrorQuery(Resources.InvalidFile, Resources.Selectedfiledoesnotexist, Resources.OK);}
             
             }
             else
@@ -151,7 +151,7 @@ public static class DialogHelpers
             if (Directory.Exists(path))
                 return path;
 
-            MessageBox.ErrorQuery("Invalid Folder", "Selected folder does not exist.", "OK");
+            MessageBox.ErrorQuery(Resources.InvalidFolder, Resources.Selectedfolderdoesnotexist, Resources.OK);
         }
 
         return null;

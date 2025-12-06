@@ -232,10 +232,10 @@
     <value>Max connections:</value>
   </data>
   <data name="Maxdownload(MB/s)" xml:space="preserve">
-    <value>Max download (MB/s):</value>
+    <value>Max download speed (MB/s):</value>
   </data>
   <data name="Maxupload(MB/s)" xml:space="preserve">
-    <value>Max upload (MB/s):</value>
+    <value>Max upload speed (MB/s):</value>
   </data>
   <data name="EnableDHT" xml:space="preserve">
     <value>Enable DHT</value>
@@ -244,7 +244,7 @@
     <value>Select torrent file</value>
   </data>
   <data name="Selectatorrentfile" xml:space="preserve">
-    <value>Select a .torrent file</value>
+    <value>Select the .torrent file</value>
   </data>
   <data name="Selectdownloadfolder" xml:space="preserve">
     <value>Select download folder</value>
@@ -483,10 +483,6 @@
   <data name="Settingspathcannotbeempty" xml:space="preserve">
     <value>Settings path cannot be empty.</value>
   </data>
-  <data name="Settingssavedsuccessfully" xml:space="preserve">
-    <value>Settings saved successfully.
- Some changes will take effect after restarting.</value>
-  </data>
   <data name="FatalError" xml:space="preserve">
     <value>Fatal Error</value>
   </data>
@@ -542,13 +538,13 @@
     <value>Invalid path.</value>
   </data>
   <data name="InvalidFile" xml:space="preserve">
-    <value>Invalid File</value>
+    <value>Invalid file</value>
   </data>
   <data name="Selectedfiledoesnotexist" xml:space="preserve">
     <value>Selected file does not exist.</value>
   </data>
   <data name="InvalidFolder" xml:space="preserve">
-    <value>Invalid Folder</value>
+    <value>Invalid folder</value>
   </data>
   <data name="Selectedfolderdoesnotexist" xml:space="preserve">
     <value>Selected folder does not exist.</value>
@@ -566,7 +562,7 @@
     <value>Delete:</value>
   </data>
   <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
-    <value>Generate magnet link: {Settings.Current.Controls.GenMagLink}</value>
+    <value>Generate magnet link: </value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
@@ -655,6 +651,10 @@
   <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
     <value>Error deleting torrent:</value>
   </data>
+  <data name="Settingssavedsuccessfully" xml:space="preserve">
+    <value>Settings saved successfully.
+ Some changes will take effect after restarting.</value>
+  </data>
   <data name="Torrentdownloadfailed" xml:space="preserve">
     <value>Torrent download failed:</value>
   </data>
@@ -669,5 +669,8 @@
   </data>
   <data name="Errorloadingtorrents" xml:space="preserve">
     <value>Error loading torrents:</value>
+  </data>
+  <data name="Selectthedownloadfolder" xml:space="preserve">
+    <value>Select the download folder</value>
   </data>
 </root>

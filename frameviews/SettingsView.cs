@@ -57,37 +57,37 @@ namespace lain.frameviews
 
             // Port
             scroll.Add(new Label(Resources.Port) { X = 1, Y = y });
-            var portField = new TextField(Settings.Current.Port.ToString()) { X = 35, Y = y, Width = 10 };
+            var portField = new TextField(Settings.Current.Port.ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(portField);
             y += 2;
 
             //DHT port
             scroll.Add(new Label(Resources.DHTport) { X = 1, Y = y });
-            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 35, Y = y, Width = 10 };
+            var dhtPortField = new TextField(Settings.Current.DhtPort.ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(dhtPortField);
             y += 2;
 
             // Max Connections
             scroll.Add(new Label(Resources.Maxtotalconnections) { X = 1, Y = y });
-            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 35, Y = y, Width = 10 };
+            var maxConnField = new TextField(Settings.Current.MaxConnections.ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(maxConnField);
             y += 2;
 
             // Max Download Speed
             scroll.Add(new Label(Resources.Maxtotaldownloadspeed_MB_s_) { X = 1, Y = y });
-            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
+            var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(maxDlField);
             y += 2;
 
             // Max Upload Speed
             scroll.Add(new Label(Resources.Maxtotaluploadspeed_MB_s_) { X = 1, Y = y });
-            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = 35, Y = y, Width = 10 };
+            var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(maxUpField);
             y += 2;
 
             // Progress Refresh rate
             scroll.Add(new Label(Resources.Progressrefreshrate_ms_) { X = 1, Y = y });
-            var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = 35, Y = y, Width = 10 };
+            var refreshRateField = new TextField(Settings.Current.RefreshInterval.ToString()) { X = 34, Y = y, Width = 10 };
             scroll.Add(refreshRateField);
             y += 2;
 

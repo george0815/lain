@@ -85,7 +85,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxconnections) { X = 1, Y = y });
             var maxConnField = new TextField(Settings.Current.MaxConnections.ToString())
             {
-                X = 22,
+                X = 28,
                 Y = y,
                 Width = 10
             };
@@ -96,7 +96,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxdownload_MB_s_) { X = 1, Y = y });
             var maxDlField = new TextField((Settings.Current.MaxDownloadSpeed / (1024 * 1024)).ToString())
             {
-                X = 22,
+                X = 28,
                 Y = y,
                 Width = 10
             };
@@ -107,7 +107,7 @@ namespace lain.frameviews
             scroll.Add(new Label(Resources.Maxupload_MB_s_) { X = 1, Y = y });
             var maxUpField = new TextField((Settings.Current.MaxUploadSpeed / (1024 * 1024)).ToString())
             {
-                X = 22,
+                X = 28,
                 Y = y,
                 Width = 10
             };
