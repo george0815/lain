@@ -204,9 +204,6 @@
   <data name="Torrentcreationfailed" xml:space="preserve">
     <value>トレントの作成に失敗しました:</value>
   </data>
-  <data name="exMessage" xml:space="preserve">
-    <value>{ex.Message}</value>
-  </data>
   <data name="Success" xml:space="preserve">
     <value>成功</value>
   </data>
@@ -289,14 +286,13 @@
     <value>トレントのダウンロードが開始されました。</value>
   </data>
   <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
-    <value>トレントの開始に失敗しました:
-{ex.Message}</value>
+    <value>トレントの開始に失敗しました:</value>
   </data>
   <data name="yyyy-MM-dd" xml:space="preserve">
     <value>yyyy-MM-dd</value>
   </data>
   <data name="ActiveTorrents" xml:space="preserve">
-    <value>アクティブなトレント: </value>
+    <value>アクティブなトレント:</value>
   </data>
   <data name="Noactivetorrents" xml:space="preserve">
     <value>アクティブなトレントはありません</value>
@@ -487,7 +483,7 @@
   <data name="Settingspathcannotbeempty" xml:space="preserve">
     <value>設定のパスを空にすることはできません。</value>
   </data>
-  <data name="Settingssavedsuccessfully&#xA;Somechangeswilltakeeffectafterrestarting" xml:space="preserve">
+  <data name="Settingssavedsuccessfully" xml:space="preserve">
     <value>設定が正常に保存されました。
 一部の変更は再起動後に有効になります。</value>
   </data>
@@ -525,7 +521,7 @@
     <value>不明</value>
   </data>
   <data name="MagnetlinkgeneratedmagnetToV1String()" xml:space="preserve">
-    <value>マグネットリンクが生成されました: {magnet.ToV1String()}</value>
+    <value>マグネットリンクが生成されました: </value>
   </data>
   <data name="Magnetlinkcopiedtoclipboard" xml:space="preserve">
     <value>マグネットリンクがクリップボードにコピーされました。</value>
@@ -561,22 +557,16 @@
     <value>ヘッダー</value>
   </data>
   <data name="StartSettingsCurrentControlsStartDownload" xml:space="preserve">
-    <value>開始: {Settings.Current.Controls.StartDownload}</value>
-  </data>
-  <data name="StopSettingsCurrentControlsStopDownload" xml:space="preserve">
-    <value>停止: {Settings.Current.Controls.StopDownload}</value>
+    <value>開始:</value>
   </data>
   <data name="StartseedingSettingsCurrentControlsStartSeeding" xml:space="preserve">
-    <value>シード開始: {Settings.Current.Controls.StartSeeding}</value>
-  </data>
-  <data name="StopseedingSettingsCurrentControlsStopSeeding" xml:space="preserve">
-    <value>シード停止: {Settings.Current.Controls.StopSeeding}</value>
+    <value>シード開始:</value>
   </data>
   <data name="DeleteSettingsCurrentControlsRemoveTorrent" xml:space="preserve">
-    <value>削除: {Settings.Current.Controls.RemoveTorrent}</value>
+    <value>削除:</value>
   </data>
   <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
-    <value>マグネットリンクを生成: {Settings.Current.Controls.GenMagLink}</value>
+    <value>マグネットリンクを生成:</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>終了</value>
@@ -586,12 +576,6 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>キャンセル</value>
-  </data>
-  <data name="OperatingonportSettingsCurrentPort" xml:space="preserve">
-    <value>動作ポート: {Settings.Current.Port}</value>
-  </data>
-  <data name="ActiveTorrentsTorrentOperationsManagers!Count" xml:space="preserve">
-    <value>アクティブなトレント: {TorrentOperations.Managers!.Count}</value>
   </data>
   <data name="/logtxt" xml:space="preserve">
     <value>./log.txt</value>
@@ -603,10 +587,10 @@
     <value>メイン</value>
   </data>
   <data name="ErrorsavingsettingsexMessage" xml:space="preserve">
-    <value>設定の保存中にエラーが発生しました: {ex.Message}</value>
+    <value>設定の保存中にエラーが発生しました:</value>
   </data>
   <data name="ErrorloadingsettingsexMessage" xml:space="preserve">
-    <value>設定の読み込み中にエラーが発生しました: {ex.Message}</value>
+    <value>設定の読み込み中にエラーが発生しました:</value>
   </data>
   <data name="LainTorrentClient" xml:space="preserve">
     <value>Lain トレントクライアント</value>
@@ -615,63 +599,75 @@
     <value>マグネットリンクからダウンロード中...</value>
   </data>
   <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
-    <value>状態が変更されました: {e.OldState} -&gt; {e.NewState}</value>
+    <value>状態が変更されました:</value>
   </data>
   <data name="DHTEngineDhtState" xml:space="preserve">
-    <value>DHT: {Engine.Dht.State}</value>
+    <value>DHT:</value>
   </data>
   <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
-    <value>ピースがハッシュ化されました: {e.PieceIndex} - {e.HashPassed}</value>
+    <value>ピースがハッシュ化されました:</value>
   </data>
   <data name="Savedfastresumedata" xml:space="preserve">
     <value>高速再開データが保存されました</value>
   </data>
   <data name="Errorsavingfastresumedataex" xml:space="preserve">
-    <value>高速再開データの保存中にエラーが発生しました: {ex}</value>
-  </data>
-  <data name="[mTorrentName]mProgress000%DLmMonitorDownloadRate/102400kB/sULmMonitorUploadRate/102400kB/s" xml:space="preserve">
-    <value>[{m.Torrent.Name}] {m.Progress:0.00}% DL: {m.Monitor.DownloadRate / 1024:0.0}kB/秒 UL: {m.Monitor.UploadRate / 1024:0.0}kB/秒</value>
+    <value>高速再開データの保存中にエラーが発生しました:</value>
   </data>
   <data name="torrentsjson" xml:space="preserve">
     <value>torrents.json</value>
   </data>
   <data name="ErrorsavingtorrentsexMessage" xml:space="preserve">
-    <value>トレントの保存中にエラーが発生しました: {ex.Message}</value>
+    <value>トレントの保存中にエラーが発生しました:</value>
   </data>
   <data name="FastresumedatasavedfortorrentManagers[index]Torrent?Name" xml:space="preserve">
-    <value>トレントの高速再開データが保存されました: {Managers[index].Torrent?.Name}</value>
+    <value>トレントの高速再開データが保存されました:</value>
   </data>
   <data name="PausedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを一時停止しました: {manager.Torrent?.Name}</value>
+    <value>トレントを一時停止しました:</value>
   </data>
   <data name="ErrorpausingtorrentexMessage" xml:space="preserve">
-    <value>トレントの一時停止中にエラーが発生しました: {ex.Message}</value>
+    <value>トレントの一時停止中にエラーが発生しました:</value>
   </data>
   <data name="ResumedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを再開しました: {manager.Torrent?.Name}</value>
+    <value>トレントを再開しました:</value>
   </data>
   <data name="ErrorresumingtorrentexMessage" xml:space="preserve">
-    <value>トレントの再開中にエラーが発生しました: {ex.Message}</value>
+    <value>トレントの再開中にエラーが発生しました:</value>
   </data>
   <data name="StartedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>シードを開始しました: {manager.Torrent?.Name}</value>
+    <value>シードを開始しました:</value>
   </data>
   <data name="ErrorstartingseedingexMessage" xml:space="preserve">
-    <value>シードの開始中にエラーが発生しました: {ex.Message}</value>
+    <value>シードの開始中にエラーが発生しました:</value>
   </data>
   <data name="StoppedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>シードを停止しました: {manager.Torrent?.Name}</value>
+    <value>シードを停止しました:</value>
   </data>
   <data name="ErrorstoppingseedingexMessage" xml:space="preserve">
-    <value>シードの停止中にエラーが発生しました: {ex.Message}</value>
+    <value>シードの停止中にエラーが発生しました:</value>
   </data>
   <data name="DeletedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを削除しました: {manager.Torrent?.Name}</value>
+    <value>トレントを削除しました: </value>
   </data>
   <data name="DeletedfilesatmanagerSavePath" xml:space="preserve">
-    <value>ファイルを削除しました: {manager.SavePath}</value>
+    <value>ファイルを削除しました: </value>
   </data>
   <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
-    <value>トレントの削除中にエラーが発生しました: {ex.Message}</value>
+    <value>トレントの削除中にエラーが発生しました:</value>
+  </data>
+  <data name="Torrentdownloadfailed" xml:space="preserve">
+    <value>トレントのダウンロードが失敗しました:</value>
+  </data>
+  <data name="Settingssaved" xml:space="preserve">
+    <value>設定が保存されました。</value>
+  </data>
+  <data name="Creating" xml:space="preserve">
+    <value>作成中...</value>
+  </data>
+  <data name="Downloadingfromtorrentfile" xml:space="preserve">
+    <value>トレントのファイルからダウンロード中...</value>
+  </data>
+  <data name="Errorloadingtorrents" xml:space="preserve">
+    <value>トレントの読み込み中にエラーが発生しました:</value>
   </data>
 </root>

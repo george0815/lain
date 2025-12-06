@@ -263,7 +263,7 @@ namespace lain.frameviews
                     {
                         Application.MainLoop.Invoke(() =>
                         {
-                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentdownloadfailed}:\n{ex.Message}", Resources.OK); //CHECK
+                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentdownloadfailed}\n{ex.Message}", Resources.OK); 
                         });
                     }
                 });

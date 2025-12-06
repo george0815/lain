@@ -204,9 +204,6 @@
   <data name="Torrentcreationfailed" xml:space="preserve">
     <value>Torrent creation failed:</value>
   </data>
-  <data name="exMessage" xml:space="preserve">
-    <value>{ex.Message}</value>
-  </data>
   <data name="Success" xml:space="preserve">
     <value>Success</value>
   </data>
@@ -289,14 +286,13 @@
     <value>Torrent download started.</value>
   </data>
   <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
-    <value>Torrent startup failed:
-{ex.Message}</value>
+    <value>Torrent startup failed:</value>
   </data>
   <data name="yyyy-MM-dd" xml:space="preserve">
     <value>yyyy-MM-dd</value>
   </data>
   <data name="ActiveTorrents" xml:space="preserve">
-    <value>Active Torrents: </value>
+    <value>Active torrents: </value>
   </data>
   <data name="Noactivetorrents" xml:space="preserve">
     <value>No active torrents</value>
@@ -487,7 +483,7 @@
   <data name="Settingspathcannotbeempty" xml:space="preserve">
     <value>Settings path cannot be empty.</value>
   </data>
-  <data name="Settingssavedsuccessfully&#xA;Somechangeswilltakeeffectafterrestarting" xml:space="preserve">
+  <data name="Settingssavedsuccessfully" xml:space="preserve">
     <value>Settings saved successfully.
  Some changes will take effect after restarting.</value>
   </data>
@@ -525,7 +521,7 @@
     <value>Unknown</value>
   </data>
   <data name="MagnetlinkgeneratedmagnetToV1String()" xml:space="preserve">
-    <value>Magnet link generated: {magnet.ToV1String()}</value>
+    <value>Magnet link generated: </value>
   </data>
   <data name="Magnetlinkcopiedtoclipboard" xml:space="preserve">
     <value>Magnet link copied to clipboard.</value>
@@ -561,19 +557,13 @@
     <value>HEADER</value>
   </data>
   <data name="StartSettingsCurrentControlsStartDownload" xml:space="preserve">
-    <value>Start: {Settings.Current.Controls.StartDownload}</value>
-  </data>
-  <data name="StopSettingsCurrentControlsStopDownload" xml:space="preserve">
-    <value>Stop: {Settings.Current.Controls.StopDownload}</value>
+    <value>Start:</value>
   </data>
   <data name="StartseedingSettingsCurrentControlsStartSeeding" xml:space="preserve">
-    <value>Start seeding: {Settings.Current.Controls.StartSeeding}</value>
-  </data>
-  <data name="StopseedingSettingsCurrentControlsStopSeeding" xml:space="preserve">
-    <value>Stop seeding: {Settings.Current.Controls.StopSeeding}</value>
+    <value>Start seeding:</value>
   </data>
   <data name="DeleteSettingsCurrentControlsRemoveTorrent" xml:space="preserve">
-    <value>Delete: {Settings.Current.Controls.RemoveTorrent}</value>
+    <value>Delete:</value>
   </data>
   <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
     <value>Generate magnet link: {Settings.Current.Controls.GenMagLink}</value>
@@ -587,12 +577,6 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="OperatingonportSettingsCurrentPort" xml:space="preserve">
-    <value>Operating on port: {Settings.Current.Port}</value>
-  </data>
-  <data name="ActiveTorrentsTorrentOperationsManagers!Count" xml:space="preserve">
-    <value>Active Torrents: {TorrentOperations.Managers!.Count}</value>
-  </data>
   <data name="/logtxt" xml:space="preserve">
     <value>./log.txt</value>
   </data>
@@ -603,10 +587,10 @@
     <value>main</value>
   </data>
   <data name="ErrorsavingsettingsexMessage" xml:space="preserve">
-    <value>Error saving settings: {ex.Message}</value>
+    <value>Error saving settings:</value>
   </data>
   <data name="ErrorloadingsettingsexMessage" xml:space="preserve">
-    <value>Error loading settings: {ex.Message}</value>
+    <value>Error loading settings:</value>
   </data>
   <data name="LainTorrentClient" xml:space="preserve">
     <value>Lain Torrent Client</value>
@@ -615,63 +599,75 @@
     <value>Downloading from magnet link...</value>
   </data>
   <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
-    <value>State changed: {e.OldState} -&gt; {e.NewState}</value>
+    <value>State changed:</value>
   </data>
   <data name="DHTEngineDhtState" xml:space="preserve">
-    <value>DHT: {Engine.Dht.State}</value>
+    <value>DHT:</value>
   </data>
   <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
-    <value>Piece hashed: {e.PieceIndex} - {e.HashPassed}</value>
+    <value>Piece hashed:</value>
   </data>
   <data name="Savedfastresumedata" xml:space="preserve">
     <value>Saved fast resume data</value>
   </data>
   <data name="Errorsavingfastresumedataex" xml:space="preserve">
-    <value>Error saving fastresume data: {ex}</value>
-  </data>
-  <data name="[mTorrentName]mProgress000%DLmMonitorDownloadRate/102400kB/sULmMonitorUploadRate/102400kB/s" xml:space="preserve">
-    <value>[{m.Torrent.Name}] {m.Progress:0.00}% DL: {m.Monitor.DownloadRate / 1024:0.0}kB/s UL: {m.Monitor.UploadRate / 1024:0.0}kB/s</value>
+    <value>Error saving fastresume data:</value>
   </data>
   <data name="torrentsjson" xml:space="preserve">
     <value>torrents.json</value>
   </data>
   <data name="ErrorsavingtorrentsexMessage" xml:space="preserve">
-    <value>Error saving torrents: {ex.Message}</value>
+    <value>Error saving torrents:</value>
   </data>
   <data name="FastresumedatasavedfortorrentManagers[index]Torrent?Name" xml:space="preserve">
     <value>Fast resume data saved for torrent: {Managers[index].Torrent?.Name}</value>
   </data>
   <data name="PausedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>Paused torrent: {manager.Torrent?.Name}</value>
+    <value>Paused torrent:</value>
   </data>
   <data name="ErrorpausingtorrentexMessage" xml:space="preserve">
-    <value>Error pausing torrent: {ex.Message}</value>
+    <value>Error pausing torrent:</value>
   </data>
   <data name="ResumedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>Resumed torrent: {manager.Torrent?.Name}</value>
+    <value>Resumed torrent:</value>
   </data>
   <data name="ErrorresumingtorrentexMessage" xml:space="preserve">
-    <value>Error resuming torrent: {ex.Message}</value>
+    <value>Error resuming torrent:</value>
   </data>
   <data name="StartedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>Started seeding: {manager.Torrent?.Name}</value>
+    <value>Started seeding:</value>
   </data>
   <data name="ErrorstartingseedingexMessage" xml:space="preserve">
-    <value>Error starting seeding: {ex.Message}</value>
+    <value>Error starting seeding:</value>
   </data>
   <data name="StoppedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>Stopped seeding: {manager.Torrent?.Name}</value>
+    <value>Stopped seeding:</value>
   </data>
   <data name="ErrorstoppingseedingexMessage" xml:space="preserve">
-    <value>Error stopping seeding: {ex.Message}</value>
+    <value>Error stopping seeding:</value>
   </data>
   <data name="DeletedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>Deleted torrent: {manager.Torrent?.Name}</value>
+    <value>Deleted torrent: </value>
   </data>
   <data name="DeletedfilesatmanagerSavePath" xml:space="preserve">
-    <value>Deleted files at: {manager.SavePath}</value>
+    <value>Deleted files at: </value>
   </data>
   <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
-    <value>Error deleting torrent: {ex.Message}</value>
+    <value>Error deleting torrent:</value>
+  </data>
+  <data name="Torrentdownloadfailed" xml:space="preserve">
+    <value>Torrent download failed:</value>
+  </data>
+  <data name="Settingssaved" xml:space="preserve">
+    <value>Settings saved</value>
+  </data>
+  <data name="Creating" xml:space="preserve">
+    <value>Creating...</value>
+  </data>
+  <data name="Downloadingfromtorrentfile" xml:space="preserve">
+    <value>Downloading from torrent file...</value>
+  </data>
+  <data name="Errorloadingtorrents" xml:space="preserve">
+    <value>Error loading torrents:</value>
   </data>
 </root>

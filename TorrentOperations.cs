@@ -86,8 +86,7 @@ namespace lain
             creator.Comment = data.Comment;
             creator.Publisher = data.Publisher; 
             creator.PieceLength = data.PieceSize > 0 ? data.PieceSize : creator.PieceLength;
-            creator.CreatedBy = { Resources.Createdby}
-            ;
+            
            
 
 
@@ -170,7 +169,7 @@ namespace lain
 
 
                 
-                Log.Write(create ? { Resources.Creating} : { Resources.Downloadingfromtorrentfile});
+                Log.Write(create ?  Resources.Creating : Resources.Downloadingfromtorrentfile);
 
 
                 if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
@@ -198,7 +197,7 @@ namespace lain
         {
             manager.TorrentStateChanged += async (o, e) =>
             {
-                Log.Write($"{Resources.StatechangedeOldState__eNewState}: {e.OldState} -> {e.NewState}"); //CHECK
+                Log.Write($"{Resources.StatechangedeOldState__eNewState} {e.OldState} -> {e.NewState}"); 
 
                 if ((e.OldState== TorrentState.Downloading) && e.NewState == TorrentState.Seeding &&
                     Settings.Current.StopSeedingWhenFinished)
@@ -220,7 +219,7 @@ namespace lain
             {
                 if (Settings.Current.DetailedLogging)
                 {
-                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed}: {e.PieceIndex} - {e.HashPassed}"); //CHECK
+                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed} {e.PieceIndex} - {e.HashPassed}"); 
              
                 }
             };
@@ -247,7 +246,7 @@ namespace lain
                     }
                     catch (Exception ex)
                     {
-                        Log.Write($"{Resources.Errorsavingfastresumedataex}: {ex}"); //CHECK
+                        Log.Write($"{Resources.Errorsavingfastresumedataex} {ex}"); 
                     }
                     
                 }
@@ -313,7 +312,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.Errorloadingtorrents}: {ex.Message}"); //CHECK
+                Console.WriteLine($"{Resources.Errorloadingtorrents} {ex.Message}"); 
                 Settings.Save();
             }
         }
@@ -330,7 +329,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage}: {ex.Message}"); //CHECK
+                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage} {ex.Message}"); 
             }
         }
 
@@ -348,7 +347,7 @@ namespace lain
 
             if (Settings.Current.DetailedLogging == true)
             {
-                Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name}: {Managers[index].Torrent?.Name}"); //CHECK
+                Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name} {Managers[index].Torrent?.Name}");
             }
         }
 
@@ -377,13 +376,13 @@ namespace lain
                 {
 
                     await manager.PauseAsync();
-                    Log.Write($"{Resources.PausedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+                    Log.Write($"{Resources.PausedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
                     await SaveTorrentAsync(index);
                    
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorpausingtorrentexMessage}: {ex.Message}"); //CHECK
+                    Log.Write($"{Resources.ErrorpausingtorrentexMessage} {ex.Message}"); 
                 }
             }
         }
@@ -398,12 +397,12 @@ namespace lain
                 {
               
                     await manager.StartAsync();
-                    Log.Write($"{Resources.ResumedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+                    Log.Write($"{Resources.ResumedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
 
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorresumingtorrentexMessage}: {ex.Message}"); //CHECK
+                    Log.Write($"{Resources.ErrorresumingtorrentexMessage} {ex.Message}"); 
                 }
             }
         }
@@ -418,13 +417,13 @@ namespace lain
                 {
                
                     await manager.StartAsync();
-                    Log.Write($"{Resources.Startseeding}: {manager.Torrent?.Name}"); //CHECK
+                    Log.Write($"{Resources.StartedseedingmanagerTorrent_Name} {manager.Torrent?.Name}"); 
 
 
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorstartingseedingexMessage}: {ex.Message}"); //CHECK
+                    Log.Write($"{Resources.ErrorstartingseedingexMessage} {ex.Message}"); 
                 }
             }
         }
@@ -438,12 +437,12 @@ namespace lain
                 try
                 {
                     await manager.StopAsync();
-                    Log.Write($"{Resources.StoppedseedingmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+                    Log.Write($"{Resources.StoppedseedingmanagerTorrent_Name} {manager.Torrent?.Name}"); 
 
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorstoppingseedingexMessage}: {ex.Message}"); //CHECK
+                    Log.Write($"{Resources.ErrorstoppingseedingexMessage} {ex.Message}"); 
                 }
             }
         }
@@ -469,18 +468,18 @@ namespace lain
                     TorrentDataDTOList.RemoveAt(index);
                     SaveTorrentData();
 
-                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name}: {manager.Torrent?.Name}"); //CHECK
+                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
 
                     // Optionally delete downloaded files
                     if (deleteFiles && Directory.Exists(manager.SavePath))
                     {
                         Directory.Delete(manager.SavePath, true);
-                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath}: {manager.SavePath}"); //CHECK
+                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath} {manager.SavePath}"); 
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrordeletingtorrentexMessage}: {ex.Message}"); //CHECK
+                    Log.Write($"{Resources.ErrordeletingtorrentexMessage} {ex.Message}"); 
                 }
             }
         }

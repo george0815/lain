@@ -96,7 +96,7 @@ internal static class Settings
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{Resources.ErrorsavingsettingsexMessage}: {ex.Message}"); //CHECK
+            Console.WriteLine($"{Resources.ErrorsavingsettingsexMessage} {ex.Message}"); 
         }
     }
 
@@ -115,7 +115,7 @@ internal static class Settings
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{Resources.ErrorloadingsettingsexMessage}: {ex.Message}"); //CHECK
+            Console.WriteLine($"{Resources.ErrorloadingsettingsexMessage} {ex.Message}");
             Settings.Save();
         }
     }

@@ -217,7 +217,7 @@ namespace lain.frameviews
                             trackerList.Add(trimmed);
                         else
                         {
-                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.InvalidtrackerURL}:\n{trimmed}", Resources.OK); //CHECK
+                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.InvalidtrackerURL}\n{trimmed}", Resources.OK); 
                             return;
                         }
                     }
@@ -253,7 +253,7 @@ namespace lain.frameviews
                         catch (Exception ex)
                         {
                             Application.MainLoop.Invoke(() =>
-                                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentcreationfailed}:\n{ex.Message}", Resources.OK) //CHECK
+                                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentcreationfailed}\n{ex.Message}", Resources.OK)
                             );
                         }
                     });
@@ -262,7 +262,7 @@ namespace lain.frameviews
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.ErrorQuery(Resources.Error, $"{Resources.Unexpectederror}:\n{ex.Message}", Resources.OK); //CHECK
+                    MessageBox.ErrorQuery(Resources.Error, $"{Resources.Unexpectederror}\n{ex.Message}", Resources.OK); 
                 }
             };
 

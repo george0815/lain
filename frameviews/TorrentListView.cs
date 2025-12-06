@@ -108,7 +108,7 @@ public class TorrentListView : FrameView
             var magnet = new MagnetLink(_managers[_table.SelectedRow].Torrent!.InfoHashes, _managers[_table.SelectedRow].Torrent!.Name,
                     _managers[_table.SelectedRow].Torrent!.AnnounceUrls.SelectMany(t => t.ToArray()).ToList());
 
-            Log.Write($"{Resources.MagnetlinkgeneratedmagnetToV1String__}: {magnet.ToV1String()}"); //CHECK
+            Log.Write($"{Resources.MagnetlinkgeneratedmagnetToV1String__}{magnet.ToV1String()}");
 
             if (MessageBox.Query($"", Resources.Magnetlinkcopiedtoclipboard,
                         Resources.OK) == 0)
