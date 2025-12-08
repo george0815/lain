@@ -20,6 +20,8 @@ namespace lain
         FrameView searchView;
 
         internal FrameView logView;
+        private FrameView header;
+        private Label torrentCount;
 
 
 
@@ -34,7 +36,7 @@ namespace lain
 
 
             //Header
-            var header = new FrameView()
+            header = new FrameView()
             {
                 X = 0,
                 Y = 0,
@@ -104,7 +106,7 @@ namespace lain
             };
 
             // Active torrents count
-            var torrentCount = new Label()
+            torrentCount = new Label()
             {
                 X = (Settings.Current.DisableASCII ? 30 : SettingsData.LogoWidth) + 2,
                 Y = (Settings.Current.DisableASCII ? 1 : 3),
@@ -245,6 +247,9 @@ namespace lain
             // Add sidebar to window
             Add(sidebar);
 
+            //refresh active torrents
+            TorrentOperations.UpdateProgress += RefreshActiveTorrents;
+
 
             //Content
             torrentListView = new TorrentListView(TorrentOperations.Managers);
@@ -261,6 +266,15 @@ namespace lain
 
         #region HELPER METHODS
 
+
+        //refreshes active torrents
+        void RefreshActiveTorrents()
+        {
+
+            torrentCount.Text = $"{Resources.ActiveTorrents}{TorrentOperations.Managers!.Count}";
+            torrentCount.SetNeedsDisplay();
+            SetNeedsDisplay();
+        }
 
         // Shows exit confirmation dialog
         private void ShowExitDialog()

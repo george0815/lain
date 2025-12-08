@@ -267,6 +267,8 @@ namespace lain
             {
                 while (true)
                 {
+
+                    UpdateProgress?.Invoke();
                     foreach (var m in Managers)
                     {
                         if (m?.Torrent == null) continue;
@@ -278,7 +280,7 @@ namespace lain
                         );
                     }
 
-                    UpdateProgress?.Invoke();
+                   
                     await Task.Delay(Settings.Current.RefreshInterval);
                 }
             });
