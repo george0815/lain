@@ -673,4 +673,25 @@
   <data name="Selectthedownloadfolder" xml:space="preserve">
     <value>ダウンロードフォルダを選択してください</value>
   </data>
+  <data name="Size" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>カテゴリ</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>配信元</value>
+  </data>
+  <data name="Hash" xml:space="preserve">
+    <value>ハッシュ</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>日付</value>
+  </data>
+  <data name="MagnetLinkSearch" xml:space="preserve">
+    <value>マグネットリンク</value>
+  </data>
 </root>

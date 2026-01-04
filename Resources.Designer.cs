@@ -277,6 +277,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        internal static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cfg.json.
         /// </summary>
         internal static string cfgjson {
@@ -336,6 +345,15 @@ namespace lain {
         internal static string DarkGray {
             get {
                 return ResourceManager.GetString("DarkGray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        internal static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -709,6 +727,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hash.
+        /// </summary>
+        internal static string Hash {
+            get {
+                return ResourceManager.GetString("Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HEADER.
         /// </summary>
         internal static string HEADER {
@@ -948,6 +975,15 @@ namespace lain {
         internal static string Magnetlinkisempty {
             get {
                 return ResourceManager.GetString("Magnetlinkisempty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnet link.
+        /// </summary>
+        internal static string MagnetLinkSearch {
+            get {
+                return ResourceManager.GetString("MagnetLinkSearch", resourceCulture);
             }
         }
         
@@ -1412,6 +1448,24 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        internal static string Source {
+            get {
+                return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start: .
         /// </summary>
         internal static string Start {
@@ -1669,6 +1723,15 @@ namespace lain {
         internal static string Uploadrate {
             get {
                 return ResourceManager.GetString("Uploadrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        internal static string Url {
+            get {
+                return ResourceManager.GetString("Url", resourceCulture);
             }
         }
         
