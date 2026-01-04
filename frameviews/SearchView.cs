@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
+using lain.helpers;
 
 namespace lain.frameviews
 {
@@ -42,10 +43,26 @@ namespace lain.frameviews
 
             searchBtn.Clicked += () =>
                 {
+
+                    //initialize ghidorah search args
+                    SearchArgs args = new SearchArgs
+                    {
+                        Query = searchBar.Text.ToString() ?? "",
+                        Limit = 5,
+                        TotalLimit = 10,
+                        Sources = new string[] { "thepiratebay", "limetorrents", "kickasstorrents" }, // Example sources
+                        Categories = new string[] { "Movies", "Games", "Other" }, // Example categories
+                        SortBy = "Sources"
+                    };
+
+                    string res = Ghidorah.Search(args);
+
+                    Log.Write($"Ghidorah Search Result: {res}");
+
                     // Example placeholder
                     results.SetSource(new List<string>()
                     {
-                $"Result: {searchBar.Text}",
+                res,
                 "Result B",
                 "Result C"
                     });
