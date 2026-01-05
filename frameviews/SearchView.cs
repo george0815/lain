@@ -1,7 +1,9 @@
 ﻿using lain.helpers;
+using MonoTorrent;
 using System.Data;
 using System.Diagnostics;
 using Terminal.Gui;
+using TextCopy;
 
 namespace lain.frameviews
 {
@@ -48,7 +50,7 @@ namespace lain.frameviews
     {
 
 
-        private TorrentResult[] torrents;
+        private List<TorrentResult>? torrents; 
         private readonly TableView _table;
         private readonly DataTable _tableData;
 
@@ -70,11 +72,13 @@ namespace lain.frameviews
                 Width = 40
             };
 
-            var searchBtn = new Button("Search")
+            var searchBtn = new Button(Resources.Search)
             {
                 X = Pos.Right(searchBar) + 2,
-                Y = 1
+                Y = 1   
             };
+
+           
 
             // Define the table's schema
             _tableData = new DataTable();
@@ -98,7 +102,7 @@ namespace lain.frameviews
             _table = new TableView()
             {
                 X = 0,
-                Y = 2,
+                Y = 3,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
                 Table = _tableData
@@ -109,14 +113,15 @@ namespace lain.frameviews
                 {
 
                     //initialize ghidorah search args
+                    torrents = new List<TorrentResult>();
                     SearchArgs args = new SearchArgs
                     {
                         Query = searchBar.Text.ToString() ?? "",
-                        Limit = 5,
-                        TotalLimit = 10,
-                        Sources = new string[] { "thepiratebay", "limetorrents", "kickasstorrents" }, // Example sources
-                        Categories = new string[] { "Movies", "Games", "Other" }, // Example categories
-                        SortBy = "Sources"
+                        Limit = Settings.Current.SearchResultsLimit,
+                        TotalLimit = Settings.Current.SearchResultsLimit,
+                        Sources = Settings.Current.SearchSources,
+                        Categories = Settings.Current.Categories,
+                        SortBy = Resources.Source
                     };
 
                     Task.Run(() =>
@@ -125,7 +130,6 @@ namespace lain.frameviews
 
                         Application.MainLoop.Invoke(() =>
                         {
-                            Log.Write($"Ghidorah Search Result: {res}");
                             DisplayResults(res);
                         });
                     });
@@ -184,10 +188,9 @@ namespace lain.frameviews
 
         private List<TorrentResult> Sanitize(string res)
         {
-            var results = new List<TorrentResult>();
 
             if (string.IsNullOrWhiteSpace(res))
-                return results;
+                return torrents;
 
             GhidorahResponse? parsed;
 
@@ -197,13 +200,13 @@ namespace lain.frameviews
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"Error parsing JSON: {e.Message}");
+                Debug.WriteLine($"{Resources.Error}: {e.Message}");
 
-                return results;
+                return torrents;
             }
 
             if (parsed?.data == null)
-                return results;
+                return torrents;
 
             foreach (var item in parsed.data)
             {
@@ -221,12 +224,13 @@ namespace lain.frameviews
                     Hash = item.hash ?? "N/A"
                 };
 
-                results.Add(torrent);
+                torrents.Add(torrent);
             }
 
-            return results;
+            return torrents;
         }
 
+        
 
         private void DisplayResults(string rawString)
         {
@@ -249,7 +253,7 @@ namespace lain.frameviews
                 string magnet = m.Magnet ?? "N/A";
                 string hash = m.Hash ?? "N/A";
 
-                _tableData.Rows.Add(name, seeders, leechers, size, magnet, date, category, source, url, hash);
+                _tableData.Rows.Add(name.Truncate(15), seeders, leechers, size, magnet.Truncate(15), date, category, source, url.Truncate(15), hash.Truncate(15));
             }
             _table.Table = _tableData;
             _table.Update();
@@ -258,6 +262,57 @@ namespace lain.frameviews
             Application.Refresh();
 
         }
+
+
+        //if there's a magnet link selected, start download on donwload key press
+        public override bool ProcessKey(KeyEvent keyEvent)
+        {
+            if (keyEvent.Key == Settings.Current.Controls.StartDownload)
+            {
+
+
+                #region SETUP SETTINGS OBJECT AND START DOWNLOAD
+
+                TorrentData settings = new TorrentData
+                {
+                    UseMagnetLink = true,
+                    MagnetUrl = torrents?[_table.SelectedRow].Magnet!,
+                    TorPath = torrents?[_table.SelectedRow].Name!,
+                    DownPath = Settings.Current.DefaultDownloadPath!,
+                    MaxConnections = Settings.Current.MaxConnections,
+                    MaxDownloadRate = Settings.Current.MaxDownloadSpeed /* to KB*/ * 1024 /* to MB*/ * 1024,
+                    MaxUploadRate = Settings.Current.MaxUploadSpeed /* to KB*/ * 1024 /* to MB*/ * 1024,
+                    UseDht = true
+                };
+
+                MessageBox.Query(Resources.Download, Resources.Torrentdownloadstarted, Resources.OK);
+
+
+                //Add torrent asynchronously
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await TorrentOperations.AddTorrent(settings, false, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        Application.MainLoop.Invoke(() =>
+                        {
+                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentdownloadfailed}\n{ex.Message}", Resources.OK);
+                        });
+                    }
+                });
+
+
+
+                #endregion
+            }
+
+
+            return base.ProcessKey(keyEvent);
+        }
+
 
     }
 }

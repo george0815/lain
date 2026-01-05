@@ -58,8 +58,7 @@ namespace lain.helpers
                 process.WaitForExit();
                 if (process.ExitCode != 0)
                 {
-                    Console.WriteLine("Error executing ghidorah:");
-                    Console.WriteLine(error);
+                    Console.WriteLine($"{ Resources.Ghidoraherror}:{error}");
                     return error;
                 }
                 else

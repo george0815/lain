@@ -160,6 +160,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applications.
+        /// </summary>
+        internal static string Applications {
+            get {
+                return ResourceManager.GetString("Applications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ASCII color:.
         /// </summary>
         internal static string ASCIIcolor {
@@ -277,6 +286,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories:.
+        /// </summary>
+        internal static string Categories {
+            get {
+                return ResourceManager.GetString("Categories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category.
         /// </summary>
         internal static string Category {
@@ -295,11 +313,29 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose Color.
+        ///   Looks up a localized string similar to Choose categories.
+        /// </summary>
+        internal static string Choosecategories {
+            get {
+                return ResourceManager.GetString("Choosecategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose color.
         /// </summary>
         internal static string ChooseColor {
             get {
                 return ResourceManager.GetString("ChooseColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose sources.
+        /// </summary>
+        internal static string Choosesources {
+            get {
+                return ResourceManager.GetString("Choosesources", resourceCulture);
             }
         }
         
@@ -700,11 +736,29 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Games.
+        /// </summary>
+        internal static string Games {
+            get {
+                return ResourceManager.GetString("Games", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate magnet link: .
         /// </summary>
         internal static string GeneratemagnetlinkSettingsCurrentControlsGenMagLink {
             get {
                 return ResourceManager.GetString("GeneratemagnetlinkSettingsCurrentControlsGenMagLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error initializing Ghidorah:.
+        /// </summary>
+        internal static string Ghidoraherror {
+            get {
+                return ResourceManager.GetString("Ghidoraherror", resourceCulture);
             }
         }
         
@@ -867,6 +921,15 @@ namespace lain {
         internal static string Invalidprogressrefreshrate {
             get {
                 return ResourceManager.GetString("Invalidprogressrefreshrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid value for search results limit..
+        /// </summary>
+        internal static string Invalidtorlimit {
+            get {
+                return ResourceManager.GetString("Invalidtorlimit", resourceCulture);
             }
         }
         
@@ -1060,6 +1123,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Movies.
+        /// </summary>
+        internal static string Movies {
+            get {
+                return ResourceManager.GetString("Movies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string Name {
@@ -1101,6 +1173,15 @@ namespace lain {
         internal static string Operatingonport {
             get {
                 return ResourceManager.GetString("Operatingonport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        internal static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
             }
         }
         
@@ -1245,6 +1326,15 @@ namespace lain {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search results limit: .
+        /// </summary>
+        internal static string Searchresultslimit {
+            get {
+                return ResourceManager.GetString("Searchresultslimit", resourceCulture);
             }
         }
         
@@ -1457,11 +1547,29 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sort by:.
+        /// </summary>
+        internal static string Sortby {
+            get {
+                return ResourceManager.GetString("Sortby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source.
         /// </summary>
         internal static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sources:.
+        /// </summary>
+        internal static string Sources {
+            get {
+                return ResourceManager.GetString("Sources", resourceCulture);
             }
         }
         
@@ -1696,6 +1804,15 @@ namespace lain {
         internal static string trimmed {
             get {
                 return ResourceManager.GetString("trimmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TV shows.
+        /// </summary>
+        internal static string TVshows {
+            get {
+                return ResourceManager.GetString("TVshows", resourceCulture);
             }
         }
         

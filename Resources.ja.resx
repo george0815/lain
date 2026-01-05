@@ -694,4 +694,43 @@
   <data name="MagnetLinkSearch" xml:space="preserve">
     <value>マグネットリンク</value>
   </data>
+  <data name="Games" xml:space="preserve">
+    <value>ゲーム</value>
+  </data>
+  <data name="Movies" xml:space="preserve">
+    <value>映画</value>
+  </data>
+  <data name="TVshows" xml:space="preserve">
+    <value>テレビ番組</value>
+  </data>
+  <data name="Applications" xml:space="preserve">
+    <value>アプリケーション</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="Ghidoraherror" xml:space="preserve">
+    <value>ギドラの初期化中にエラーが発生しました</value>
+  </data>
+  <data name="Choosecategories" xml:space="preserve">
+    <value>カテゴリを選択</value>
+  </data>
+  <data name="Choosesources" xml:space="preserve">
+    <value> 配信元を選択</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>カテゴリ</value>
+  </data>
+  <data name="Searchresultslimit" xml:space="preserve">
+    <value>検索結果数の上限：</value>
+  </data>
+  <data name="Sources" xml:space="preserve">
+    <value>配信元</value>
+  </data>
+  <data name="Sortby" xml:space="preserve">
+    <value>並び替え：</value>
+  </data>
+  <data name="Invalidtorlimit" xml:space="preserve">
+    <value>検索結果数の上限が無効です。</value>
+  </data>
 </root>

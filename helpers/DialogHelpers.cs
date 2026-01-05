@@ -7,6 +7,170 @@ using lain.frameviews;
 public static class DialogHelpers
 {
 
+    public static string[] PickCategories(string[] categories)
+    {
+        var dlg = new Dialog(Resources.Choosecategories, 60, 12);
+        var selected = new HashSet<string>();
+
+        int y = 0;
+        foreach (var cat in categories)
+        {
+            var btn = new Button($" [ ] {cat} ")
+            {
+                X = 1,
+                Y = y++
+            };
+
+            btn.Clicked += () =>
+            {
+                if (selected.Contains(cat))
+                {
+                    selected.Remove(cat);
+                    btn.Text = $" [ ] {cat} ";
+                }
+                else
+                {
+                    selected.Add(cat);
+                    btn.Text = $" [x] {cat} ";
+                }
+            };
+
+            dlg.Add(btn);
+        }
+
+        var okBtn = new Button(Resources.OK)
+        {
+            IsDefault = true
+        };
+        okBtn.Clicked += () => Application.RequestStop();
+
+        var cancelBtn = new Button(Resources.Cancel);
+        cancelBtn.Clicked += () =>
+        {
+            selected.Clear();
+            Application.RequestStop();
+        };
+
+        dlg.AddButton(okBtn);
+        dlg.AddButton(cancelBtn);
+
+
+        Application.Run(dlg);
+        return selected.ToArray();
+    }
+
+
+    public static string[] PickSources(string[] sources)
+    {
+        var dlg = new Dialog(Resources.Choosesources, 60, 12);
+        var selected = new HashSet<string>();
+
+        int y = 0;
+        foreach (var src in sources)
+        {
+            var btn = new Button($" [ ] {src} ")
+            {
+                X = 1,
+                Y = y++
+            };
+
+            btn.Clicked += () =>
+            {
+                if (selected.Contains(src))
+                {
+                    selected.Remove(src);
+                    btn.Text = $" [ ] {src} ";
+                }
+                else
+                {
+                    selected.Add(src);
+                    btn.Text = $" [x] {src} ";
+                }
+            };
+
+            dlg.Add(btn);
+        }
+
+        var okBtn = new Button(Resources.OK)
+        {
+            IsDefault = true
+        };
+        okBtn.Clicked += () => Application.RequestStop();
+
+        var cancelBtn = new Button(Resources.Cancel);
+        cancelBtn.Clicked += () =>
+        {
+            selected.Clear();
+            Application.RequestStop();
+        };
+
+        dlg.AddButton(okBtn);
+        dlg.AddButton(cancelBtn);
+
+
+        Application.Run(dlg);
+        return selected.ToArray();
+    }
+
+
+    public static string PickSortCriteria(string[] criteria)
+    {
+        var dlg = new Dialog("Sort by: ", 40, 10);
+        string result = criteria.FirstOrDefault() ?? "";
+
+        int y = 0;
+        Button? active = null;
+
+        foreach (var c in criteria)
+        {
+            var btn = new Button($" ( ) {c} ")
+            {
+                X = 1,
+                Y = y++
+            };
+
+            btn.Clicked += () =>
+            {
+                if (active != null)
+                    active.Text = active.Text.Replace("(x)", "( )");
+
+                btn.Text = $" (x) {c} ";
+                active = btn;
+                result = c;
+            };
+
+            dlg.Add(btn);
+
+            if (active == null)
+            {
+                active = btn;
+                btn.Text = $" (x) {c} ";
+                result = c;
+            }
+        }
+
+        var okBtn = new Button(Resources.OK)
+        {
+            IsDefault = true
+        };
+        okBtn.Clicked += () => Application.RequestStop();
+
+        var cancelBtn = new Button(Resources.Cancel);
+        cancelBtn.Clicked += () =>
+        {
+            result = "";
+            Application.RequestStop();
+        };
+
+        dlg.AddButton(okBtn);
+        dlg.AddButton(cancelBtn);
+
+
+        Application.Run(dlg);
+        return result;
+    }
+
+
     public static string PickColorGrid()
     {
         var colors = SettingsView.colors;
@@ -133,6 +297,11 @@ public static class DialogHelpers
         return null;
     }
 
+    internal static string Truncate(this string value, int maxLength)
+    {
+        if (string.IsNullOrEmpty(value)) return value;
+        return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+    }
 
     public static string? ShowFolderDialog(string title, string message)
     {

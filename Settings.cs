@@ -58,6 +58,15 @@ internal class SettingsData
     //Icons
     public List<string> icons { get; set; } = ASCII.icons;
 
+
+    //Search settings
+
+    public int SearchResultsLimit { get; set; } = 20;
+    public String[] SearchSources { get; set; } = ["thepiratebay", "limetorrents", "kickasstorrents" ];
+    public String[] Categories { get; set; } = [Resources.Movies, Resources.Games, 
+                                                Resources.TVshows, Resources.Applications, Resources.Other ];
+    public string SortBy { get; set; } = Resources.Source;
+
 }
 
 

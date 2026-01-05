@@ -347,6 +347,165 @@ namespace lain.frameviews
 
             #endregion
 
+
+            #region SEARCH ENGINE SETTINGS
+
+            //Search results total limit
+            scroll.Add(new Label(Resources.Searchresultslimit) { X = 1, Y = y });
+            var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 30), Y = y, Width = 10 };
+            scroll.Add(torLimit);
+            y += 2;
+
+            //categories to search
+            scroll.Add(new Label(Resources.Categories) { X = 1, Y = y });
+            var categories = new Button()
+            {
+                X = 30,
+                Y = y,
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.Categories[0] + "..."
+            };
+
+
+            categories.Clicked += () =>
+            {
+                // Open pick categories dialog
+                string[] tmp = DialogHelpers.PickCategories([
+
+                    Resources.Movies, Resources.Games,
+                     Resources.TVshows, Resources.Applications, 
+                     Resources.Other
+
+
+                ]);
+                
+                if(tmp.Length > 0)
+                {
+                    Settings.Current.Categories = tmp;
+                    if (tmp.Length == 1)
+                    {
+                        categories.Text = tmp[0];
+                    }
+                    else if (tmp.Length > 1)
+                    {
+                        categories.Text = tmp[0] + "...";
+                    }
+                }
+                
+                
+                else
+                {
+                    Settings.Current.Categories = [Resources.Movies, Resources.Games,
+                     Resources.TVshows, Resources.Applications,
+                     Resources.Other ];
+                    categories.Text = $"{Resources.Movies}...";
+                }
+
+                // Force redraw the button *and its parent view*
+                categories.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
+            scroll.Add(categories);
+            y += 2;
+
+            //Preferred search sources
+            scroll.Add(new Label(Resources.Sources) { X = 1, Y = y });
+            var sources = new Button()
+            {
+                X = 30,
+                Y = y,
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.SearchSources[0] + "..."
+            };
+
+
+            sources.Clicked += () =>
+            {
+                // Open your color picker
+                string[] tmp = DialogHelpers.PickSources([
+                    "kickasstorrents",
+                        "thepiratebay",
+                        "limetorrents",
+                        "yts",
+                        "x1337",
+                        "torrentgalaxy"]);
+
+                if (tmp.Length > 0)
+                {
+                    Settings.Current.SearchSources = tmp;
+                    if (tmp.Length == 1)
+                    {
+                        sources.Text = tmp[0];
+                    }
+                    else if (tmp.Length > 1)
+                    {
+                        sources.Text = tmp[0] + "...";
+                    }
+                }
+                else
+                {
+                    Settings.Current.SearchSources = [
+                        "kickasstorrents",
+                        "thepiratebay",
+                        "limetorrents",
+                        "yts",
+                        "x1337",
+                        "torrentgalaxy"];
+                    sources.Text = "kickasstorrents...";
+                }
+              
+                sources.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
+            scroll.Add(sources);
+            y += 2;
+            
+
+
+            //sort by option
+            scroll.Add(new Label(Resources.Sortby) { X = 1, Y = y });
+            var sortBy = new Button()
+            {
+                X = 30,
+                Y = y,
+                Width = 3,
+
+                Height = 1,
+                Text = Settings.Current.SortBy
+            };
+
+
+            sortBy.Clicked += () =>
+            {
+                // Open your color picker
+                string tmp = DialogHelpers.PickSortCriteria([Resources.Name, Resources.Source, Resources.Size, Resources.Seeders]);
+                Settings.Current.SortBy = tmp;
+
+                // Update *the button's* text, not `Text = ...`
+                sortBy.Text = tmp;
+
+                if (String.IsNullOrEmpty(tmp))
+                {
+                    sortBy.Text = Resources.Source;
+                    Settings.Current.SortBy = Resources.Source;
+                }
+
+                // Force redraw the button *and its parent view*
+                sortBy.SetNeedsDisplay();
+                scroll.SetNeedsDisplay();
+
+            };
+            scroll.Add(sortBy);
+            y += 2;
+
+            #endregion
+
             // Save button
             var saveBtn = new Button(Resources.Save) { X = 1, Y = y };
             scroll.Add(saveBtn);
@@ -432,9 +591,14 @@ namespace lain.frameviews
                         MessageBox.ErrorQuery(Resources.Error, Resources.Invalidprogressrefreshrate, Resources.OK);
                         return;
                     }
+                    if (!int.TryParse(torLimit.Text.ToString(), out var torLim) || torLim > 100 || torLim < 0)
+                    {
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidtorlimit, Resources.OK);
+                        return;
+                    }
 
-                   
-                 
+
+
 
 
                     // Paths
@@ -485,6 +649,7 @@ namespace lain.frameviews
                     Settings.Current.MaxDownloadSpeed = maxDl /* to KB*/ * 1024 /* to MB*/ * 1024;
                     Settings.Current.MaxUploadSpeed = maxUp /* to KB*/ * 1024 /* to MB*/ * 1024;
                     Settings.Current.RefreshInterval = refRate;
+                    Settings.Current.SearchResultsLimit = torLim;
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                     Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;
