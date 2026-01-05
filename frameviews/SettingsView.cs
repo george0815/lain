@@ -352,8 +352,14 @@ namespace lain.frameviews
 
             //Search results total limit
             scroll.Add(new Label(Resources.Searchresultslimit) { X = 1, Y = y });
-            var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 30), Y = y, Width = 10 };
+            var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
             scroll.Add(torLimit);
+            y += 2;
+
+            //Search results limit per source
+            scroll.Add(new Label(Resources.Searchresultslimitpersource) { X = 1, Y = y });
+            var torLimitPerSource = new TextField(Settings.Current.SearchResultsLimitPerSource.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
+            scroll.Add(torLimitPerSource);
             y += 2;
 
             //categories to search
@@ -365,7 +371,7 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.Categories[0] + "..."
+                Text = Settings.Current.Categories.Length > 1 ? Settings.Current.Categories[0] + "..." : Settings.Current.Categories[0]
             };
 
 
@@ -420,7 +426,7 @@ namespace lain.frameviews
                 Width = 3,
 
                 Height = 1,
-                Text = Settings.Current.SearchSources[0] + "..."
+                Text = Settings.Current.SearchSources.Length > 1 ? Settings.Current.SearchSources[0] + "..." : Settings.Current.SearchSources[0]
             };
 
 
@@ -598,6 +604,13 @@ namespace lain.frameviews
                     }
 
 
+                    if (!int.TryParse(torLimitPerSource.Text.ToString(), out var torLimPerSource) || torLimPerSource > 100 || torLimPerSource < 0)
+                    {
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidtorlimit, Resources.OK);
+                        return;
+                    }
+
+
 
 
 
@@ -650,6 +663,7 @@ namespace lain.frameviews
                     Settings.Current.MaxUploadSpeed = maxUp /* to KB*/ * 1024 /* to MB*/ * 1024;
                     Settings.Current.RefreshInterval = refRate;
                     Settings.Current.SearchResultsLimit = torLim;
+                    Settings.Current.SearchResultsLimitPerSource = torLimPerSource;
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                     Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;

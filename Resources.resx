@@ -733,4 +733,10 @@
   <data name="Invalidtorlimit" xml:space="preserve">
     <value>Invalid value for search results limit.</value>
   </data>
+  <data name="Searchresultslimitpersource" xml:space="preserve">
+    <value>Search results limit per source: </value>
+  </data>
+  <data name="ghidorahtimeout" xml:space="preserve">
+    <value>Error: Ghidorah process timed out.</value>
+  </data>
 </root>

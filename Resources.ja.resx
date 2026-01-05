@@ -733,4 +733,10 @@
   <data name="Invalidtorlimit" xml:space="preserve">
     <value>検索結果数の上限が無効です。</value>
   </data>
+  <data name="Searchresultslimitpersource" xml:space="preserve">
+    <value>配信元ごとの検索結果数の上限：</value>
+  </data>
+  <data name="Ghidorahtimeout" xml:space="preserve">
+    <value>ギドラの処理がタイムアウトしました。</value>
+  </data>
 </root>

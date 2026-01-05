@@ -763,6 +763,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error: Ghidorah process timed out..
+        /// </summary>
+        internal static string ghidorahtimeout {
+            get {
+                return ResourceManager.GetString("ghidorahtimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gray.
         /// </summary>
         internal static string Gray {
@@ -1335,6 +1344,15 @@ namespace lain {
         internal static string Searchresultslimit {
             get {
                 return ResourceManager.GetString("Searchresultslimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search results limit per source: .
+        /// </summary>
+        internal static string Searchresultslimitpersource {
+            get {
+                return ResourceManager.GetString("Searchresultslimitpersource", resourceCulture);
             }
         }
         

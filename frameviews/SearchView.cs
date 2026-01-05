@@ -117,11 +117,11 @@ namespace lain.frameviews
                     SearchArgs args = new SearchArgs
                     {
                         Query = searchBar.Text.ToString() ?? "",
-                        Limit = Settings.Current.SearchResultsLimit,
+                        Limit = Settings.Current.SearchResultsLimitPerSource,
                         TotalLimit = Settings.Current.SearchResultsLimit,
                         Sources = Settings.Current.SearchSources,
                         Categories = Settings.Current.Categories,
-                        SortBy = Resources.Source
+                        SortBy = Settings.Current.SortBy
                     };
 
                     Task.Run(() =>
@@ -239,19 +239,19 @@ namespace lain.frameviews
 
             _tableData.Clear();
 
-            foreach (var m in res)
+            for (int i = 0; (i < res.Count && i < Settings.Current.SearchResultsLimit); i++)
             {
 
-                string name = m.Name ?? "N/A";
-                int size = m.Size;
-                int seeders = m.Seeders;
-                int leechers = m.Leechers;
-                string category = m.Category ?? "N/A";
-                string source = m.Source ?? "N/A";
-                string url = m.Url ?? "N/A";
-                string date = m.Date ?? "N/A";
-                string magnet = m.Magnet ?? "N/A";
-                string hash = m.Hash ?? "N/A";
+                string name = res[i].Name ?? "N/A";
+                int size = res[i].Size;
+                int seeders = res[i].Seeders;
+                int leechers = res[i].Leechers;
+                string category = res[i].Category ?? "N/A";
+                string source = res[i].Source ?? "N/A";
+                string url = res[i].Url ?? "N/A";
+                string date = res[i].Date ?? "N/A";
+                string magnet = res[i].Magnet ?? "N/A";
+                string hash = res[i].Hash ?? "N/A";
 
                 _tableData.Rows.Add(name.Truncate(15), seeders, leechers, size, magnet.Truncate(15), date, category, source, url.Truncate(15), hash.Truncate(15));
             }

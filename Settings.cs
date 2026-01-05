@@ -62,6 +62,9 @@ internal class SettingsData
     //Search settings
 
     public int SearchResultsLimit { get; set; } = 20;
+
+    public int SearchResultsLimitPerSource { get; set; } = 20;
+
     public String[] SearchSources { get; set; } = ["thepiratebay", "limetorrents", "kickasstorrents" ];
     public String[] Categories { get; set; } = [Resources.Movies, Resources.Games, 
                                                 Resources.TVshows, Resources.Applications, Resources.Other ];

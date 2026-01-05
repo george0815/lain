@@ -27,7 +27,6 @@ namespace lain.helpers
 
         internal static string Search(SearchArgs args)
         {
-
             string sources = string.Join(" ", args.Sources);
             string categories = string.Join(" ", args.Categories);
 
@@ -49,24 +48,34 @@ namespace lain.helpers
                 StandardErrorEncoding = Encoding.UTF8
             };
 
+            using var process = new Process { StartInfo = psi };
+            process.Start();
 
-            using (var process = new Process { StartInfo = psi })
+            const int timeoutMs = 60_000;
+
+            // Read output asynchronously
+            var outputTask = process.StandardOutput.ReadToEndAsync();
+            var errorTask = process.StandardError.ReadToEndAsync();
+
+            if (!process.WaitForExit(timeoutMs))
             {
-                process.Start();
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-                if (process.ExitCode != 0)
-                {
-                    Console.WriteLine($"{ Resources.Ghidoraherror}:{error}");
-                    return error;
-                }
-                else
-                {
-                    return output;
-                }
+                try { process.Kill(entireProcessTree: true); } catch { }
+                return Resources.ghidorahtimeout;
             }
 
+            // Ensure async reads completed
+            Task.WaitAll(outputTask, errorTask);
+
+            string output = outputTask.Result;
+            string error = errorTask.Result;
+
+            if (process.ExitCode != 0)
+            {
+                Debug.WriteLine($"{Resources.Ghidoraherror}: {error}");
+                return error;
+            }
+
+            return output;
         }
 
     }
