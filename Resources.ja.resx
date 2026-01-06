@@ -742,4 +742,7 @@
   <data name="Nomagnetlink" xml:space="preserve">
     <value>マグネットリンクは利用できません。</value>
   </data>
+  <data name="Searching" xml:space="preserve">
+    <value>検索中...</value>
+  </data>
 </root>

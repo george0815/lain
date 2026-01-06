@@ -742,4 +742,7 @@
   <data name="Nomagnetlink" xml:space="preserve">
     <value>No magnet link available. </value>
   </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
 </root>

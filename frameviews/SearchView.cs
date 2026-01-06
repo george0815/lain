@@ -1,10 +1,15 @@
 ﻿using lain.helpers;
 using MonoTorrent;
+using System;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
+using System.Xml.Linq;
 using Terminal.Gui;
 using TextCopy;
+using static NStack.Unicode;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lain.frameviews
 {
@@ -37,16 +42,16 @@ namespace lain.frameviews
     //holds sanitized torrent data
     internal struct TorrentResult
     {
-        internal String Name;
+        internal string Name;
         internal int Size;
         internal int Seeders;
         internal int Leechers;
-        internal String Category;
-        internal String Source;
-        internal String Url;
-        internal String Date;
-        internal String Magnet;
-        internal String Hash;
+        internal string Category;
+        internal string Source;
+        internal string Url;
+        internal string Date;
+        internal string Magnet;
+        internal string Hash;
 
     };
 
@@ -133,11 +138,47 @@ namespace lain.frameviews
 
                     Task.Run(() =>
                     {
-                        var res = Ghidorah.Search(args);
 
-                        Application.MainLoop.Invoke(() =>
+                        _tableData.Clear();
+
+                        // Start counter
+                        int seconds = 0;
+
+                        // CancellationTokenSource to stop the timer
+                        var cts = new CancellationTokenSource();
+
+                        // Update button text every second
+                        var timer = new Timer(_ =>
                         {
-                            DisplayResults(res);
+                            seconds++;
+                            Application.MainLoop.Invoke(() =>
+                            {
+                                searchBtn.Text = $"Searching... {seconds}s";
+                                searchBtn.SetNeedsDisplay();
+                            });
+                        }, null, 0, 1000); // first 0ms delay, then every 1000ms
+
+                        // Run the search in the background
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                var res = Ghidorah.Search(args); // your long-running search
+
+                                // Update UI with results
+                                Application.MainLoop.Invoke(() =>
+                                {
+                                    DisplayResults(res);
+                                    searchBtn.Text = "Search"; // reset button text
+                                    searchBtn.SetNeedsDisplay();
+                                });
+                            }
+                            finally
+                            {
+                                // Ensure timer stops even if search throws
+                                cts.Cancel();
+                                timer.Dispose();
+                            }
                         });
                     });
 
@@ -267,7 +308,6 @@ namespace lain.frameviews
             _table.Update();
             _table.SetNeedsDisplay();
             SetNeedsDisplay();
-            Application.Refresh();
 
         }
 
@@ -280,9 +320,6 @@ namespace lain.frameviews
 
             if (keyEvent.Key == Settings.Current.Controls.StartDownload && torrent != null && torrents![_table.SelectedRow].Magnet != "N/A")
             {
-
-
-                #region SETUP SETTINGS OBJECT AND START DOWNLOAD
 
                 TorrentData settings = new TorrentData
                 {
@@ -319,14 +356,13 @@ namespace lain.frameviews
                 
             }
 
-            else if (torrent != null && torrents![_table.SelectedRow].Magnet == "N/A")
+            else if (keyEvent.Key == Settings.Current.Controls.StartDownload && torrent != null && torrents![_table.SelectedRow].Magnet == "N/A")
             {
 
                 MessageBox.ErrorQuery(Resources.Error, $"{Resources.Nomagnetlink}", Resources.OK);
 
             }
 
-            #endregion
 
             return base.ProcessKey(keyEvent);
         }
