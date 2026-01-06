@@ -8,11 +8,16 @@ using TextCopy;
 namespace lain.frameviews
 {
 
+    #region DATA STRUCTS
+
+    //holds data received from python subprocess
     internal class GhidorahResponse
     {
         public List<GhidorahItem>? data { get; set; }
     }
 
+
+    //holds individual torrent item data before sanitization
     internal class GhidorahItem
     {
         public string? name { get; set; }
@@ -28,7 +33,7 @@ namespace lain.frameviews
     }
 
 
-
+    //holds sanitized torrent data
     internal struct TorrentResult
     {
         internal String Name;
@@ -44,7 +49,7 @@ namespace lain.frameviews
 
     };
 
-
+    #endregion
 
     internal class SearchView : FrameView
     {
@@ -63,7 +68,7 @@ namespace lain.frameviews
             Width = Dim.Fill();
             Height = Dim.Fill();
 
-
+            #region UI ELEMENTS
 
             var searchBar = new TextField("")
             {
@@ -108,6 +113,7 @@ namespace lain.frameviews
                 Table = _tableData
             };
 
+            #endregion
 
             searchBtn.Clicked += () =>
                 {
@@ -143,8 +149,9 @@ namespace lain.frameviews
 
         }
 
-        //HELPER FUNCTIONS
+        #region HELPER METHODS
 
+        //parse size string into int in bytes
         private static int ParseSize(string? size)
         {
             if (string.IsNullOrWhiteSpace(size) || size == "N/A")
@@ -185,7 +192,7 @@ namespace lain.frameviews
         }
 
 
-
+        //sanitize raw json response into structured data
         private List<TorrentResult> Sanitize(string res)
         {
 
@@ -230,8 +237,8 @@ namespace lain.frameviews
             return torrents;
         }
 
-        
 
+        //display search results in table
         private void DisplayResults(string rawString)
         {
 
@@ -312,6 +319,8 @@ namespace lain.frameviews
 
             return base.ProcessKey(keyEvent);
         }
+
+        #endregion
 
 
     }

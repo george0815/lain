@@ -7,6 +7,7 @@ using lain.frameviews;
 public static class DialogHelpers
 {
 
+    // Allows multiple selection of categories
     public static string[] PickCategories(string[] categories)
     {
         var dlg = new Dialog(Resources.Choosecategories, 60, 12);
@@ -60,6 +61,7 @@ public static class DialogHelpers
     }
 
 
+    // Allows multiple selection of sources
     public static string[] PickSources(string[] sources)
     {
         var dlg = new Dialog(Resources.Choosesources, 60, 12);
@@ -112,7 +114,7 @@ public static class DialogHelpers
         return selected.ToArray();
     }
 
-
+    // Allows single selection of sort criteria
     public static string PickSortCriteria(string[] criteria)
     {
         var dlg = new Dialog("Sort by: ", 40, 10);
@@ -171,6 +173,7 @@ public static class DialogHelpers
     }
 
 
+    // Allows single color selection from grid
     public static string PickColorGrid()
     {
         var colors = SettingsView.colors;
@@ -225,7 +228,7 @@ public static class DialogHelpers
         return result;
     }
 
-
+    // Save file dialog with validation 
     public static string? ShowSaveFileDialog(string title, string message, string[] allowedExtensions,
                                              string defaultFileName = "")
     {
@@ -263,7 +266,7 @@ public static class DialogHelpers
         }
     }
 
-
+    // Open file dialog with validation
     public static string? ShowFileDialog(string title, string message, string[] allowedExtensions, bool create)
     {
         var dialog = new OpenDialog(title, message)
@@ -297,12 +300,15 @@ public static class DialogHelpers
         return null;
     }
 
+    // Truncate string to max length
     internal static string Truncate(this string value, int maxLength)
     {
         if (string.IsNullOrEmpty(value)) return value;
         return value.Length <= maxLength ? value : value.Substring(0, maxLength);
     }
 
+
+    // Open folder dialog with validation
     public static string? ShowFolderDialog(string title, string message)
     {
         var dialog = new OpenDialog(title, message)
