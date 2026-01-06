@@ -1,5 +1,6 @@
 ﻿using lain.helpers;
 using MonoTorrent;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
 using Terminal.Gui;
@@ -273,8 +274,11 @@ namespace lain.frameviews
 
         //if there's a magnet link selected, start download on donwload key press
         public override bool ProcessKey(KeyEvent keyEvent)
+
         {
-            if (keyEvent.Key == Settings.Current.Controls.StartDownload)
+            var torrent = torrents?.ElementAtOrDefault(_table.SelectedRow);
+
+            if (keyEvent.Key == Settings.Current.Controls.StartDownload && torrent != null && torrents![_table.SelectedRow].Magnet != "N/A")
             {
 
 
@@ -312,13 +316,21 @@ namespace lain.frameviews
                 });
 
 
-
-                #endregion
+                
             }
 
+            else if (torrent != null && torrents![_table.SelectedRow].Magnet == "N/A")
+            {
+
+                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Nomagnetlink}", Resources.OK);
+
+            }
+
+            #endregion
 
             return base.ProcessKey(keyEvent);
         }
+        
 
         #endregion
 

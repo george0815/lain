@@ -8,6 +8,7 @@ using System.Text.Json;
 namespace lain.helpers
 {
 
+    // Struct to hold search arguments
     internal struct SearchArgs
     {
         internal string Query;
@@ -23,7 +24,7 @@ namespace lain.helpers
 
     internal class Ghidorah
     {
-
+        // Execute Ghidorah (paython exe as a subprocess) search with given arguments
         internal static string Search(SearchArgs args)
         {
             string sources = string.Join(" ", args.Sources);

@@ -1168,6 +1168,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No magnet link available. .
+        /// </summary>
+        internal static string Nomagnetlink {
+            get {
+                return ResourceManager.GetString("Nomagnetlink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string OK {

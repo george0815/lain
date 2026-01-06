@@ -739,4 +739,7 @@
   <data name="ghidorahtimeout" xml:space="preserve">
     <value>Error: Ghidorah process timed out.</value>
   </data>
+  <data name="Nomagnetlink" xml:space="preserve">
+    <value>No magnet link available. </value>
+  </data>
 </root>
