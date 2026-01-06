@@ -352,13 +352,13 @@ namespace lain.frameviews
 
             //Search results total limit
             scroll.Add(new Label(Resources.Searchresultslimit) { X = 1, Y = y });
-            var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
+            var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 34), Y = y, Width = 10 };
             scroll.Add(torLimit);
             y += 2;
 
             //Search results limit per source
             scroll.Add(new Label(Resources.Searchresultslimitpersource) { X = 1, Y = y });
-            var torLimitPerSource = new TextField(Settings.Current.SearchResultsLimitPerSource.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 35), Y = y, Width = 10 };
+            var torLimitPerSource = new TextField(Settings.Current.SearchResultsLimitPerSource.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 34), Y = y, Width = 10 };
             scroll.Add(torLimitPerSource);
             y += 2;
 
