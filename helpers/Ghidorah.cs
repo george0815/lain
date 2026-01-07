@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
+using System.Text;
 using System.Text.Json;
+using Terminal.Gui;
 
 namespace lain.helpers
 {
@@ -51,15 +51,17 @@ namespace lain.helpers
             using var process = new Process { StartInfo = psi };
             process.Start();
 
-            const int timeoutMs = 60_000;
+            
 
             // Read output asynchronously
             var outputTask = process.StandardOutput.ReadToEndAsync();
             var errorTask = process.StandardError.ReadToEndAsync();
 
-            if (!process.WaitForExit(timeoutMs))
+            if (!process.WaitForExit(Settings.Current.Timeout))
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
+                Log.Write(Resources.ghidorahtimeout);
+                MessageBox.ErrorQuery(Resources.Error, $"{Resources.ghidorahtimeout}", Resources.OK);
                 return Resources.ghidorahtimeout;
             }
 
@@ -71,7 +73,9 @@ namespace lain.helpers
 
             if (process.ExitCode != 0)
             {
-                Debug.WriteLine($"{Resources.Ghidoraherror}: {error}");
+                Log.Write($"{Resources.Ghidoraherror}: {error}");
+                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Ghidoraherror}: {error}", Resources.OK);
+
                 return error;
             }
 

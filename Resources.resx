@@ -739,10 +739,21 @@
   <data name="ghidorahtimeout" xml:space="preserve">
     <value>Error: Ghidorah process timed out.</value>
   </data>
+<<<<<<< Updated upstream
   <data name="Nomagnetlink" xml:space="preserve">
     <value>No magnet link available. </value>
   </data>
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>
+=======
+  <data name="Searchtimeout" xml:space="preserve">
+    <value>Search timeout:</value>
+  </data>
+  <data name="Invalidtorlimitpersource" xml:space="preserve">
+    <value>Invalid value for search results limit per source.</value>
+  </data>
+  <data name="Invalidtimeout" xml:space="preserve">
+    <value>Invalid value for search timeout.</value>
+>>>>>>> Stashed changes
   </data>
 </root>

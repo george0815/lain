@@ -739,10 +739,21 @@
   <data name="ghidorahtimeout" xml:space="preserve">
     <value>ギドラの処理がタイムアウトしました。</value>
   </data>
+<<<<<<< Updated upstream
   <data name="Nomagnetlink" xml:space="preserve">
     <value>マグネットリンクは利用できません。</value>
   </data>
   <data name="Searching" xml:space="preserve">
     <value>検索中...</value>
+=======
+  <data name="Searchtimeout" xml:space="preserve">
+    <value>検索のタイムアウト:</value>
+  </data>
+  <data name="Invalidtorlimitpersource" xml:space="preserve">
+    <value>配信元ごとの検索結果数の上限が無効です。</value>
+  </data>
+  <data name="Invalidtimeout" xml:space="preserve">
+    <value>検索のタイムアウトの上限が無効です。</value>
+>>>>>>> Stashed changes
   </data>
 </root>

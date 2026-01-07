@@ -934,11 +934,29 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid value for search timeout..
+        /// </summary>
+        internal static string Invalidtimeout {
+            get {
+                return ResourceManager.GetString("Invalidtimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid value for search results limit..
         /// </summary>
         internal static string Invalidtorlimit {
             get {
                 return ResourceManager.GetString("Invalidtorlimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid value for search results limit per source..
+        /// </summary>
+        internal static string Invalidtorlimitpersource {
+            get {
+                return ResourceManager.GetString("Invalidtorlimitpersource", resourceCulture);
             }
         }
         
@@ -1371,6 +1389,15 @@ namespace lain {
         internal static string Searchresultslimitpersource {
             get {
                 return ResourceManager.GetString("Searchresultslimitpersource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search timeout:.
+        /// </summary>
+        internal static string Searchtimeout {
+            get {
+                return ResourceManager.GetString("Searchtimeout", resourceCulture);
             }
         }
         

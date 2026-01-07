@@ -351,6 +351,12 @@ namespace lain.frameviews
             #region SEARCH ENGINE SETTINGS
 
             //Search results total limit
+            scroll.Add(new Label(Resources.Searchtimeout) { X = 1, Y = y });
+            var timeOutBtn = new TextField((Settings.Current.Timeout / 1000).ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 34), Y = y, Width = 10 };
+            scroll.Add(timeOutBtn);
+            y += 2;
+
+            //Search results total limit
             scroll.Add(new Label(Resources.Searchresultslimit) { X = 1, Y = y });
             var torLimit = new TextField(Settings.Current.SearchResultsLimit.ToString()) { X = (Thread.CurrentThread.CurrentUICulture.Name == "ja-JP" ? 32 : 34), Y = y, Width = 10 };
             scroll.Add(torLimit);
@@ -606,7 +612,13 @@ namespace lain.frameviews
 
                     if (!int.TryParse(torLimitPerSource.Text.ToString(), out var torLimPerSource) || torLimPerSource > 100 || torLimPerSource < 0)
                     {
-                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidtorlimit, Resources.OK);
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidtorlimitpersource, Resources.OK);
+                        return;
+                    }
+
+                    if (!int.TryParse(timeOutBtn.Text.ToString(), out var timeOut) || timeOut > 1000 || timeOut < 0)
+                    {
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Invalidtimeout, Resources.OK);
                         return;
                     }
 
@@ -664,6 +676,8 @@ namespace lain.frameviews
                     Settings.Current.RefreshInterval = refRate;
                     Settings.Current.SearchResultsLimit = torLim;
                     Settings.Current.SearchResultsLimitPerSource = torLimPerSource;
+                    Settings.Current.Timeout = timeOut * 1000;
+
 
                     Settings.Current.StopSeedingWhenFinished = stopSeedCheckbox.Checked;
                     Settings.Current.EnablePortForwarding = portFwdCheckbox.Checked;

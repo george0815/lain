@@ -249,7 +249,8 @@ namespace lain.frameviews
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"{Resources.Error}: {e.Message}");
+                Log.Write($"{Resources.Error}: {e.Message}");
+                MessageBox.ErrorQuery(Resources.Error, e.Message, Resources.OK);
 
                 return torrents;
             }

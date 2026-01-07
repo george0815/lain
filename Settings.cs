@@ -63,6 +63,9 @@ internal class SettingsData
 
     public int SearchResultsLimit { get; set; } = 20;
 
+    public int Timeout { get; set; } = 20 * 1_000;
+
+
     public int SearchResultsLimitPerSource { get; set; } = 20;
 
     public String[] SearchSources { get; set; } = ["thepiratebay", "limetorrents", "kickasstorrents" ];
