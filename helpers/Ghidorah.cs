@@ -61,8 +61,8 @@ namespace lain.helpers
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
                 Log.Write(Resources.ghidorahtimeout);
-                MessageBox.ErrorQuery(Resources.Error, $"{Resources.ghidorahtimeout}", Resources.OK);
-                return Resources.ghidorahtimeout;
+                return $"{{\"data\":[],\"errors\":[\"{Resources.ghidorahtimeout}\"]}}";
+                
             }
 
             // Ensure async reads completed
@@ -74,9 +74,8 @@ namespace lain.helpers
             if (process.ExitCode != 0)
             {
                 Log.Write($"{Resources.Ghidoraherror}: {error}");
-                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Ghidoraherror}: {error}", Resources.OK);
+                return $"{{\"data\":[],\"errors\":[\"{Resources.Ghidoraherror}: {error}\"]}}";
 
-                return error;
             }
 
             return output;

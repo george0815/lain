@@ -20,6 +20,9 @@ namespace lain.frameviews
     internal class GhidorahResponse
     {
         public List<GhidorahItem>? data { get; set; }
+
+        public List<string>? errors { get; set; }
+
     }
 
 
@@ -255,8 +258,12 @@ namespace lain.frameviews
                 return torrents;
             }
 
-            if (parsed?.data == null)
+            if ((parsed?.data == null || parsed?.data.Count == 0) && parsed?.errors?.Count > 0)
+            {
+                Log.Write($"{Resources.Error}: {parsed?.errors[0]}");
+                MessageBox.ErrorQuery(Resources.Error, parsed?.errors[0], Resources.OK);
                 return torrents;
+            }
 
             foreach (var item in parsed.data)
             {
