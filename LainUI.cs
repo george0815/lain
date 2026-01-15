@@ -18,6 +18,7 @@ namespace lain
         FrameView createView;
         FrameView settingsView;
         FrameView searchView;
+        FrameView pluginsView;
 
         internal FrameView logView;
         private FrameView header;
@@ -210,6 +211,7 @@ namespace lain
                 Resources.Torrents,
                 Resources.Download,
                 Resources.Create,
+                "Plugins",
                 Resources.Settings,
                 Resources.Search,
                 Resources.Log
@@ -256,6 +258,7 @@ namespace lain
             downloadView = new DownloadView();
             createView = new CreateView();
             settingsView = new SettingsView();
+            pluginsView = new PluginView();
             searchView = new SearchView();
             logView = new LogView(Log.log);
 
@@ -335,9 +338,10 @@ namespace lain
                 case 0: Add(torrentListView); ((TorrentListView)torrentListView).Refresh(); break;
                 case 1: Add(downloadView); break;
                 case 2: Add(createView); break;
-                case 3: Add(settingsView); break;
-                case 4: Add(searchView); break;
-                case 5: Add(logView); break;
+                case 3: Add(pluginsView); break;
+                case 4: Add(settingsView); break;
+                case 5: Add(searchView); break;
+                case 6: Add(logView); break;
             }
 
             SetNeedsDisplay();
