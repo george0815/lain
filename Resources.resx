@@ -745,13 +745,25 @@
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>
   </data>
-	<data name="Searchtimeout" xml:space="preserve">
+  <data name="Searchtimeout" xml:space="preserve">
     <value>Search timeout:</value>
   </data>
-	<data name="Invalidtorlimitpersource" xml:space="preserve">
+  <data name="Invalidtorlimitpersource" xml:space="preserve">
     <value>Invalid value for search results limit per source.</value>
   </data>
-	<data name="Invalidtimeout" xml:space="preserve">
-        <value>Invalid value for search timeout.</value>
-    </data>
+  <data name="Invalidtimeout" xml:space="preserve">
+    <value>Invalid value for search timeout.</value>
+  </data>
+  <data name="Useqbittorrentplugins" xml:space="preserve">
+    <value>Use qBittorrent plugins</value>
+  </data>
+  <data name="Importantifusing" xml:space="preserve">
+    <value>IMPORTANT: if using qBittorrent plugins, the per torrent limit is ignored, and category selection is limited to one category only. Additionally, many plugins will default to "all".</value>
+  </data>
+  <data name="Checkstatus" xml:space="preserve">
+    <value>Check status</value>
+  </data>
+  <data name="Ghidorah" xml:space="preserve">
+    <value>Ghidorah</value>
+  </data>
 </root>

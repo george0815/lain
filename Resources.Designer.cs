@@ -313,6 +313,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check status.
+        /// </summary>
+        internal static string Checkstatus {
+            get {
+                return ResourceManager.GetString("Checkstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose categories.
         /// </summary>
         internal static string Choosecategories {
@@ -754,6 +763,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ghidorah.
+        /// </summary>
+        internal static string Ghidorah {
+            get {
+                return ResourceManager.GetString("Ghidorah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error initializing Ghidorah:.
         /// </summary>
         internal static string Ghidoraherror {
@@ -822,6 +840,15 @@ namespace lain {
         internal static string Hotkeytextcolor {
             get {
                 return ResourceManager.GetString("Hotkeytextcolor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IMPORTANT: if using qBittorrent plugins, the per torrent limit is ignored, and category selection is limited to one category only. Additionally, many plugins will default to &quot;all&quot;..
+        /// </summary>
+        internal static string Importantifusing {
+            get {
+                return ResourceManager.GetString("Importantifusing", resourceCulture);
             }
         }
         
@@ -1921,6 +1948,15 @@ namespace lain {
         internal static string Usemagnetlink {
             get {
                 return ResourceManager.GetString("Usemagnetlink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use qBittorrent plugins.
+        /// </summary>
+        internal static string Useqbittorrentplugins {
+            get {
+                return ResourceManager.GetString("Useqbittorrentplugins", resourceCulture);
             }
         }
         

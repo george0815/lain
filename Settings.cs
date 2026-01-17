@@ -73,6 +73,9 @@ internal class SettingsData
                                                 Resources.TVshows, Resources.Applications, Resources.Other ];
     public string SortBy { get; set; } = Resources.Source;
 
+    public bool UseQbittorrentPlugins { get; set; } = true;
+
+
 }
 
 

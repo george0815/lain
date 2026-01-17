@@ -745,14 +745,25 @@
   <data name="Searching" xml:space="preserve">
     <value>検索中...</value>
   </data>
-	<data name="Searchtimeout" xml:space="preserve">
+  <data name="Searchtimeout" xml:space="preserve">
     <value>検索のタイムアウト:</value>
   </data>
-	<data name="Invalidtimeout" xml:space="preserve">
-    <value>検索のタイムアウトの上限が無効です。</value>
-  </data>
-	<data name="Invalidtorlimitpersource" xml:space="preserve">
+  <data name="Invalidtorlimitpersource" xml:space="preserve">
     <value>配信元ごとの検索結果数の上限が無効です。</value>
   </data>
-	
+  <data name="Invalidtimeout" xml:space="preserve">
+    <value>検索のタイムアウトの上限が無効です。</value>
+  </data>
+  <data name="Useqbittorrentplugins" xml:space="preserve">
+    <value>qBittorrent プラグインを使用する</value>
+  </data>
+  <data name="Importantifusing" xml:space="preserve">
+    <value>重要：qBittorrent プラグインを使用する場合、トレントごとの制限は無視され、カテゴリの選択は1つのみに制限されます。また、多くのプラグインではデフォルトで「すべて（all）」が選択されます。</value>
+  </data>
+  <data name="Checkstatus" xml:space="preserve">
+    <value>ステータスを確認</value>
+  </data>
+  <data name="Ghidorah" xml:space="preserve">
+    <value>ギドラ</value>
+  </data>
 </root>

@@ -12,7 +12,7 @@ namespace lain.frameviews
 
 
         public PluginView()
-            : base(Resources.Settings)
+            : base(Resources.Ghidorah)
         {
             X = 20;
             Y = SettingsData.HeaderHeight;
@@ -204,6 +204,24 @@ namespace lain.frameviews
             scroll.Add(sortBy);
             y += 2;
 
+
+            //Use  qbittorent plugins
+            var qbCheckbox = new CheckBox(Resources.Useqbittorrentplugins)
+            {
+                X = 1,
+                Y = y,
+                Checked = Settings.Current.UseQbittorrentPlugins
+            };
+            scroll.Add(qbCheckbox);
+            y += 2;
+
+
+            //check status 
+            var checkStatusBtn = new Button(Resources.Checkstatus) { X = 1, Y = y };
+            scroll.Add(checkStatusBtn);
+
+            y += 2;
+
             #endregion
 
             // Save button
@@ -215,6 +233,30 @@ namespace lain.frameviews
             scroll.ContentSize = new Terminal.Gui.Size(Application.Top.Frame.Width - 2, y + 2);
 
             #region EVENT HANDLERS
+
+            qbCheckbox.Toggled += (e) =>
+            {
+                try
+                {
+                    if (!e) { MessageBox.Query(Resources.Ghidorah, Resources.Importantifusing, Resources.OK); }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
+                }
+            };  
+
+            checkStatusBtn.Clicked += () =>
+            {
+                try
+                {
+                    
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
+                }
+            };
 
 
             saveBtn.Clicked += () =>

@@ -211,7 +211,7 @@ namespace lain
                 Resources.Torrents,
                 Resources.Download,
                 Resources.Create,
-                "Plugins",
+                Resources.Ghidorah,
                 Resources.Settings,
                 Resources.Search,
                 Resources.Log
