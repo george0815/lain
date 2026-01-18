@@ -313,6 +313,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking status.
+        /// </summary>
+        internal static string Checkingstatus {
+            get {
+                return ResourceManager.GetString("Checkingstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check status.
         /// </summary>
         internal static string Checkstatus {
@@ -637,6 +646,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        internal static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error saving fastresume data:.
         /// </summary>
         internal static string Errorsavingfastresumedataex {
@@ -777,6 +795,15 @@ namespace lain {
         internal static string Ghidoraherror {
             get {
                 return ResourceManager.GetString("Ghidoraherror", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ghidorah - Plugin Status.
+        /// </summary>
+        internal static string Ghidorahpluginstatus {
+            get {
+                return ResourceManager.GetString("Ghidorahpluginstatus", resourceCulture);
             }
         }
         
@@ -1222,11 +1249,29 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No qBittorrent plugins found..
+        /// </summary>
+        internal static string Noqbittorrentpluginsfound {
+            get {
+                return ResourceManager.GetString("Noqbittorrentpluginsfound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Online.
+        /// </summary>
+        internal static string Online {
+            get {
+                return ResourceManager.GetString("Online", resourceCulture);
             }
         }
         
@@ -1353,6 +1398,15 @@ namespace lain {
         internal static string Red {
             get {
                 return ResourceManager.GetString("Red", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to result(s).
+        /// </summary>
+        internal static string Results {
+            get {
+                return ResourceManager.GetString("Results", resourceCulture);
             }
         }
         
@@ -1921,6 +1975,15 @@ namespace lain {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown error.
+        /// </summary>
+        internal static string Unknownerror {
+            get {
+                return ResourceManager.GetString("Unknownerror", resourceCulture);
             }
         }
         

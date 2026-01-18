@@ -1,7 +1,8 @@
-﻿using System;
+﻿using lain.helpers;
+using System;
 using System.Drawing;
+using System.Net.NetworkInformation;
 using Terminal.Gui;
-using lain.helpers;
 
 namespace lain.frameviews
 {
@@ -111,7 +112,7 @@ namespace lain.frameviews
             scroll.Add(categories);
             y += 2;
 
-            //Preferred search sources
+            //Preferred search sources //TODO: EDIT THIS LATER
             scroll.Add(new Label(Resources.Sources) { X = 1, Y = y });
             var sources = new Button()
             {
@@ -126,14 +127,8 @@ namespace lain.frameviews
 
             sources.Clicked += () =>
             {
-                // Open your color picker
-                string[] tmp = DialogHelpers.PickSources([
-                    "kickasstorrents",
-                        "thepiratebay",
-                        "limetorrents",
-                        "yts",
-                        "x1337",
-                        "torrentgalaxy"]);
+               
+                string[] tmp = DialogHelpers.PickSources(Settings.Current.UseQbittorrentPlugins ? Ghidorah.QbSources : Settings.Current.SearchSources);
 
                 if (tmp.Length > 0)
                 {
@@ -149,14 +144,8 @@ namespace lain.frameviews
                 }
                 else
                 {
-                    Settings.Current.SearchSources = [
-                        "kickasstorrents",
-                        "thepiratebay",
-                        "limetorrents",
-                        "yts",
-                        "x1337",
-                        "torrentgalaxy"];
-                    sources.Text = "kickasstorrents...";
+                    Settings.Current.SearchSources = Settings.Current.UseQbittorrentPlugins ? Ghidorah.QbSources : Settings.Current.DefaultSources;
+                    sources.Text = $"{Settings.Current.SearchSources[0]}...";
                 }
 
                 sources.SetNeedsDisplay();
@@ -238,24 +227,63 @@ namespace lain.frameviews
             {
                 try
                 {
-                    if (!e) { MessageBox.Query(Resources.Ghidorah, Resources.Importantifusing, Resources.OK); }
+                    
+                    if (!e) {
+
+                        if (Ghidorah.QbSources.Length == 0 || Ghidorah.QbSources == null)
+                        {
+                            MessageBox.ErrorQuery(Resources.Error, Resources.Noqbittorrentpluginsfound, Resources.OK);
+                            qbCheckbox.Checked = false;
+                        }
+
+                        else {
+                            MessageBox.Query(Resources.Ghidorah, Resources.Importantifusing, Resources.OK);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
                 }
-            };  
+            };
 
             checkStatusBtn.Clicked += () =>
             {
-                try
+                // Immediately update UI
+                Application.MainLoop.Invoke(() =>
                 {
-                    
-                }
-                catch (Exception ex)
+                    checkStatusBtn.Text = $"{Resources.Checkingstatus}...";
+                    checkStatusBtn.SetNeedsDisplay();
+                });
+
+                Task.Run(() =>
                 {
-                    MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
-                }
+                    try
+                    {
+                        var result = Ghidorah.CheckStatusPlugins(true);
+
+                        Application.MainLoop.Invoke(() =>
+                        {
+                            MessageBox.Query(Resources.Ghidorah, result, Resources.OK);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Application.MainLoop.Invoke(() =>
+                        {
+                            MessageBox.ErrorQuery(Resources.FatalError, ex.Message, Resources.OK);
+                        });
+                    }
+                    finally
+                    {
+                       
+                        Application.MainLoop.Invoke(() =>
+                        {
+                            checkStatusBtn.Text = Resources.Checkstatus; // "Check status"
+                            checkStatusBtn.SetNeedsDisplay();
+                        });
+                    }
+                });
             };
 
 
@@ -290,6 +318,7 @@ namespace lain.frameviews
                     Settings.Current.SearchResultsLimit = torLim;
                     Settings.Current.SearchResultsLimitPerSource = torLimPerSource;
                     Settings.Current.Timeout = timeOut * 1000;
+                    Settings.Current.UseQbittorrentPlugins = qbCheckbox.Checked;
 
 
 

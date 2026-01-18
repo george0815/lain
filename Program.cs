@@ -26,7 +26,7 @@ namespace lain
         public static async Task Main(string[] args)
         {
 
-            // Change to Japanese (Japan)
+            // Change to Japanese (Japan) (for debugging)
             CultureInfo ci = new CultureInfo("ja-JP");
 
             //Thread.CurrentThread.CurrentUICulture = ci;
@@ -38,6 +38,7 @@ namespace lain
 
             //load settings
             Settings.Load();
+            Ghidorah.LoadQbittorrentPlugins();
 
 
             //load tui

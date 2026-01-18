@@ -766,4 +766,25 @@
   <data name="Ghidorah" xml:space="preserve">
     <value>Ghidorah</value>
   </data>
+  <data name="Noqbittorrentpluginsfound" xml:space="preserve">
+    <value>No qBittorrent plugins found.</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Checkingstatus" xml:space="preserve">
+    <value>Checking status</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>result(s)</value>
+  </data>
+  <data name="Ghidorahpluginstatus" xml:space="preserve">
+    <value>Ghidorah - Plugin Status</value>
+  </data>
+  <data name="Unknownerror" xml:space="preserve">
+    <value>Unknown error</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errors</value>
+  </data>
 </root>

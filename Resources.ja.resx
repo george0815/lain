@@ -766,4 +766,25 @@
   <data name="Ghidorah" xml:space="preserve">
     <value>ギドラ</value>
   </data>
+  <data name="Noqbittorrentpluginsfound" xml:space="preserve">
+    <value>qBittorrentプラグインが見つかりません。</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>オンライン</value>
+  </data>
+  <data name="Checkingstatus" xml:space="preserve">
+    <value>ステータスを確認中</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>件の結果</value>
+  </data>
+  <data name="Ghidorahpluginstatus" xml:space="preserve">
+    <value>ギドラ - プラグインのステータス</value>
+  </data>
+  <data name="Unknownerror" xml:space="preserve">
+    <value>不明なエラー</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>エラー</value>
+  </data>
 </root>
