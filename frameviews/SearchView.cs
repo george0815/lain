@@ -326,7 +326,9 @@ namespace lain.frameviews
         {
             var torrent = torrents?.ElementAtOrDefault(_table.SelectedRow);
 
-            if (keyEvent.Key == Settings.Current.Controls.StartDownload && torrent != null && torrents![_table.SelectedRow].Magnet != "N/A")
+            if (keyEvent.Key == Settings.Current.Controls.StartDownload && 
+                torrent != null && torrents![_table.SelectedRow].Magnet != "N/A" && 
+                torrents![_table.SelectedRow].Magnet.Contains("magnet:?"))
             {
 
                 TorrentData settings = new TorrentData

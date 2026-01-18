@@ -112,7 +112,7 @@ namespace lain.frameviews
             scroll.Add(categories);
             y += 2;
 
-            //Preferred search sources //TODO: EDIT THIS LATER
+            //Preferred search sources 
             scroll.Add(new Label(Resources.Sources) { X = 1, Y = y });
             var sources = new Button()
             {
@@ -128,7 +128,7 @@ namespace lain.frameviews
             sources.Clicked += () =>
             {
                
-                string[] tmp = DialogHelpers.PickSources(Settings.Current.UseQbittorrentPlugins ? Ghidorah.QbSources : Settings.Current.SearchSources);
+                string[] tmp = DialogHelpers.PickSources((Settings.Current.UseQbittorrentPlugins) ? Ghidorah.QbSources : Settings.Current.DefaultSources);
 
                 if (tmp.Length > 0)
                 {
@@ -234,12 +234,29 @@ namespace lain.frameviews
                         {
                             MessageBox.ErrorQuery(Resources.Error, Resources.Noqbittorrentpluginsfound, Resources.OK);
                             qbCheckbox.Checked = false;
+                            Settings.Current.UseQbittorrentPlugins = false;
+
                         }
 
                         else {
                             MessageBox.Query(Resources.Ghidorah, Resources.Importantifusing, Resources.OK);
+                            Settings.Current.UseQbittorrentPlugins = true;
+
                         }
                     }
+                    else
+                    {
+                        Settings.Current.UseQbittorrentPlugins = false;
+                    }
+
+                    // Immediately update UI
+                    Application.MainLoop.Invoke(() =>
+                    {
+                        Settings.Current.SearchSources = Settings.Current.UseQbittorrentPlugins ? Ghidorah.QbSources : Settings.Current.DefaultSources;
+
+                        sources.Text = Settings.Current.UseQbittorrentPlugins ? $"{Ghidorah.QbSources![0]}..." : $"{Settings.Current.DefaultSources[0]}...";
+                        sources.SetNeedsDisplay();
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -311,10 +328,16 @@ namespace lain.frameviews
                         return;
                     }
 
+                    if (qbCheckbox.Checked && (Ghidorah.QbSources.Length == 0 || Ghidorah.QbSources == null))
+                    {
+                        MessageBox.ErrorQuery(Resources.Error, Resources.Noqbittorrentpluginsfound, Resources.OK);
+                        return;
+                    }
+                    
 
 
                     // Apply settings
-                  
+
                     Settings.Current.SearchResultsLimit = torLim;
                     Settings.Current.SearchResultsLimitPerSource = torLimPerSource;
                     Settings.Current.Timeout = timeOut * 1000;

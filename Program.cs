@@ -39,6 +39,10 @@ namespace lain
             //load settings
             Settings.Load();
             Ghidorah.LoadQbittorrentPlugins();
+            if (Ghidorah.QbSources == null || Ghidorah.QbSources.Length == 0)
+            {
+                Settings.Current.UseQbittorrentPlugins = false;
+            }
 
 
             //load tui
