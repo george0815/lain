@@ -5,6 +5,8 @@ using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using Terminal.Gui;
 using TextCopy;
@@ -30,9 +32,13 @@ namespace lain.frameviews
     internal class GhidorahItem
     {
         public string? name { get; set; }
-        public string? size { get; set; }
-        public string? seeders { get; set; }
-        public string? leechers { get; set; }
+        public long? size { get; set; }
+
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public int? seeders { get; set; }
+
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public int? leechers { get; set; }
         public string? category { get; set; }
         public string? source { get; set; }
         public string? url { get; set; }
@@ -46,7 +52,7 @@ namespace lain.frameviews
     internal struct TorrentResult
     {
         internal string Name;
-        internal int Size;
+        internal long Size;
         internal int Seeders;
         internal int Leechers;
         internal string Category;
@@ -270,9 +276,9 @@ namespace lain.frameviews
                 var torrent = new TorrentResult
                 {
                     Name = item.name ?? "N/A",
-                    Size = ParseSize(item.size),
-                    Seeders = int.TryParse(item.seeders, out var s) ? s : 0,
-                    Leechers = int.TryParse(item.leechers, out var l) ? l : 0,
+                    Size = item.size ?? 0,
+                    Seeders = item.seeders ?? 0,
+                    Leechers = item.leechers ?? 0,
                     Category = item.category ?? "N/A",
                     Source = item.source ?? "N/A",
                     Url = item.url ?? "N/A",
@@ -300,7 +306,7 @@ namespace lain.frameviews
             {
 
                 string name = res[i].Name ?? "N/A";
-                int size = res[i].Size;
+                long size = res[i].Size;
                 int seeders = res[i].Seeders;
                 int leechers = res[i].Leechers;
                 string category = res[i].Category ?? "N/A";
@@ -310,13 +316,39 @@ namespace lain.frameviews
                 string magnet = res[i].Magnet ?? "N/A";
                 string hash = res[i].Hash ?? "N/A";
 
-                _tableData.Rows.Add(name.Truncate(15), seeders, leechers, size, magnet.Truncate(15), date, category, source, url.Truncate(15), hash.Truncate(15));
+                _tableData.Rows.Add(name.Truncate(20), seeders, leechers, FormatSizeBytes(size), magnet.Truncate(15), date, category, source, url.Truncate(15), hash.Truncate(15));
             }
             _table.Table = _tableData;
             _table.Update();
             _table.SetNeedsDisplay();
             SetNeedsDisplay();
 
+        }
+
+        public static string FormatSizeBytes(long numBytes, int precision = 1)
+        {
+            if (numBytes <= 0)
+                return "0 B";
+
+            double size = numBytes;
+            string[] units = { "B", "KB", "MB", "GB", "TB", "PB" };
+            const double step = 1024.0;
+
+            foreach (var unit in units)
+            {
+                if (size < step)
+                {
+                    if (unit == "B")
+                        return $"{(long)size} {unit}";
+
+                    return $"{Math.Round(size, precision).ToString($"F{precision}", CultureInfo.InvariantCulture)} {unit}";
+                }
+
+                size /= step;
+            }
+
+            // Fallback (very large values)
+            return $"{Math.Round(size, precision).ToString($"F{precision}", CultureInfo.InvariantCulture)} PB";
         }
 
 
