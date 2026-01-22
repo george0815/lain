@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,13 @@ namespace lain
             if (Ghidorah.QbSources == null || Ghidorah.QbSources.Length == 0)
             {
                 Settings.Current.UseQbittorrentPlugins = false;
+            }
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Linux / WSL
+                Application.UseSystemConsole = true;
+                Console.OutputEncoding = Encoding.UTF8;
             }
 
 

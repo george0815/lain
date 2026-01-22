@@ -55,6 +55,11 @@ namespace lain.helpers
     internal class Ghidorah
     {
 
+        static string ExeFileName = OperatingSystem.IsWindows()
+    ? "ghidorah.exe"
+    : "ghidorah";
+
+
         internal static String[] QbSources { get; set; } = [];
 
         internal static void LoadQbittorrentPlugins()
@@ -80,7 +85,7 @@ namespace lain.helpers
 
             var psi = new ProcessStartInfo
             {
-                FileName = "ghidorah.exe",
+                FileName = ExeFileName,
                 Arguments =
                     status ? $"--check_status" : $"--check_plugins",
                 RedirectStandardOutput = true,
@@ -144,7 +149,7 @@ namespace lain.helpers
 
             var psi = new ProcessStartInfo
             {
-                FileName = "ghidorah.exe",
+                FileName = ExeFileName,
                 Arguments =
                     $"{args.Query} " + 
                     $"--limit {args.Limit} " +
