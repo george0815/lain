@@ -5,72 +5,80 @@ using System.Text;
 using System.Text.Json;
 using Terminal.Gui;
 using System.Text.Json.Serialization;
-
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace lain.helpers
 {
-
-
+    /// <summary>
+    /// Represents the JSON response returned by Ghidorah for status queries.
+    /// </summary>
     public class StatusResponse
     {
         [JsonPropertyName("paths")]
-        public string Paths { get; set; }
+        public string Paths { get; set; }  // Paths used in Ghidorah execution
 
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string Message { get; set; } // Optional message from Ghidorah
 
         [JsonPropertyName("results")]
-        public List<SourceStatus> Results { get; set; }
+        public List<SourceStatus> Results { get; set; } // List of sources and their status
     }
 
+    /// <summary>
+    /// Represents the status of a single source/plugin.
+    /// </summary>
     public class SourceStatus
     {
         [JsonPropertyName("source")]
-        public string Source { get; set; }
+        public string Source { get; set; } // Name of the source
 
         [JsonPropertyName("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } // ONLINE, ERROR, or UNKNOWN
 
         [JsonPropertyName("results")]
-        public int? Results { get; set; }
+        public int? Results { get; set; } // Number of results found, if applicable
 
         [JsonPropertyName("error")]
-        public string Error { get; set; }
+        public string Error { get; set; } // Error message, if any
     }
 
-    // Struct to hold search arguments
+    /// <summary>
+    /// Struct to hold arguments for a Ghidorah search.
+    /// </summary>
     internal struct SearchArgs
     {
-        internal string Query;
-        internal int Limit;
-        internal int TotalLimit;
-        internal String[] Sources;
-        internal String[] Categories;
-        internal String SortBy;
-    
+        internal string Query;       // Search query
+        internal int Limit;          // Number of results per source
+        internal int TotalLimit;     // Maximum total results
+        internal string[] Sources;   // Sources to search
+        internal string[] Categories;// Categories to filter
+        internal string SortBy;      // Sorting criteria
     }
 
-
-
+    /// <summary>
+    /// Handles interaction with the Ghidorah executable for searches and plugin checks.
+    /// </summary>
     internal class Ghidorah
     {
+        // Determine executable name based on OS
+        static string ExeFileName = OperatingSystem.IsWindows() ? "ghidorah.exe" : "ghidorah";
 
-        static string ExeFileName = OperatingSystem.IsWindows()
-    ? "ghidorah.exe"
-    : "ghidorah";
+        // Stores sources discovered from qBittorrent plugins
+        internal static string[] QbSources { get; set; } = Array.Empty<string>();
 
-
-        internal static String[] QbSources { get; set; } = [];
-
+        /// <summary>
+        /// Loads qBittorrent plugin sources by querying Ghidorah.
+        /// </summary>
         internal static void LoadQbittorrentPlugins()
         {
-            string result = CheckStatusPlugins(false);
+            string result = CheckStatusPlugins(false); // Fetch plugin list
             try
             {
                 var plugins = JsonSerializer.Deserialize<List<string>>(result);
                 if (plugins != null)
                 {
-                    QbSources = plugins.ToArray();
+                    QbSources = plugins.ToArray(); // Store plugins as array
                 }
             }
             catch (Exception ex)
@@ -79,19 +87,22 @@ namespace lain.helpers
             }
         }
 
+        /// <summary>
+        /// Checks plugin or status information from Ghidorah.
+        /// </summary>
+        /// <param name="status">True to check status, false to check plugins</param>
+        /// <returns>Output string from Ghidorah or error message</returns>
         internal static string CheckStatusPlugins(bool status)
         {
-          
-
+            // Configure process to run Ghidorah executable
             var psi = new ProcessStartInfo
             {
                 FileName = ExeFileName,
-                Arguments =
-                    status ? $"--check_status" : $"--check_plugins",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
+                Arguments = status ? "--check_status" : "--check_plugins",
+                RedirectStandardOutput = true,    // Capture stdout
+                RedirectStandardError = true,     // Capture stderr
+                UseShellExecute = false,          // Run without shell
+                CreateNoWindow = true,            // Hide window
                 StandardOutputEncoding = Encoding.UTF8,
                 StandardErrorEncoding = Encoding.UTF8
             };
@@ -99,51 +110,50 @@ namespace lain.helpers
             using var process = new Process { StartInfo = psi };
             process.Start();
 
-
-
-            // Read output asynchronously
+            // Start asynchronous reading of stdout and stderr
             var outputTask = process.StandardOutput.ReadToEndAsync();
             var errorTask = process.StandardError.ReadToEndAsync();
 
-            if (!process.WaitForExit(120000)) //2 mins
+            // Wait for process to exit (timeout: 2 minutes)
+            if (!process.WaitForExit(120000))
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
                 Log.Write(Resources.ghidorahtimeout);
                 return Resources.ghidorahtimeout;
-
             }
 
-            // Ensure async reads completed
+            // Ensure async reads are completed
             Task.WaitAll(outputTask, errorTask);
 
             string output = outputTask.Result;
             string error = errorTask.Result;
 
+            // Non-zero exit code indicates an error
             if (process.ExitCode != 0)
             {
                 Log.Write($"{Resources.Ghidoraherror}: {error}");
                 return $"{Resources.Ghidoraherror}: {error}";
-
             }
 
-            if (status == false)
-            {
-                return output;
-            }
+            // Return raw plugin list if status check not requested
+            if (!status) return output;
 
+            // Deserialize JSON status response
             var stat = JsonSerializer.Deserialize<StatusResponse>(
                 output,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
 
-
-
+            // Build human-readable summary of status
             return BuildSummary(stat);
         }
 
-        // Execute Ghidorah (paython exe as a subprocess) search with given arguments
+        /// <summary>
+        /// Executes a search using Ghidorah with the given arguments.
+        /// </summary>
         internal static string Search(SearchArgs args)
         {
+            // Convert arrays to space-separated strings for CLI
             string sources = string.Join(" ", args.Sources);
             string categories = string.Join(" ", args.Categories);
 
@@ -151,7 +161,7 @@ namespace lain.helpers
             {
                 FileName = ExeFileName,
                 Arguments =
-                    $"{args.Query} " + 
+                    $"{args.Query} " +
                     $"--limit {args.Limit} " +
                     $"--total_limit {args.TotalLimit} " +
                     $"--categories {categories} " +
@@ -165,29 +175,27 @@ namespace lain.helpers
                 StandardErrorEncoding = Encoding.UTF8
             };
 
+            // Append qBittorrent plugin flag if enabled
             if (Settings.Current.UseQbittorrentPlugins)
             {
-                psi.Arguments += " --use_qb_plugins";   
+                psi.Arguments += " --use_qb_plugins";
             }
 
             using var process = new Process { StartInfo = psi };
             process.Start();
 
-            
-
-            // Read output asynchronously
+            // Asynchronously read stdout and stderr
             var outputTask = process.StandardOutput.ReadToEndAsync();
             var errorTask = process.StandardError.ReadToEndAsync();
 
+            // Wait for exit with configurable timeout
             if (!process.WaitForExit(Settings.Current.Timeout))
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
                 Log.Write(Resources.ghidorahtimeout);
                 return $"{{\"data\":[],\"errors\":[\"{Resources.ghidorahtimeout}\"]}}";
-                
             }
 
-            // Ensure async reads completed
             Task.WaitAll(outputTask, errorTask);
 
             string output = outputTask.Result;
@@ -197,21 +205,23 @@ namespace lain.helpers
             {
                 Log.Write($"{Resources.Ghidoraherror}: {error}");
                 return $"{{\"data\":[],\"errors\":[\"{Resources.Ghidoraherror}: {error}\"]}}";
-
             }
 
-            return output;
+            return output; // Return JSON search result
         }
 
+        /// <summary>
+        /// Builds a human-readable summary of plugin/source status.
+        /// </summary>
         internal static string BuildSummary(StatusResponse status)
         {
             var sb = new StringBuilder();
 
-            // ---- Debug paths block ----
+            // ---- Debug paths ----
             if (!string.IsNullOrWhiteSpace(status.Paths))
             {
                 sb.AppendLine(status.Paths.TrimEnd());
-                sb.AppendLine(); // spacing
+                sb.AppendLine(); // Add spacing
             }
 
             // ---- Header ----
@@ -254,7 +264,9 @@ namespace lain.helpers
             return sb.ToString();
         }
 
-
+        /// <summary>
+        /// Trims an error message to a maximum length for display.
+        /// </summary>
         internal static string TrimError(string error, int maxLength = 120)
         {
             if (string.IsNullOrEmpty(error))
@@ -264,6 +276,5 @@ namespace lain.helpers
                 ? error.Substring(0, maxLength) + "…"
                 : error;
         }
-
     }
 }

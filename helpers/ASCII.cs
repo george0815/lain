@@ -4,11 +4,15 @@ using System.Text;
 
 namespace lain.helpers
 {
-
-    //Static helper class for storing constants and utility functions, in addtion to ASCII art icons
+    /// <summary>
+    /// Static helper class for storing ASCII art icons and constants.
+    /// </summary>
     internal static class ASCII
     {
-
+        /// <summary>
+        /// List of ASCII art icons used throughout the UI.
+        /// Each string is a multi-line ASCII art representation.
+        /// </summary>
         static internal List<string> icons = new List<string>() {@"⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⣠⣣⣿⣿⣿⣿⢏⠀⣼⠀⠀⠀⣤⡀⠀⠀⠀⡘⣠⡀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢼
 ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠃⣸⣡⣿⣿⣿⣿⣣⡏⢸⣿⢰⠀⣼⢫⠷⡀⢘⢀⣇⢩⣿⡄⣯⣄⡻⢦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣬
 ⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣯⡾⢸⢣⣿⣿⣿⣿⡿⢬⠇⣼⣯⡚⢾⣶⣧⡟⣡⡇⣾⠿⠘⠉⠉⢀⣀⣀⣀⣉⡑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿

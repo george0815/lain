@@ -15,20 +15,22 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lain.frameviews
 {
-
     #region DATA STRUCTS
 
-    //holds data received from python subprocess
+    /// <summary>
+    /// Holds the raw response returned by the Ghidorah Python subprocess.
+    /// This is deserialized directly from JSON before any validation or cleanup.
+    /// </summary>
     internal class GhidorahResponse
     {
         public List<GhidorahItem>? Data { get; set; }
-
         public List<string>? Errors { get; set; }
-
     }
 
-
-    //holds individual torrent item data before sanitization
+    /// <summary>
+    /// Represents a single torrent entry as returned by Ghidorah,
+    /// prior to sanitization and default-value enforcement.
+    /// </summary>
     internal class GhidorahItem
     {
         public string? Name { get; set; }
@@ -39,6 +41,7 @@ namespace lain.frameviews
 
         [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int? Leechers { get; set; }
+
         public string? Category { get; set; }
         public string? Source { get; set; }
         public string? Url { get; set; }
@@ -47,8 +50,10 @@ namespace lain.frameviews
         public string? Hash { get; set; }
     }
 
-
-    //holds sanitized torrent data
+    /// <summary>
+    /// Sanitized, non-nullable torrent data used internally by the UI.
+    /// All fields are guaranteed to have usable defaults.
+    /// </summary>
     internal struct TorrentResult
     {
         internal string Name;
@@ -61,23 +66,24 @@ namespace lain.frameviews
         internal string Date;
         internal string Magnet;
         internal string Hash;
-
-    };
+    }
 
     #endregion
 
+    /// <summary>
+    /// Search view responsible for querying Ghidorah, displaying results,
+    /// and allowing quick-start downloads via keyboard shortcuts.
+    /// </summary>
     internal class SearchView : FrameView
     {
+        private List<TorrentResult>? torrents;
 
-
-        private List<TorrentResult>? torrents; 
         private readonly TableView _table;
         private readonly DataTable _tableData;
 
         public SearchView()
             : base(Resources.Search)
         {
-
             X = 20;
             Y = SettingsData.HeaderHeight;
             Width = Dim.Fill();
@@ -95,17 +101,13 @@ namespace lain.frameviews
             var searchBtn = new Button(Resources.Search)
             {
                 X = Pos.Right(searchBar) + 2,
-                Y = 1   
+                Y = 1
             };
 
-           
-
-            // Define the table's schema
+            // Backing DataTable used by the TableView
             _tableData = new DataTable();
 
-
-
-            // Define columns
+            // Define visible columns (order matters)
             _tableData.Columns.Add(Resources.Name, typeof(string));
             _tableData.Columns.Add(Resources.Seeders, typeof(string));
             _tableData.Columns.Add(Resources.Leechers, typeof(string));
@@ -117,8 +119,7 @@ namespace lain.frameviews
             _tableData.Columns.Add(Resources.Url, typeof(string));
             _tableData.Columns.Add(Resources.Hash, typeof(string));
 
-
-            // Create the TableView
+            // TableView rendering the search results
             _table = new TableView()
             {
                 X = 0,
@@ -131,122 +132,76 @@ namespace lain.frameviews
             #endregion
 
             searchBtn.Clicked += () =>
+            {
+                // Initialize storage for incoming results
+                torrents = [];
+
+                // Build Ghidorah search arguments from current settings
+                SearchArgs args = new()
                 {
-
-                    //initialize ghidorah search args
-                    torrents = [];
-                    SearchArgs args = new()
-                    {
-                        Query = searchBar.Text.ToString() ?? "",
-                        Limit = Settings.Current.SearchResultsLimitPerSource,
-                        TotalLimit = Settings.Current.SearchResultsLimit,
-                        Sources = Settings.Current.SearchSources,
-                        Categories = Settings.Current.Categories,
-                        SortBy = Settings.Current.SortBy
-                    };
-
-                    Task.Run(() =>
-                    {
-
-                        _tableData.Clear();
-
-                        // Start counter
-                        int seconds = 0;
-
-                        // CancellationTokenSource to stop the timer
-                        var cts = new CancellationTokenSource();
-
-                        // Update button text every second
-                        var timer = new Timer(_ =>
-                        {
-                            seconds++;
-                            Application.MainLoop.Invoke(() =>
-                            {
-                                searchBtn.Text = $"Searching... {seconds}s";
-                                searchBtn.SetNeedsDisplay();
-                            });
-                        }, null, 0, 1000); // first 0ms delay, then every 1000ms
-
-                        // Run the search in the background
-                        Task.Run(() =>
-                        {
-                            try
-                            {
-                                var res = Ghidorah.Search(args); // your long-running search
-
-                                // Update UI with results
-                                Application.MainLoop.Invoke(() =>
-                                {
-                                    DisplayResults(res);
-                                    searchBtn.Text = "Search"; // reset button text
-                                    searchBtn.SetNeedsDisplay();
-                                });
-                            }
-                            finally
-                            {
-                                // Ensure timer stops even if search throws
-                                cts.Cancel();
-                                timer.Dispose();
-                            }
-                        });
-                    });
-
-
-
-
+                    Query = searchBar.Text.ToString() ?? "",
+                    Limit = Settings.Current.SearchResultsLimitPerSource,
+                    TotalLimit = Settings.Current.SearchResultsLimit,
+                    Sources = Settings.Current.SearchSources,
+                    Categories = Settings.Current.Categories,
+                    SortBy = Settings.Current.SortBy
                 };
 
-            Add(searchBar, searchBtn, _table);
+                Task.Run(() =>
+                {
+                    _tableData.Clear();
 
+                    int seconds = 0;
+
+                    // Used only to stop the timer cleanly
+                    var cts = new CancellationTokenSource();
+
+                    // Update the search button with elapsed time
+                    var timer = new Timer(_ =>
+                    {
+                        seconds++;
+                        Application.MainLoop.Invoke(() =>
+                        {
+                            searchBtn.Text = $"Searching... {seconds}s";
+                            searchBtn.SetNeedsDisplay();
+                        });
+                    }, null, 0, 1000);
+
+                    // Perform the search in the background
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            var res = Ghidorah.Search(args);
+
+                            Application.MainLoop.Invoke(() =>
+                            {
+                                DisplayResults(res);
+                                searchBtn.Text = "Search";
+                                searchBtn.SetNeedsDisplay();
+                            });
+                        }
+                        finally
+                        {
+                            cts.Cancel();
+                            timer.Dispose();
+                        }
+                    });
+                });
+            };
+
+            Add(searchBar, searchBtn, _table);
         }
 
         #region HELPER METHODS
 
-        //parse size string into int in bytes
-        private static int ParseSize(string? size)
-        {
-            if (string.IsNullOrWhiteSpace(size) || size == "N/A")
-                return 0;
-
-            var parts = size.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 2)
-                return 0;
-
-            if (!double.TryParse(parts[0], out var number))
-                return 0;
-
-            var unit = parts[1].ToUpperInvariant();
-
-            var multipliers = new Dictionary<string, int>
-            {
-                ["KIB"] = 1,
-                ["MIB"] = 1024,
-                ["GIB"] = 1024 * 1024,
-                ["TIB"] = 1024 * 1024 * 1024,
-                ["KiB"] = 1,
-                ["MiB"] = 1024,
-                ["GiB"] = 1024 * 1024,
-                ["TiB"] = 1024 * 1024 * 1024,
-                ["kb"] = 1,
-                ["mb"] = 1024,
-                ["gb"] = 1024 * 1024,
-                ["tb"] = 1024 * 1024 * 1024,
-                ["KB"] = 1,
-                ["MB"] = 1024,
-                ["GB"] = 1024 * 1024,
-                ["TB"] = 1024 * 1024 * 1024
-            };
-
-            return multipliers.TryGetValue(unit, out var mul)
-                ? (int)(number * mul)
-                : 0;
-        }
-
-
-        //sanitize raw json response into structured data
+       
+        /// <summary>
+        /// Converts the raw JSON response into sanitized TorrentResult entries.
+        /// Handles deserialization errors and reported Ghidorah failures.
+        /// </summary>
         private List<TorrentResult> Sanitize(string res)
         {
-
             if (string.IsNullOrWhiteSpace(res))
                 return torrents!;
 
@@ -260,14 +215,14 @@ namespace lain.frameviews
             {
                 Log.Write($"{Resources.Error}: {e.Message}");
                 MessageBox.ErrorQuery(Resources.Error, e.Message, Resources.OK);
-
                 return torrents!;
             }
 
-            if ((parsed?.Data == null || parsed?.Data.Count == 0) && parsed?.Errors?.Count > 0)
+            if ((parsed?.Data == null || parsed?.Data.Count == 0) &&
+                parsed?.Errors?.Count > 0)
             {
-                Log.Write($"{Resources.Error}: {parsed?.Errors[0]}");
-                MessageBox.ErrorQuery(Resources.Error, parsed?.Errors[0], Resources.OK);
+                Log.Write($"{Resources.Error}: {parsed.Errors[0]}");
+                MessageBox.ErrorQuery(Resources.Error, parsed.Errors[0], Resources.OK);
                 return torrents!;
             }
 
@@ -293,18 +248,19 @@ namespace lain.frameviews
             return torrents!;
         }
 
-
-        //display search results in table
+        /// <summary>
+        /// Renders sanitized search results into the TableView.
+        /// </summary>
         private void DisplayResults(string rawString)
         {
-
             var res = Sanitize(rawString);
 
             _tableData.Clear();
 
-            for (int i = 0; (i < res.Count && i < Settings.Current.SearchResultsLimit); i++)
+            for (int i = 0;
+                 i < res.Count && i < Settings.Current.SearchResultsLimit;
+                 i++)
             {
-
                 string name = res[i].Name ?? "N/A";
                 long size = res[i].Size;
                 int seeders = res[i].Seeders;
@@ -316,15 +272,29 @@ namespace lain.frameviews
                 string magnet = res[i].Magnet ?? "N/A";
                 string hash = res[i].Hash ?? "N/A";
 
-                _tableData.Rows.Add(name.Truncate(20), seeders, leechers, FormatSizeBytes(size), magnet.Truncate(15), date, category, source, url.Truncate(15), hash.Truncate(15));
+                _tableData.Rows.Add(
+                    name.Truncate(20),
+                    seeders,
+                    leechers,
+                    FormatSizeBytes(size),
+                    magnet.Truncate(15),
+                    date,
+                    category,
+                    source,
+                    url.Truncate(15),
+                    hash.Truncate(15)
+                );
             }
+
             _table.Table = _tableData;
             _table.Update();
             _table.SetNeedsDisplay();
             SetNeedsDisplay();
-
         }
 
+        /// <summary>
+        /// Formats a byte count into a human-readable string.
+        /// </summary>
         public static string FormatSizeBytes(long numBytes, int precision = 1)
         {
             if (numBytes <= 0)
@@ -347,22 +317,22 @@ namespace lain.frameviews
                 size /= step;
             }
 
-            // Fallback (very large values)
             return $"{Math.Round(size, precision).ToString($"F{precision}", CultureInfo.InvariantCulture)} PB";
         }
 
-
-        //if there's a magnet link selected, start download on donwload key press
+        /// <summary>
+        /// Handles keyboard input, including starting a download when the
+        /// configured download key is pressed on a valid magnet entry.
+        /// </summary>
         public override bool ProcessKey(KeyEvent keyEvent)
-
         {
             var torrent = torrents?.ElementAtOrDefault(_table.SelectedRow);
 
-            if (keyEvent.Key == Settings.Current.Controls.StartDownload && 
-                torrent != null && torrents![_table.SelectedRow].Magnet != "N/A" && 
+            if (keyEvent.Key == Settings.Current.Controls.StartDownload &&
+                torrent != null &&
+                torrents![_table.SelectedRow].Magnet != "N/A" &&
                 torrents![_table.SelectedRow].Magnet.Contains("magnet:?"))
             {
-
                 TorrentData settings = new()
                 {
                     UseMagnetLink = true,
@@ -370,15 +340,13 @@ namespace lain.frameviews
                     TorPath = torrents?[_table.SelectedRow].Name!,
                     DownPath = Settings.Current.DefaultDownloadPath!,
                     MaxConnections = Settings.Current.MaxConnections,
-                    MaxDownloadRate = Settings.Current.MaxDownloadSpeed /* to KB*/ * 1024 /* to MB*/ * 1024,
-                    MaxUploadRate = Settings.Current.MaxUploadSpeed /* to KB*/ * 1024 /* to MB*/ * 1024,
+                    MaxDownloadRate = Settings.Current.MaxDownloadSpeed * 1024 * 1024,
+                    MaxUploadRate = Settings.Current.MaxUploadSpeed * 1024 * 1024,
                     UseDht = true
                 };
 
                 MessageBox.Query(Resources.Download, Resources.Torrentdownloadstarted, Resources.OK);
 
-
-                //Add torrent asynchronously
                 Task.Run(async () =>
                 {
                     try
@@ -389,29 +357,25 @@ namespace lain.frameviews
                     {
                         Application.MainLoop.Invoke(() =>
                         {
-                            MessageBox.ErrorQuery(Resources.Error, $"{Resources.Torrentdownloadfailed}\n{ex.Message}", Resources.OK);
+                            MessageBox.ErrorQuery(
+                                Resources.Error,
+                                $"{Resources.Torrentdownloadfailed}\n{ex.Message}",
+                                Resources.OK
+                            );
                         });
                     }
                 });
-
-
-                
             }
-
-            else if (keyEvent.Key == Settings.Current.Controls.StartDownload && torrent != null && torrents![_table.SelectedRow].Magnet == "N/A")
+            else if (keyEvent.Key == Settings.Current.Controls.StartDownload &&
+                     torrent != null &&
+                     torrents![_table.SelectedRow].Magnet == "N/A")
             {
-
-                MessageBox.ErrorQuery(Resources.Error, $"{Resources.Nomagnetlink}", Resources.OK);
-
+                MessageBox.ErrorQuery(Resources.Error, Resources.Nomagnetlink, Resources.OK);
             }
-
 
             return base.ProcessKey(keyEvent);
         }
-        
 
         #endregion
-
-
     }
 }

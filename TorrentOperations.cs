@@ -15,8 +15,9 @@ using TextCopy;
 
 namespace lain
 {
-
-    //used for passing in settings from UI forms
+    /// <summary>
+    /// Data structure for passing torrent settings from UI forms.
+    /// </summary>
     internal struct TorrentData
     {
         public bool UseMagnetLink { get; set; }
@@ -34,27 +35,27 @@ namespace lain
         public int PieceSize { get; set; }
         public int MaxDownloadRate { get; set; }
         public int MaxUploadRate { get; set; }
-
     }
 
-    //CRUD operations
+    /// <summary>
+    /// Handles all torrent operations: create, add, manage, progress, and seeding.
+    /// </summary>
     internal class TorrentOperations
     {
         #region DECLARATIONS
-
 
         // Shared engine instance (rebuilt on startup using settings)
         private static readonly ClientEngine Engine =
             new(Settings.BuildEngineSettings().ToSettings());
 
-        //list of all torrents
+        // List of all active torrent managers
         internal static List<TorrentManager> Managers { get; } = [];
 
-        //list of all torrentdata for serialization
+        // List of all TorrentData objects for serialization
         public static List<TorrentData> TorrentDataDTOList { get; set; } = [];
 
-        // Add this static readonly field to cache the JsonSerializerOptions instance
-        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
+        // JSON serializer options
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
         internal TorrentOperations() { }
 
@@ -62,41 +63,38 @@ namespace lain
 
         #region ADD/CREATE
 
-        // Create torrent
+        /// <summary>
+        /// Creates a new torrent file from specified data and optionally adds it to the engine.
+        /// </summary>
         internal static async Task CreateTorrent(TorrentData data)
         {
             var creator = new TorrentCreator();
 
+            // Add tracker URLs as tiers
             foreach (string t in data.Trackers)
             {
                 if (!string.IsNullOrWhiteSpace(t))
                 {
-                    creator.Announces.Add([t]); // Add as a tier
+                    creator.Announces.Add([t]); // Add as a tracker tier
                 }
             }
 
-
-            
-
-
-            //Implement other metadata and settings
+            // Set additional metadata
             creator.Private = data.IsPrivate;
             creator.Comment = data.Comment;
-            creator.Publisher = data.Publisher; 
+            creator.Publisher = data.Publisher;
             creator.PieceLength = data.PieceSize > 0 ? data.PieceSize : creator.PieceLength;
-            
-           
 
-
-
+            // Specify files to include in torrent
             ITorrentFileSource files = new TorrentFileSource(data.TorPath);
 
+            // Create .torrent dictionary
             BEncodedDictionary dict = await creator.CreateAsync(files);
-            
 
+            // Write torrent file to disk
             File.WriteAllBytes(data.DownPath, dict.Encode());
 
-
+            // Apply default engine limits
             data.MaxConnections = Settings.Current.MaxConnections;
             data.MaxDownloadRate = Settings.Current.MaxDownloadSpeed;
             data.MaxUploadRate = Settings.Current.MaxUploadSpeed;
@@ -104,20 +102,17 @@ namespace lain
 
             data.TorPath = data.DownPath;
             data.DownPath = "./";
-            
 
-
+            // Add the torrent to engine
             await AddTorrent(data, false, true);
-
-
-
         }
 
-
-        // Add torrent
+        /// <summary>
+        /// Adds a torrent to the engine from a magnet link or .torrent file.
+        /// </summary>
         internal static async Task AddTorrent(TorrentData data, bool loading, bool create)
         {
-            // Build torrent settings
+            // Build torrent-specific settings
             var tSettings = new TorrentSettingsBuilder
             {
                 MaximumConnections = data.MaxConnections,
@@ -125,58 +120,51 @@ namespace lain
                 MaximumUploadRate = data.MaxUploadRate,
                 AllowDht = data.UseDht,
                 AllowInitialSeeding = data.StartSeedingAfterCreation,
-
             }.ToSettings();
 
-            // Check if we have a magnet link
+            // -------------------------------
+            // Handle Magnet Link
+            // -------------------------------
             if (!string.IsNullOrWhiteSpace(data.MagnetUrl))
             {
-                // Create a MagnetLink object from the URL
                 MagnetLink magnet = MagnetLink.Parse(data.MagnetUrl);
-
-                // Add the torrent from magnet link
                 var manager = await Engine.AddAsync(magnet, data.DownPath, tSettings);
 
                 WireUpManagerEvents(manager);
                 Managers.Add(manager);
-                if (!loading){ TorrentDataDTOList.Add(data); };
+
+                if (!loading) TorrentDataDTOList.Add(data);
                 SaveTorrentData();
 
                 Log.Write(Resources.Downloadingfrommagnetlink);
 
                 if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
-                {
                     await manager.StartAsync();
-                }
 
-                StartProgressLoop();      
+                StartProgressLoop();
                 AutosaveLoop();
             }
             else
             {
+                // -------------------------------
                 // Fallback: load from .torrent file
-
-                if (!Path.Exists(data.TorPath)) { return; }
+                // -------------------------------
+                if (!Path.Exists(data.TorPath)) return;
 
                 Torrent torrent = await Torrent.LoadAsync(data.TorPath);
-
                 var manager = await Engine.AddAsync(torrent, data.DownPath, tSettings);
 
                 WireUpManagerEvents(manager);
                 Managers.Add(manager);
-                if (!loading) { TorrentDataDTOList.Add(data); }         
+
+                if (!loading) TorrentDataDTOList.Add(data);
                 SaveTorrentData();
 
-
-                
-                Log.Write(create ?  Resources.Creating : Resources.Downloadingfromtorrentfile);
-
+                Log.Write(create ? Resources.Creating : Resources.Downloadingfromtorrentfile);
 
                 if (manager.Progress != 100.0 || !Settings.Current.StopSeedingWhenFinished)
-                {
                     await manager.StartAsync();
-                }
-                
+
                 StartProgressLoop();
                 AutosaveLoop();
             }
@@ -186,48 +174,52 @@ namespace lain
 
         #region EVENTS
 
-        //updates torrent list data
+        // Event fired to update UI with torrent progress
         public static event Action? UpdateProgress;
 
-
-        // Events
+        /// <summary>
+        /// Wires up events for a TorrentManager and the DHT engine.
+        /// Handles state changes, piece verification, and logging.
+        /// </summary>
         private static void WireUpManagerEvents(TorrentManager manager)
         {
+            // Log state changes
             manager.TorrentStateChanged += async (o, e) =>
             {
-                Log.Write($"{Resources.StatechangedeOldState__eNewState} {e.OldState} -> {e.NewState}"); 
+                Log.Write($"{Resources.StatechangedeOldState__eNewState} {e.OldState} -> {e.NewState}");
 
-                if ((e.OldState== TorrentState.Downloading) && e.NewState == TorrentState.Seeding &&
+                // Auto-stop seeding if enabled
+                if ((e.OldState == TorrentState.Downloading) &&
+                    e.NewState == TorrentState.Seeding &&
                     Settings.Current.StopSeedingWhenFinished)
                 {
                     await manager.StopAsync();
-                  
                 }
             };
 
+            // Log DHT state changes
             Engine.Dht.StateChanged += async (o, e) =>
             {
                 if (Settings.Current.DetailedLogging)
-                {
                     Log.Write($"DHT: {Engine.Dht.State}");
-                }
             };
 
+            // Log piece verification results
             manager.PieceHashed += (o, e) =>
             {
                 if (Settings.Current.DetailedLogging)
-                {
-                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed} {e.PieceIndex} - {e.HashPassed}"); 
-             
-                }
+                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed} {e.PieceIndex} - {e.HashPassed}");
             };
         }
-        //Autosave loop
+
+        // -------------------------------
+        // Autosave loop
+        // -------------------------------
         private static bool _autoLoopRunning = false;
+
         private static void AutosaveLoop()
         {
-            if (_autoLoopRunning)
-                return;
+            if (_autoLoopRunning) return;
 
             _autoLoopRunning = true;
 
@@ -240,24 +232,23 @@ namespace lain
                     {
                         Log.Write(Resources.Savedfastresumedata);
                         await Engine.SaveStateAsync();
-
                     }
                     catch (Exception ex)
                     {
-                        Log.Write($"{Resources.Errorsavingfastresumedataex} {ex}"); 
+                        Log.Write($"{Resources.Errorsavingfastresumedataex} {ex}");
                     }
-                    
                 }
             });
         }
 
-        // Progress loop
+        // -------------------------------
+        // Progress logging loop
+        // -------------------------------
         private static bool _progressLoopRunning = false;
 
         private static void StartProgressLoop()
         {
-            if (_progressLoopRunning)
-                return;
+            if (_progressLoopRunning) return;
 
             _progressLoopRunning = true;
 
@@ -265,8 +256,8 @@ namespace lain
             {
                 while (true)
                 {
-
                     UpdateProgress?.Invoke();
+
                     foreach (var m in Managers)
                     {
                         if (m?.Torrent == null) continue;
@@ -278,7 +269,6 @@ namespace lain
                         );
                     }
 
-                   
                     await Task.Delay(Settings.Current.RefreshInterval);
                 }
             });
@@ -288,31 +278,34 @@ namespace lain
 
         #region MANAGE TORRENTS
 
+        /// <summary>
+        /// Loads all torrents from serialized JSON and adds them to the engine.
+        /// </summary>
         internal async static void LoadAllTorrents()
         {
             try
             {
-                if (!File.Exists("torrents.json")) {  return; }
+                if (!File.Exists("torrents.json")) return;
 
                 string json = File.ReadAllText("torrents.json");
                 var loaded = JsonSerializer.Deserialize<List<TorrentData>>(json, JsonOptions);
 
-                if (loaded != null) { TorrentDataDTOList = loaded; }
+                if (loaded != null) TorrentDataDTOList = loaded;
 
-                //for each torrent add it to manager
+                // Add each torrent to engine
                 for (int i = 0; i < TorrentDataDTOList.Count; i++)
-                {
                     await AddTorrent(TorrentDataDTOList[i], true, false);
-                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.Errorloadingtorrents} {ex.Message}"); 
+                Console.WriteLine($"{Resources.Errorloadingtorrents} {ex.Message}");
                 Settings.Save();
             }
         }
 
-
+        /// <summary>
+        /// Saves the current list of torrents to JSON.
+        /// </summary>
         internal static void SaveTorrentData()
         {
             try
@@ -322,15 +315,15 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage} {ex.Message}"); 
+                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage} {ex.Message}");
             }
         }
 
-      
-
+        /// <summary>
+        /// Saves fast resume data for a torrent by index.
+        /// </summary>
         internal static async Task SaveTorrentAsync(int index)
         {
-
             var fastResumeData = (await Managers[index].SaveFastResumeAsync()).Encode();
 
             var fastResumePath = Engine.Settings.GetFastResumePath(Managers[index].InfoHashes);
@@ -338,15 +331,15 @@ namespace lain
             Directory.CreateDirectory(parentDirectory);
             File.WriteAllBytes(fastResumePath, fastResumeData);
 
-            if (Settings.Current.DetailedLogging == true)
-            {
+            if (Settings.Current.DetailedLogging)
                 Log.Write($"{Resources.FastresumedatasavedfortorrentManagers_index_Torrent_Name}{Managers[index].Torrent?.Name}");
-            }
         }
 
+        /// <summary>
+        /// Loads fast resume data for a torrent by index.
+        /// </summary>
         internal static async Task LoadTorrentAsync(int index)
         {
-          
             var fastResumePath = Engine.Settings.GetFastResumePath(Managers[index].InfoHashes);
 
             if (File.Exists(fastResumePath) &&
@@ -355,93 +348,112 @@ namespace lain
             {
                 await Managers[index].LoadFastResumeAsync(fastResume);
             }
-
         }
 
+        /// <summary>
+        /// Pauses a torrent by index.
+        /// </summary>
         internal static async Task PauseTorrentAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
+
             var manager = Managers[index];
-            if (manager != null && (manager.State == TorrentState.Downloading || manager.State == TorrentState.Seeding))
+
+            if (manager != null &&
+                (manager.State == TorrentState.Downloading || manager.State == TorrentState.Seeding))
             {
                 try
                 {
-
                     await manager.PauseAsync();
-                    Log.Write($"{Resources.PausedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
+                    Log.Write($"{Resources.PausedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}");
                     await SaveTorrentAsync(index);
-                   
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorpausingtorrentexMessage} {ex.Message}"); 
+                    Log.Write($"{Resources.ErrorpausingtorrentexMessage} {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Resumes a paused torrent by index.
+        /// </summary>
         internal static async Task ResumeTorrentAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
+
             var manager = Managers[index];
+
             if (manager != null && manager.State == TorrentState.Paused)
             {
                 try
                 {
-              
                     await manager.StartAsync();
-                    Log.Write($"{Resources.ResumedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}"); 
-
+                    Log.Write($"{Resources.ResumedtorrentmanagerTorrent_Name} {manager.Torrent?.Name}");
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorresumingtorrentexMessage} {ex.Message}"); 
+                    Log.Write($"{Resources.ErrorresumingtorrentexMessage} {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Starts seeding a torrent by index.
+        /// </summary>
         internal static async Task StartSeedingAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
+
             var manager = Managers[index];
+
             if (manager != null && manager.State != TorrentState.Seeding)
             {
                 try
                 {
-               
                     await manager.StartAsync();
-                    Log.Write($"{Resources.StartedseedingmanagerTorrent_Name} {manager.Torrent?.Name}"); 
-
-
+                    Log.Write($"{Resources.StartedseedingmanagerTorrent_Name} {manager.Torrent?.Name}");
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorstartingseedingexMessage} {ex.Message}"); 
+                    Log.Write($"{Resources.ErrorstartingseedingexMessage} {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Stops seeding a torrent by index.
+        /// </summary>
         internal static async Task StopSeedingAsync(int index)
         {
             if (index < 0 || index >= Managers.Count) return;
+
             var manager = Managers[index];
-            if (manager != null && manager.State == TorrentState.Seeding && manager.State != TorrentState.Stopping && manager.State != TorrentState.Stopped)
+
+            if (manager != null &&
+                manager.State == TorrentState.Seeding &&
+                manager.State != TorrentState.Stopping &&
+                manager.State != TorrentState.Stopped)
             {
                 try
                 {
                     await manager.StopAsync();
-                    Log.Write($"{Resources.StoppedseedingmanagerTorrent_Name} {manager.Torrent?.Name}"); 
-
+                    Log.Write($"{Resources.StoppedseedingmanagerTorrent_Name} {manager.Torrent?.Name}");
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrorstoppingseedingexMessage} {ex.Message}"); 
+                    Log.Write($"{Resources.ErrorstoppingseedingexMessage} {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Deletes a torrent from engine and optionally removes downloaded files.
+        /// </summary>
         internal static async Task DeleteTorrentAsync(int index, bool deleteFiles = true)
         {
             if (index < 0 || index >= Managers.Count) return;
+
             var manager = Managers[index];
 
             if (manager != null)
@@ -455,28 +467,27 @@ namespace lain
                     // Remove from engine
                     await Engine.RemoveAsync(manager);
 
-                    // Remove from list
+                    // Remove from lists
                     Managers.RemoveAt(index);
                     TorrentDataDTOList.RemoveAt(index);
                     SaveTorrentData();
 
-                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name}{manager.Torrent?.Name}"); 
+                    Log.Write($"{Resources.DeletedtorrentmanagerTorrent_Name}{manager.Torrent?.Name}");
 
                     // Optionally delete downloaded files
                     if (deleteFiles && Directory.Exists(manager.SavePath))
                     {
                         Directory.Delete(manager.SavePath, true);
-                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath}{manager.SavePath}"); 
+                        Log.Write($"{Resources.DeletedfilesatmanagerSavePath}{manager.SavePath}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Write($"{Resources.ErrordeletingtorrentexMessage} {ex.Message}"); 
+                    Log.Write($"{Resources.ErrordeletingtorrentexMessage} {ex.Message}");
                 }
             }
         }
 
         #endregion
-
     }
 }
