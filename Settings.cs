@@ -56,7 +56,7 @@ internal class SettingsData
     };
 
     //Icons
-    public List<string> icons { get; set; } = ASCII.icons;
+    public List<string> Icons { get; set; } = ASCII.icons;
 
 
     //Search settings

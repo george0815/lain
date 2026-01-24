@@ -238,7 +238,7 @@ namespace lain.frameviews
 
                 #region SETUP SETTINGS OBJECT AND START DOWNLOAD
 
-                TorrentData settings = new TorrentData
+                TorrentData settings = new()
                 {
                     UseMagnetLink = useMagnet,
                     MagnetUrl = magnetText,

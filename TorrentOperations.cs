@@ -45,13 +45,16 @@ namespace lain
 
         // Shared engine instance (rebuilt on startup using settings)
         private static readonly ClientEngine Engine =
-            new ClientEngine(Settings.BuildEngineSettings().ToSettings());
+            new(Settings.BuildEngineSettings().ToSettings());
 
         //list of all torrents
-        internal static List<TorrentManager> Managers { get; } = new();
+        internal static List<TorrentManager> Managers { get; } = [];
 
         //list of all torrentdata for serialization
-        public static List<TorrentData> TorrentDataDTOList { get; set; } = new();
+        public static List<TorrentData> TorrentDataDTOList { get; set; } = [];
+
+        // Add this static readonly field to cache the JsonSerializerOptions instance
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
 
         internal TorrentOperations() { }
 
@@ -68,17 +71,12 @@ namespace lain
             {
                 if (!string.IsNullOrWhiteSpace(t))
                 {
-                    creator.Announces.Add(new List<string> { t }); // Add as a tier
+                    creator.Announces.Add([t]); // Add as a tier
                 }
             }
 
 
-            // Build torrent settings
-            var tSettings = new TorrentSettingsBuilder
-            {
-                AllowInitialSeeding = data.StartSeedingAfterCreation,
-                
-            }.ToSettings();
+            
 
 
             //Implement other metadata and settings
@@ -125,7 +123,9 @@ namespace lain
                 MaximumConnections = data.MaxConnections,
                 MaximumDownloadRate = data.MaxDownloadRate,
                 MaximumUploadRate = data.MaxUploadRate,
-                AllowDht = data.UseDht
+                AllowDht = data.UseDht,
+                AllowInitialSeeding = data.StartSeedingAfterCreation,
+
             }.ToSettings();
 
             // Check if we have a magnet link
@@ -189,8 +189,6 @@ namespace lain
         //updates torrent list data
         public static event Action? UpdateProgress;
 
-        //updates
-        public static event Action<string>? MagnetLinkGenerated;
 
         // Events
         private static void WireUpManagerEvents(TorrentManager manager)
@@ -292,9 +290,6 @@ namespace lain
 
         internal async static void LoadAllTorrents()
         {
-
-            JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
-
             try
             {
                 if (!File.Exists("torrents.json")) {  return; }
@@ -309,8 +304,6 @@ namespace lain
                 {
                     await AddTorrent(TorrentDataDTOList[i], true, false);
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -322,8 +315,6 @@ namespace lain
 
         internal static void SaveTorrentData()
         {
-            JsonSerializerOptions JsonOptions = new() { WriteIndented = true, };
-
             try
             {
                 var json = JsonSerializer.Serialize(TorrentDataDTOList, JsonOptions);
@@ -357,7 +348,6 @@ namespace lain
         {
           
             var fastResumePath = Engine.Settings.GetFastResumePath(Managers[index].InfoHashes);
-            var parentDirectory = Path.GetDirectoryName(fastResumePath)!;
 
             if (File.Exists(fastResumePath) &&
                 FastResume.TryLoad(fastResumePath, out FastResume? fastResume) &&

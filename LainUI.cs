@@ -13,16 +13,16 @@ namespace lain
 
 
         // Content views
-        FrameView torrentListView;
-        FrameView downloadView;
-        FrameView createView;
-        FrameView settingsView;
-        FrameView searchView;
-        FrameView pluginsView;
+        readonly FrameView torrentListView;
+        readonly FrameView downloadView;
+        readonly FrameView createView;
+        readonly FrameView settingsView;
+        readonly FrameView searchView;
+        readonly FrameView pluginsView;
 
         internal FrameView logView;
-        private FrameView header;
-        private Label torrentCount;
+        readonly private FrameView header;
+        readonly private Label torrentCount;
 
 
 
@@ -80,7 +80,7 @@ namespace lain
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
-                Text = Settings.Current.icons[0],
+                Text = Settings.Current.Icons[0],
 
                 ColorScheme = new ColorScheme()
                 {
@@ -280,10 +280,12 @@ namespace lain
         }
 
         // Shows exit confirmation dialog
-        private void ShowExitDialog()
+        private static void ShowExitDialog()
         {
-            var dialog = new Dialog(Resources.Exit_, 50, 10);
-            dialog.Height = 3;
+            var dialog = new Dialog(Resources.Exit_, 50, 10)
+            {
+                Height = 3
+            };
             var ok = new Button(Resources.OK);
             var cancel = new Button(Resources.Cancel);
 

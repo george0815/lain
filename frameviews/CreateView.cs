@@ -160,7 +160,7 @@ namespace lain.frameviews
 
             filesDialogBtn.Clicked += () =>
             {
-                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectfolder, Resources.Selectthefolderthatcontainsyourfiles, new string[] { "" });
+                string? path = DialogHelpers.ShowSaveFileDialog(Resources.Selectfolder, Resources.Selectthefolderthatcontainsyourfiles, [""]);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     folderPath.Text = path;
@@ -207,7 +207,7 @@ namespace lain.frameviews
 
 
                 // Validate trackers (optional)
-                List<string> trackerList = new();
+                List<string> trackerList = [];
                 if (!string.IsNullOrWhiteSpace(trackers))
                 {
                     foreach (var line in trackers.Split('\n', StringSplitOptions.RemoveEmptyEntries))
@@ -231,7 +231,7 @@ namespace lain.frameviews
                 try
                 {
 
-                    TorrentData settings = new TorrentData
+                    TorrentData settings = new()
                     {
                         UseMagnetLink = false,
                         TorPath = inputPath,

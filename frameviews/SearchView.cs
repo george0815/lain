@@ -21,9 +21,9 @@ namespace lain.frameviews
     //holds data received from python subprocess
     internal class GhidorahResponse
     {
-        public List<GhidorahItem>? data { get; set; }
+        public List<GhidorahItem>? Data { get; set; }
 
-        public List<string>? errors { get; set; }
+        public List<string>? Errors { get; set; }
 
     }
 
@@ -31,20 +31,20 @@ namespace lain.frameviews
     //holds individual torrent item data before sanitization
     internal class GhidorahItem
     {
-        public string? name { get; set; }
-        public long? size { get; set; }
+        public string? Name { get; set; }
+        public long? Size { get; set; }
 
         [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int? seeders { get; set; }
+        public int? Seeders { get; set; }
 
         [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int? leechers { get; set; }
-        public string? category { get; set; }
-        public string? source { get; set; }
-        public string? url { get; set; }
-        public string? date { get; set; }
-        public string? magnet { get; set; }
-        public string? hash { get; set; }
+        public int? Leechers { get; set; }
+        public string? Category { get; set; }
+        public string? Source { get; set; }
+        public string? Url { get; set; }
+        public string? Date { get; set; }
+        public string? Magnet { get; set; }
+        public string? Hash { get; set; }
     }
 
 
@@ -134,8 +134,8 @@ namespace lain.frameviews
                 {
 
                     //initialize ghidorah search args
-                    torrents = new List<TorrentResult>();
-                    SearchArgs args = new SearchArgs
+                    torrents = [];
+                    SearchArgs args = new()
                     {
                         Query = searchBar.Text.ToString() ?? "",
                         Limit = Settings.Current.SearchResultsLimitPerSource,
@@ -248,7 +248,7 @@ namespace lain.frameviews
         {
 
             if (string.IsNullOrWhiteSpace(res))
-                return torrents;
+                return torrents!;
 
             GhidorahResponse? parsed;
 
@@ -261,36 +261,36 @@ namespace lain.frameviews
                 Log.Write($"{Resources.Error}: {e.Message}");
                 MessageBox.ErrorQuery(Resources.Error, e.Message, Resources.OK);
 
-                return torrents;
+                return torrents!;
             }
 
-            if ((parsed?.data == null || parsed?.data.Count == 0) && parsed?.errors?.Count > 0)
+            if ((parsed?.Data == null || parsed?.Data.Count == 0) && parsed?.Errors?.Count > 0)
             {
-                Log.Write($"{Resources.Error}: {parsed?.errors[0]}");
-                MessageBox.ErrorQuery(Resources.Error, parsed?.errors[0], Resources.OK);
-                return torrents;
+                Log.Write($"{Resources.Error}: {parsed?.Errors[0]}");
+                MessageBox.ErrorQuery(Resources.Error, parsed?.Errors[0], Resources.OK);
+                return torrents!;
             }
 
-            foreach (var item in parsed.data)
+            foreach (var item in parsed!.Data!)
             {
                 var torrent = new TorrentResult
                 {
-                    Name = item.name ?? "N/A",
-                    Size = item.size ?? 0,
-                    Seeders = item.seeders ?? 0,
-                    Leechers = item.leechers ?? 0,
-                    Category = item.category ?? "N/A",
-                    Source = item.source ?? "N/A",
-                    Url = item.url ?? "N/A",
-                    Date = item.date ?? "N/A",
-                    Magnet = item.magnet ?? "N/A",
-                    Hash = item.hash ?? "N/A"
+                    Name = item.Name ?? "N/A",
+                    Size = item.Size ?? 0,
+                    Seeders = item.Seeders ?? 0,
+                    Leechers = item.Leechers ?? 0,
+                    Category = item.Category ?? "N/A",
+                    Source = item.Source ?? "N/A",
+                    Url = item.Url ?? "N/A",
+                    Date = item.Date ?? "N/A",
+                    Magnet = item.Magnet ?? "N/A",
+                    Hash = item.Hash ?? "N/A"
                 };
 
-                torrents.Add(torrent);
+                torrents!.Add(torrent);
             }
 
-            return torrents;
+            return torrents!;
         }
 
 
@@ -331,7 +331,7 @@ namespace lain.frameviews
                 return "0 B";
 
             double size = numBytes;
-            string[] units = { "B", "KB", "MB", "GB", "TB", "PB" };
+            string[] units = ["B", "KB", "MB", "GB", "TB", "PB"];
             const double step = 1024.0;
 
             foreach (var unit in units)
@@ -363,7 +363,7 @@ namespace lain.frameviews
                 torrents![_table.SelectedRow].Magnet.Contains("magnet:?"))
             {
 
-                TorrentData settings = new TorrentData
+                TorrentData settings = new()
                 {
                     UseMagnetLink = true,
                     MagnetUrl = torrents?[_table.SelectedRow].Magnet!,

@@ -8,6 +8,8 @@ using System.Xml.Linq;
 using Terminal.Gui;
 using TextCopy;
 
+namespace lain.frameviews;
+
 public class TorrentListView : FrameView
 {
     private readonly List<TorrentManager> _managers;
@@ -106,7 +108,7 @@ public class TorrentListView : FrameView
         else if (keyEvent.Key == Settings.Current.Controls.GenMagLink)
         {
             var magnet = new MagnetLink(_managers[_table.SelectedRow].Torrent!.InfoHashes, _managers[_table.SelectedRow].Torrent!.Name,
-                    _managers[_table.SelectedRow].Torrent!.AnnounceUrls.SelectMany(t => t.ToArray()).ToList());
+                    [.. _managers[_table.SelectedRow].Torrent!.AnnounceUrls.SelectMany(t => t.ToArray())]);
 
             Log.Write($"{Resources.MagnetlinkgeneratedmagnetToV1String__}{magnet.ToV1String()}");
 
