@@ -152,8 +152,8 @@ namespace lain
                 DhtEndPoint = new IPEndPoint(IPAddress.Any, s.DhtPort),
 
                 MaximumConnections = s.MaxConnections,
-                MaximumDownloadRate = s.MaxDownloadSpeed * 1024,
-                MaximumUploadRate = s.MaxUploadSpeed * 1024,
+                MaximumDownloadRate = s.MaxDownloadSpeed,
+                MaximumUploadRate = s.MaxUploadSpeed,
             };
         }
 

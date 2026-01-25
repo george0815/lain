@@ -195,7 +195,12 @@ namespace lain.frameviews
 
         #region HELPER METHODS
 
-       
+        //Json options
+        private static readonly System.Text.Json.JsonSerializerOptions CachedJsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         /// <summary>
         /// Converts the raw JSON response into sanitized TorrentResult entries.
         /// Handles deserialization errors and reported Ghidorah failures.
@@ -209,7 +214,10 @@ namespace lain.frameviews
 
             try
             {
-                parsed = System.Text.Json.JsonSerializer.Deserialize<GhidorahResponse>(res);
+                parsed = System.Text.Json.JsonSerializer.Deserialize<GhidorahResponse>(
+                    res,
+                    CachedJsonOptions // Use the cached options instance
+                );
             }
             catch (Exception e)
             {
