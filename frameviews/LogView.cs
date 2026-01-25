@@ -63,7 +63,7 @@ internal class LogView : FrameView
                 int top = ListView.TopItem;
 
                 // Replace the ListView source with the latest log snapshot.
-                ListView.SetSource(Log.log);
+                ListView.SetSource(Log.LogList);
 
                 // Restore scroll position if still within bounds.
                 if (top < ListView.Source.Count)

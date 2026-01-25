@@ -26,7 +26,7 @@ namespace lain.frameviews
         /// as button labels in the color picker UI.
         /// </summary>
         internal static Dictionary<string, Terminal.Gui.Color> colors =
-            new Dictionary<string, Terminal.Gui.Color>
+            new()
             {
                 { Resources.Black,          Terminal.Gui.Color.Black },
                 { Resources.Blue,           Terminal.Gui.Color.Blue },

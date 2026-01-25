@@ -24,78 +24,90 @@ namespace lain
     {
         public static async Task Main(string[] args)
         {
-            // ------------------------------
-            // Optional debug: change culture to Japanese
-            // ------------------------------
-            CultureInfo ci = new CultureInfo("ja-JP");
-            //Thread.CurrentThread.CurrentUICulture = ci;
-
-            // Register encodings for legacy code pages (e.g., Shift-JIS)
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Console.OutputEncoding = Encoding.GetEncoding(932); // Japanese encoding
 
             // ------------------------------
-            // Load settings and plugins
+            // CLI Entry point (will implement later)
             // ------------------------------
-            Settings.Load(); // load user settings from file
-            Ghidorah.LoadQbittorrentPlugins(); // load qbittorrent plugin sources
-
-            // Disable QB plugin usage if none loaded
-            if (Ghidorah.QbSources == null || Ghidorah.QbSources.Length == 0)
+            if (args.Length > 0)
             {
-                Settings.Current.UseQbittorrentPlugins = false;
+                return;
             }
 
-            // ------------------------------
-            // Platform-specific adjustments
-            // ------------------------------
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                // Linux / WSL support
-                Application.UseSystemConsole = true;
-                Console.OutputEncoding = Encoding.UTF8; // UTF-8 for terminal
-            }
+            else {
 
-            // ------------------------------
-            // Initialize Terminal.Gui
-            // ------------------------------
-            Application.Init();
-
-            // Top-level container for windows
-            var top = Application.Top;
-
-            // Main window (contains header, sidebar, and content panels)
-            var mainWin = new LainUI();
-
-            // ------------------------------
-            // Setup color scheme for the main window
-            // ------------------------------
-            ColorScheme myScheme = new ColorScheme()
-            {
-                Normal = Application.Driver.MakeAttribute(Settings.Current.TextColor, Settings.Current.BackgroundColor), // normal text
-                Focus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused element
-                HotNormal = Application.Driver.MakeAttribute(Settings.Current.HotTextColor, Settings.Current.BackgroundColor), // hotkey text
-                HotFocus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused hotkey
-            };
-
-            mainWin.ColorScheme = myScheme;
-
-            // Add main window to the top-level container
-            top.Add(mainWin);
-
-            // ------------------------------
-            // Run the application
-            // ------------------------------
-            try
-            {
-                Application.Run(); // blocks until user exits
-            }
-            finally
-            {
                 // ------------------------------
-                // Cleanup / persist data
+                // Optional debug: change culture to Japanese
                 // ------------------------------
-                Log.Save(); // save logs to file
+                CultureInfo ci = new("ja-JP");
+                //Thread.CurrentThread.CurrentUICulture = ci;
+
+                // Register encodings for legacy code pages (e.g., Shift-JIS)
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                Console.OutputEncoding = Encoding.GetEncoding(932); // Japanese encoding
+
+                // ------------------------------
+                // Load settings and plugins
+                // ------------------------------
+                Settings.Load(); // load user settings from file
+                Ghidorah.LoadQbittorrentPlugins(); // load qbittorrent plugin sources
+
+                // Disable QB plugin usage if none loaded
+                if (Ghidorah.QbSources == null || Ghidorah.QbSources.Length == 0)
+                {
+                    Settings.Current.UseQbittorrentPlugins = false;
+                }
+
+                // ------------------------------
+                // Platform-specific adjustments
+                // ------------------------------
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    // Linux / WSL support
+                    Application.UseSystemConsole = true;
+                    Console.OutputEncoding = Encoding.UTF8; // UTF-8 for terminal
+                }
+
+                // ------------------------------
+                // Initialize Terminal.Gui
+                // ------------------------------
+                Application.Init();
+
+                // Top-level container for windows
+                var top = Application.Top;
+
+                // Main window (contains header, sidebar, and content panels)
+                var mainWin = new LainUI();
+
+                // ------------------------------
+                // Setup color scheme for the main window
+                // ------------------------------
+                ColorScheme myScheme = new()
+                {
+                    Normal = Application.Driver.MakeAttribute(Settings.Current.TextColor, Settings.Current.BackgroundColor), // normal text
+                    Focus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused element
+                    HotNormal = Application.Driver.MakeAttribute(Settings.Current.HotTextColor, Settings.Current.BackgroundColor), // hotkey text
+                    HotFocus = Application.Driver.MakeAttribute(Settings.Current.FocusTextColor, Settings.Current.FocusBackgroundColor), // focused hotkey
+                };
+
+                mainWin.ColorScheme = myScheme;
+
+                // Add main window to the top-level container
+                top.Add(mainWin);
+
+                // ------------------------------
+                // Run the application
+                // ------------------------------
+                try
+                {
+                    Application.Run(); // blocks until user exits
+                }
+                finally
+                {
+                    // ------------------------------
+                    // Cleanup / persist data
+                    // ------------------------------
+                    Log.Save(); // save logs to file
+                }
             }
         }
     }

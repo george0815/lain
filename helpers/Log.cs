@@ -20,7 +20,7 @@ namespace lain.helpers
         /// <summary>
         /// Internal in-memory storage for log entries.
         /// </summary>
-        static internal List<string> log { get; set; } = new List<string>();
+        static internal List<string> LogList { get; set; } = [];
 
         /// <summary>
         /// Adds a new log entry with timestamp.
@@ -29,7 +29,7 @@ namespace lain.helpers
         static internal void Write(string msg)
         {
             // Append timestamp to message and store in log
-            log.Add($"[{DateTime.Now}] {msg}");
+            LogList.Add($"[{DateTime.Now}] {msg}");
 
             // Notify any listeners that a new log entry was added
             OnLogAdded?.Invoke();
@@ -41,10 +41,10 @@ namespace lain.helpers
         static internal void Save()
         {
             // Open file for writing, overwrite existing content
-            using StreamWriter writer = new StreamWriter(Settings.Current.LogPath!, false, Encoding.UTF8);
+            using StreamWriter writer = new(Settings.Current.LogPath!, false, Encoding.UTF8);
 
             // Join all log entries with newline and write to file
-            writer.Write(string.Join("\n", log));
+            writer.Write(string.Join("\n", LogList));
         }
     }
 }

@@ -16,13 +16,13 @@ namespace lain.helpers
     public class StatusResponse
     {
         [JsonPropertyName("paths")]
-        public string Paths { get; set; }  // Paths used in Ghidorah execution
+        public string? Paths { get; set; }  // Paths used in Ghidorah execution
 
         [JsonPropertyName("message")]
-        public string Message { get; set; } // Optional message from Ghidorah
+        public string? Message { get; set; } // Optional message from Ghidorah
 
         [JsonPropertyName("results")]
-        public List<SourceStatus> Results { get; set; } // List of sources and their status
+        public List<SourceStatus>? Results { get; set; } // List of sources and their status
     }
 
     /// <summary>
@@ -31,16 +31,16 @@ namespace lain.helpers
     public class SourceStatus
     {
         [JsonPropertyName("source")]
-        public string Source { get; set; } // Name of the source
+        public string? Source { get; set; } // Name of the source
 
         [JsonPropertyName("status")]
-        public string Status { get; set; } // ONLINE, ERROR, or UNKNOWN
+        public string? Status { get; set; } // ONLINE, ERROR, or UNKNOWN
 
         [JsonPropertyName("results")]
         public int? Results { get; set; } // Number of results found, if applicable
 
         [JsonPropertyName("error")]
-        public string Error { get; set; } // Error message, if any
+        public string? Error { get; set; } // Error message, if any
     }
 
     /// <summary>
@@ -62,10 +62,13 @@ namespace lain.helpers
     internal class Ghidorah
     {
         // Determine executable name based on OS
-        static string ExeFileName = OperatingSystem.IsWindows() ? "ghidorah.exe" : "ghidorah";
+        internal static readonly string ExeFileName = OperatingSystem.IsWindows() ? "ghidorah.exe" : "ghidorah";
 
         // Stores sources discovered from qBittorrent plugins
-        internal static string[] QbSources { get; set; } = Array.Empty<string>();
+        internal static string[] QbSources { get; set; } = [];
+
+        // JsonSerializerOptions instance
+        private static readonly JsonSerializerOptions CachedJsonOptions = new() { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Loads qBittorrent plugin sources by querying Ghidorah.
@@ -78,7 +81,7 @@ namespace lain.helpers
                 var plugins = JsonSerializer.Deserialize<List<string>>(result);
                 if (plugins != null)
                 {
-                    QbSources = plugins.ToArray(); // Store plugins as array
+                    QbSources = [.. plugins]; // Store plugins as array
                 }
             }
             catch (Exception ex)
@@ -141,11 +144,11 @@ namespace lain.helpers
             // Deserialize JSON status response
             var stat = JsonSerializer.Deserialize<StatusResponse>(
                 output,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                CachedJsonOptions
             );
 
             // Build human-readable summary of status
-            return BuildSummary(stat);
+            return BuildSummary(stat!);
         }
 
         /// <summary>
@@ -229,7 +232,7 @@ namespace lain.helpers
             sb.AppendLine();
 
             // ---- Results ----
-            foreach (var r in status.Results)
+            foreach (var r in status.Results!)
             {
                 if (r.Status == "ONLINE")
                 {
@@ -250,14 +253,14 @@ namespace lain.helpers
                 .Where(r => r.Status == "ERROR")
                 .ToList();
 
-            if (errors.Any())
+            if (errors.Count != 0)
             {
                 sb.AppendLine();
                 sb.AppendLine($"{Resources.Errors}:");
 
                 foreach (var e in errors)
                 {
-                    sb.AppendLine($"- {e.Source}: {TrimError(e.Error)}");
+                    sb.AppendLine($"- {e.Source}: {TrimError(e.Error!)}");
                 }
             }
 
@@ -273,7 +276,7 @@ namespace lain.helpers
                 return Resources.Unknownerror;
 
             return error.Length > maxLength
-                ? error.Substring(0, maxLength) + "…"
+                ? string.Concat(error.AsSpan(0, maxLength), "…")
                 : error;
         }
     }

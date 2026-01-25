@@ -255,7 +255,7 @@ namespace lain
             settingsView = new SettingsView();
             pluginsView = new PluginView();
             searchView = new SearchView();
-            logView = new LogView(Log.log);
+            logView = new LogView(Log.LogList);
 
             // Show default panel
             Add(torrentListView);
