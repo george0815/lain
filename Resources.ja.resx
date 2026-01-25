@@ -121,16 +121,16 @@
     <value>作成</value>
   </data>
   <data name="File/Folder" xml:space="preserve">
-    <value>ファイル/フォルダ:</value>
+    <value>ファイル/フォルダ：</value>
   </data>
   <data name="Outputpath" xml:space="preserve">
-    <value>出力先:</value>
+    <value>出力先：</value>
   </data>
   <data name="Trackers" xml:space="preserve">
-    <value>トラッカー:</value>
+    <value>トラッカー：</value>
   </data>
   <data name="PieceSize" xml:space="preserve">
-    <value>ピースサイズ:</value>
+    <value>ピースサイズ：</value>
   </data>
   <data name="16KB" xml:space="preserve">
     <value>16 KB</value>
@@ -163,10 +163,10 @@
     <value>プライベート</value>
   </data>
   <data name="Publisher" xml:space="preserve">
-    <value>公開者:</value>
+    <value>公開者：</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>コメント:</value>
+    <value>コメント：</value>
   </data>
   <data name="Selectfolder" xml:space="preserve">
     <value>フォルダを選択</value>
@@ -196,7 +196,7 @@
     <value>出力先が存在しません。</value>
   </data>
   <data name="InvalidtrackerURL" xml:space="preserve">
-    <value>トラッカーのURLが無効です:</value>
+    <value>トラッカーのURLが無効です：</value>
   </data>
   <data name="trimmed" xml:space="preserve">
     <value>{trimmed}</value>
@@ -211,31 +211,31 @@
     <value>トレントが正常に作成されました!</value>
   </data>
   <data name="Unexpectederror" xml:space="preserve">
-    <value>予期しないエラー:</value>
+    <value>予期しないエラー：</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>ダウンロード</value>
   </data>
   <data name="Magnetlink" xml:space="preserve">
-    <value>マグネットリンク:</value>
+    <value>マグネットリンク：</value>
   </data>
   <data name="Usemagnetlink" xml:space="preserve">
     <value>マグネットリンクを使用</value>
   </data>
   <data name="Torrentfilepath" xml:space="preserve">
-    <value>トレントファイルのパス:</value>
+    <value>トレントファイルのパス：</value>
   </data>
   <data name="Downloadpath" xml:space="preserve">
-    <value>ダウンロード先:</value>
+    <value>ダウンロード先：</value>
   </data>
   <data name="Maxconnections" xml:space="preserve">
-    <value>最大接続数:</value>
+    <value>最大接続数：</value>
   </data>
   <data name="Maxdownload(MB/s)" xml:space="preserve">
-    <value>最大ダウンロード速度(MB/秒):</value>
+    <value>最大ダウンロード速度(MB/秒)：</value>
   </data>
   <data name="Maxupload(MB/s)" xml:space="preserve">
-    <value>最大アップロード速度(MB/秒):</value>
+    <value>最大アップロード速度(MB/秒)：</value>
   </data>
   <data name="EnableDHT" xml:space="preserve">
     <value>DHTを有効にする</value>
@@ -286,34 +286,34 @@
     <value>トレントのダウンロードが開始されました。</value>
   </data>
   <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
-    <value>トレントの開始に失敗しました:</value>
+    <value>トレントの開始に失敗しました：</value>
   </data>
   <data name="yyyy-MM-dd" xml:space="preserve">
     <value>yyyy-MM-dd</value>
   </data>
   <data name="ActiveTorrents" xml:space="preserve">
-    <value>アクティブなトレント:</value>
+    <value>アクティブなトレント：</value>
   </data>
   <data name="Noactivetorrents" xml:space="preserve">
     <value>アクティブなトレントはありません</value>
   </data>
   <data name="Operatingonport" xml:space="preserve">
-    <value>動作ポート: </value>
+    <value>動作ポート：</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>開始: </value>
+    <value>開始：</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>停止: </value>
+    <value>停止：</value>
   </data>
   <data name="Startseeding" xml:space="preserve">
-    <value>シード開始: </value>
+    <value>シード開始:：</value>
   </data>
   <data name="Stopseeding" xml:space="preserve">
-    <value>シード停止: </value>
+    <value>シード停止：</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>削除: </value>
+    <value>削除:：</value>
   </data>
   <data name="Log" xml:space="preserve">
     <value>ログ</value>
@@ -373,22 +373,22 @@
     <value>設定</value>
   </data>
   <data name="Port" xml:space="preserve">
-    <value>ポート:</value>
+    <value>ポート：</value>
   </data>
   <data name="DHTport" xml:space="preserve">
-    <value>DHTポート:</value>
+    <value>DHTポート：</value>
   </data>
   <data name="Maxtotalconnections" xml:space="preserve">
-    <value>最大総接続数:</value>
+    <value>最大総接続数：</value>
   </data>
   <data name="Maxtotaldownloadspeed(MB/s)" xml:space="preserve">
-    <value>最大総ダウンロード速度(MB/秒):</value>
+    <value>最大総ダウンロード速度(MB/秒)：</value>
   </data>
   <data name="Maxtotaluploadspeed(MB/s)" xml:space="preserve">
-    <value>最大総アップロード速度(MB/秒):</value>
+    <value>最大総アップロード速度(MB/秒)：</value>
   </data>
   <data name="Progressrefreshrate(ms)" xml:space="preserve">
-    <value>進捗更新レート(ミリ秒):</value>
+    <value>進捗更新レート(ミリ秒)：</value>
   </data>
   <data name="StopSeedingWhenFinished" xml:space="preserve">
     <value>完了時にシードを停止</value>
@@ -406,31 +406,31 @@
     <value>テキストカーソルを非表示</value>
   </data>
   <data name="DefaultDownloadPath" xml:space="preserve">
-    <value>デフォルトのダウンロード先:</value>
+    <value>デフォルトのダウンロード先：</value>
   </data>
   <data name="LogPath" xml:space="preserve">
-    <value>ログのパス:</value>
+    <value>ログのパス：</value>
   </data>
   <data name="SettingsPath" xml:space="preserve">
-    <value>設定のパス:</value>
+    <value>設定のパス：</value>
   </data>
   <data name="Backgroundcolor" xml:space="preserve">
-    <value>背景色:</value>
+    <value>背景色：</value>
   </data>
   <data name="Textcolor" xml:space="preserve">
-    <value>テキスト色:</value>
+    <value>テキスト色：</value>
   </data>
   <data name="Focusbackgroundcolor" xml:space="preserve">
-    <value>フォーカス背景色:</value>
+    <value>フォーカス背景色：</value>
   </data>
   <data name="Focustextcolor" xml:space="preserve">
-    <value>フォーカステキスト色:</value>
+    <value>フォーカステキスト色：</value>
   </data>
   <data name="Hotkeytextcolor" xml:space="preserve">
-    <value>ホットキーテキスト色:</value>
+    <value>ホットキーテキスト色：</value>
   </data>
   <data name="ASCIIcolor" xml:space="preserve">
-    <value>ASCII色:</value>
+    <value>ASCII色：</value>
   </data>
   <data name="DisableASCII" xml:space="preserve">
     <value>ASCIIを無効にする</value>
@@ -517,7 +517,7 @@
     <value>不明</value>
   </data>
   <data name="MagnetlinkgeneratedmagnetToV1String()" xml:space="preserve">
-    <value>マグネットリンクが生成されました: </value>
+    <value>マグネットリンクが生成されました：</value>
   </data>
   <data name="Magnetlinkcopiedtoclipboard" xml:space="preserve">
     <value>マグネットリンクがクリップボードにコピーされました。</value>
@@ -553,16 +553,16 @@
     <value>ヘッダー</value>
   </data>
   <data name="StartSettingsCurrentControlsStartDownload" xml:space="preserve">
-    <value>開始:</value>
+    <value>開始：</value>
   </data>
   <data name="StartseedingSettingsCurrentControlsStartSeeding" xml:space="preserve">
-    <value>シード開始:</value>
+    <value>シード開始：</value>
   </data>
   <data name="DeleteSettingsCurrentControlsRemoveTorrent" xml:space="preserve">
     <value>削除:</value>
   </data>
   <data name="GeneratemagnetlinkSettingsCurrentControlsGenMagLink" xml:space="preserve">
-    <value>マグネットリンクを生成: </value>
+    <value>マグネットリンクを生成:：</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>終了</value>
@@ -583,10 +583,10 @@
     <value>メイン</value>
   </data>
   <data name="ErrorsavingsettingsexMessage" xml:space="preserve">
-    <value>設定の保存中にエラーが発生しました:</value>
+    <value>設定の保存中にエラーが発生しました：</value>
   </data>
   <data name="ErrorloadingsettingsexMessage" xml:space="preserve">
-    <value>設定の読み込み中にエラーが発生しました:</value>
+    <value>設定の読み込み中にエラーが発生しました：</value>
   </data>
   <data name="LainTorrentClient" xml:space="preserve">
     <value>Lain トレントクライアント</value>
@@ -595,61 +595,61 @@
     <value>マグネットリンクからダウンロード中...</value>
   </data>
   <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
-    <value>状態が変更されました:</value>
+    <value>状態が変更されました：</value>
   </data>
   <data name="DHTEngineDhtState" xml:space="preserve">
-    <value>DHT:</value>
+    <value>DHT：</value>
   </data>
   <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
-    <value>ピースがハッシュ化されました:</value>
+    <value>ピースがハッシュ化されました：</value>
   </data>
   <data name="Savedfastresumedata" xml:space="preserve">
     <value>高速再開データが保存されました</value>
   </data>
   <data name="Errorsavingfastresumedataex" xml:space="preserve">
-    <value>高速再開データの保存中にエラーが発生しました:</value>
+    <value>高速再開データの保存中にエラーが発生しました：</value>
   </data>
   <data name="torrentsjson" xml:space="preserve">
     <value>torrents.json</value>
   </data>
   <data name="ErrorsavingtorrentsexMessage" xml:space="preserve">
-    <value>トレントの保存中にエラーが発生しました:</value>
+    <value>トレントの保存中にエラーが発生しました：</value>
   </data>
   <data name="FastresumedatasavedfortorrentManagers[index]Torrent?Name" xml:space="preserve">
     <value>トレントの高速再開データが保存されました:</value>
   </data>
   <data name="PausedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを一時停止しました:</value>
+    <value>トレントを一時停止しました：</value>
   </data>
   <data name="ErrorpausingtorrentexMessage" xml:space="preserve">
-    <value>トレントの一時停止中にエラーが発生しました:</value>
+    <value>トレントの一時停止中にエラーが発生しました：</value>
   </data>
   <data name="ResumedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを再開しました:</value>
+    <value>トレントを再開しました：</value>
   </data>
   <data name="ErrorresumingtorrentexMessage" xml:space="preserve">
-    <value>トレントの再開中にエラーが発生しました:</value>
+    <value>トレントの再開中にエラーが発生しました：</value>
   </data>
   <data name="StartedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>シードを開始しました:</value>
+    <value>シードを開始しました：</value>
   </data>
   <data name="ErrorstartingseedingexMessage" xml:space="preserve">
-    <value>シードの開始中にエラーが発生しました:</value>
+    <value>シードの開始中にエラーが発生しました：</value>
   </data>
   <data name="StoppedseedingmanagerTorrent?Name" xml:space="preserve">
-    <value>シードを停止しました:</value>
+    <value>シードを停止しました：</value>
   </data>
   <data name="ErrorstoppingseedingexMessage" xml:space="preserve">
-    <value>シードの停止中にエラーが発生しました:</value>
+    <value>シードの停止中にエラーが発生しました：</value>
   </data>
   <data name="DeletedtorrentmanagerTorrent?Name" xml:space="preserve">
-    <value>トレントを削除しました: </value>
+    <value>トレントを削除しました:：</value>
   </data>
   <data name="DeletedfilesatmanagerSavePath" xml:space="preserve">
-    <value>ファイルを削除しました: </value>
+    <value>ファイルを削除しました:：</value>
   </data>
   <data name="ErrordeletingtorrentexMessage" xml:space="preserve">
-    <value>トレントの削除中にエラーが発生しました:</value>
+    <value>トレントの削除中にエラーが発生しました：</value>
   </data>
   <data name="Settingssavedsuccessfully" xml:space="preserve">
     <value>設定が正常に保存されました。
@@ -668,7 +668,7 @@
     <value>トレントのファイルからダウンロード中...</value>
   </data>
   <data name="Errorloadingtorrents" xml:space="preserve">
-    <value>トレントの読み込み中にエラーが発生しました:</value>
+    <value>トレントの読み込み中にエラーが発生しました：</value>
   </data>
   <data name="Selectthedownloadfolder" xml:space="preserve">
     <value>ダウンロードフォルダを選択してください</value>
@@ -719,13 +719,13 @@
     <value> 配信元を選択</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>カテゴリ</value>
+    <value>カテゴリ：</value>
   </data>
   <data name="Searchresultslimit" xml:space="preserve">
     <value>検索結果数の上限：</value>
   </data>
   <data name="Sources" xml:space="preserve">
-    <value>配信元</value>
+    <value>配信元：</value>
   </data>
   <data name="Sortby" xml:space="preserve">
     <value>並び替え：</value>
@@ -746,7 +746,7 @@
     <value>検索中...</value>
   </data>
   <data name="Searchtimeout" xml:space="preserve">
-    <value>検索のタイムアウト:</value>
+    <value>検索のタイムアウト：</value>
   </data>
   <data name="Invalidtorlimitpersource" xml:space="preserve">
     <value>配信元ごとの検索結果数の上限が無効です。</value>

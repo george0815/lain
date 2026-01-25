@@ -43,7 +43,12 @@ namespace lain
 
                 // Register encodings for legacy code pages (e.g., Shift-JIS)
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                Console.OutputEncoding = Encoding.GetEncoding(932); // Japanese encoding
+
+                // Enable UTF-8
+                Application.UseSystemConsole = true;
+                Console.InputEncoding = Encoding.UTF8;
+                Console.OutputEncoding = Encoding.UTF8;
+
 
                 // ------------------------------
                 // Load settings and plugins
@@ -55,16 +60,6 @@ namespace lain
                 if (Ghidorah.QbSources == null || Ghidorah.QbSources.Length == 0)
                 {
                     Settings.Current.UseQbittorrentPlugins = false;
-                }
-
-                // ------------------------------
-                // Platform-specific adjustments
-                // ------------------------------
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    // Linux / WSL support
-                    Application.UseSystemConsole = true;
-                    Console.OutputEncoding = Encoding.UTF8; // UTF-8 for terminal
                 }
 
                 // ------------------------------
