@@ -1934,6 +1934,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Torrent startup failed:.
+        /// </summary>
+        internal static string TorrentstartupfailedexMessage {
+            get {
+                return ResourceManager.GetString("TorrentstartupfailedexMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trackers:.
         /// </summary>
         internal static string Trackers {

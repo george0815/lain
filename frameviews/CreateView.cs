@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using lain.helpers;
 using Terminal.Gui;
 using TextCopy;
 

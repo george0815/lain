@@ -285,7 +285,7 @@
   <data name="Torrentdownloadstarted" xml:space="preserve">
     <value>トレントのダウンロードが開始されました。</value>
   </data>
-  <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
+  <data name="TorrentstartupfailedexMessage" xml:space="preserve">
     <value>トレントの開始に失敗しました：</value>
   </data>
   <data name="yyyy-MM-dd" xml:space="preserve">

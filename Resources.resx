@@ -285,7 +285,7 @@
   <data name="Torrentdownloadstarted" xml:space="preserve">
     <value>Torrent download started.</value>
   </data>
-  <data name="Torrentstartupfailed&#xA;exMessage" xml:space="preserve">
+  <data name="TorrentstartupfailedexMessage" xml:space="preserve">
     <value>Torrent startup failed:</value>
   </data>
   <data name="yyyy-MM-dd" xml:space="preserve">
