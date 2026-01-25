@@ -308,6 +308,7 @@ namespace lain
             {
                 Application.Top.RemoveAll();
                 Application.RequestStop();
+
             }
         }
 

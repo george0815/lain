@@ -102,6 +102,19 @@ namespace lain
                     // Cleanup / persist data
                     // ------------------------------
                     Log.Save(); // save logs to file
+
+                    // Shutdown Terminal.Gui
+                    Application.Shutdown();
+
+                    // Restore terminal state if on Linux or macOS
+                    if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+                    {
+                        Console.Write("\x1b[0m");      // reset attributes
+                        Console.Write("\x1b[?25h");   // show cursor
+                        Console.Write("\x1b[?1049l"); // leave alt screen
+                        Console.Out.Flush();
+                    }
+
                 }
             }
         }

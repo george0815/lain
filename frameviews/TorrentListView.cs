@@ -212,8 +212,8 @@ public class TorrentListView : FrameView
                 string seeders = m.Peers.Seeds.ToString();
 
                 // Download/upload rates in kB/s
-                string downloadRate = $"{m.Monitor.DownloadRate / 1024:0.0}kB/s";
-                string uploadRate = $"{m.Monitor.UploadRate / 1024:0.0}kB/s";
+                string downloadRate = $"{m.Monitor.DownloadRate / 1024:0.0} kB/s";
+                string uploadRate = $"{m.Monitor.UploadRate / 1024:0.0} kB/s";
 
                 _tableData.Rows.Add(
                     name,
