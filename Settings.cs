@@ -113,7 +113,7 @@ namespace lain
 
         public string SortBy { get; set; } = Resources.Source;
 
-        public bool UseQbittorrentPlugins { get; set; } = true;
+        public bool UseQbittorrentPlugins { get; set; } = false;
     }
 
 
