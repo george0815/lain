@@ -47,6 +47,7 @@ namespace lain.frameviews
             int y = 1;
 
             #region SEARCH ENGINE SETTINGS
+
             // -------------------
             // Ghidorah search configuration
             // -------------------
@@ -245,6 +246,7 @@ namespace lain.frameviews
             );
 
             #region EVENT HANDLERS
+
             // -------------------
             // Settings logic and validation
             // -------------------

@@ -787,4 +787,7 @@
   <data name="Errors" xml:space="preserve">
     <value>Errors</value>
   </data>
+  <data name="Errorwrittentolog" xml:space="preserve">
+    <value>Error initializing Ghidorah, see log for more details.</value>
+  </data>
 </root>

@@ -787,4 +787,7 @@
   <data name="Errors" xml:space="preserve">
     <value>エラー</value>
   </data>
+  <data name="Errorwrittentolog" xml:space="preserve">
+    <value>ギドラの初期化中にエラーが発生しました。詳細はログを確認してください。</value>
+  </data>
 </root>

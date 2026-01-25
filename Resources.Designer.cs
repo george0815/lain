@@ -700,6 +700,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error initializing Ghidorah, see log for more details..
+        /// </summary>
+        internal static string Errorwrittentolog {
+            get {
+                return ResourceManager.GetString("Errorwrittentolog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string Exit {

@@ -134,8 +134,8 @@ namespace lain.helpers
             // Non-zero exit code indicates an error
             if (process.ExitCode != 0)
             {
-                Log.Write($"{Resources.Ghidoraherror}: {error}");
-                return $"{Resources.Ghidoraherror}: {error}";
+                Log.Write($"{Resources.Ghidoraherror} {error}");
+                return $"{Resources.Ghidoraherror} {error}"; 
             }
 
             // Return raw plugin list if status check not requested
@@ -164,7 +164,7 @@ namespace lain.helpers
             {
                 FileName = ExeFileName,
                 Arguments =
-                    $"{args.Query} " +
+                    $"\"{args.Query}\" " +
                     $"--limit {args.Limit} " +
                     $"--total_limit {args.TotalLimit} " +
                     $"--categories {categories} " +
@@ -206,8 +206,8 @@ namespace lain.helpers
 
             if (process.ExitCode != 0)
             {
-                Log.Write($"{Resources.Ghidoraherror}: {error}");
-                return $"{{\"data\":[],\"errors\":[\"{Resources.Ghidoraherror}: {error}\"]}}";
+                Log.Write($"{Resources.Ghidoraherror} {error}");
+                return $"{{\"data\":[],\"errors\":[\"{Resources.Errorwrittentolog}\"]}}";
             }
 
             return output; // Return JSON search result
