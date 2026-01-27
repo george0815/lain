@@ -449,20 +449,28 @@ namespace lain
 
 
 
-            //updates status of torrent download in CLI mode
+
             static void PrintStatus()
             {
                 try
-                {              
-                        if (Log.LogList.Count > 0 )
+                {
+                    if (Log.LogList.Count > 0)
+                    {
+                        var latest = Log.LogList[^1];
+
+                        if (latest != Log._lastPrintedLog)
                         {
-                            Console.WriteLine(Log.LogList[^1]); // latest entry
-                        }    
+                            Console.WriteLine(latest);
+                            Log._lastPrintedLog = latest;
+                        }
+                    }
                 }
-                catch (TaskCanceledException) {} // Expected when cancelled — safe to ignore
-            
-            
+                catch (TaskCanceledException)
+                {
+                    // Expected when cancelled — safe to ignore
+                }
             }
+
 
 
 

@@ -22,6 +22,13 @@ namespace lain.helpers
         /// </summary>
         static internal List<string> LogList { get; set; } = [];
 
+
+        /// <summary>
+        /// Used for only printing new log entries in CLI/headless mode.
+        /// </summary>
+        static internal string _lastPrintedLog = "";
+
+
         /// <summary>
         /// Adds a new log entry with timestamp.
         /// </summary>

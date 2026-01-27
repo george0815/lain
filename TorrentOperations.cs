@@ -100,6 +100,7 @@ namespace lain
             data.MaxDownloadRate = Settings.Current.MaxDownloadSpeed;
             data.MaxUploadRate = Settings.Current.MaxUploadSpeed;
             data.UseDht = true;
+            data.UseMagnetLink = false;
 
             data.TorPath = data.DownPath;
             data.DownPath = "./";
@@ -126,8 +127,11 @@ namespace lain
             // -------------------------------
             // Handle Magnet Link
             // -------------------------------
-            if (!string.IsNullOrWhiteSpace(data.MagnetUrl))
+            if (data.UseMagnetLink)
             {
+                if (string.IsNullOrWhiteSpace(data.MagnetUrl) || !data.MagnetUrl.StartsWith("magnet:?"))
+                    throw new ArgumentException(Resources.Thisdoesnotappeartobeavalidmagnetlink);
+
                 MagnetLink magnet = MagnetLink.Parse(data.MagnetUrl);
                 var manager = await Engine.AddAsync(magnet, data.DownPath, tSettings);
 
