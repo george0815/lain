@@ -1,15 +1,21 @@
-# LAIN - TUI bittorrent client
+# lain - TUI bittorrent client
 
 TUI bittorrent client meant to be run from the terminal. Main branch currently supports DHT, magnet links, UPnP, and private torrents. Users can download and create torrents, as well as generate magnet links for any torrent they download. Japanese translation also available. 
 
-A search function (similar to qBittorrent's) will be added in the near future. 
+<img width="1517" height="741" alt="Screenshot 2026-01-25 220754" src="https://github.com/user-attachments/assets/047723cf-bf91-4b75-91db-35d4626990d6" />
+<img width="1492" height="783" alt="Screenshot 2026-01-25 222108" src="https://github.com/user-attachments/assets/b6b24a7d-7dba-4f82-9df2-a9134f796ca2" />
 
 
-<img width="1116" height="599" alt="スクリーンショット 2025-12-09 034038" src="https://github.com/user-attachments/assets/a30f3f8c-5dd4-4c98-94bc-f513e0317c9e" />
+## Search
+A search engine is also included that scrapes popular sites for torrents. Users can additionally install qBittorrent plugins and start torrent downloads directly from the search results list.
+A plugin can be installed by placing the .py file into the qv_env/engines directory.
 
 
 
-<img width="1022" height="515" alt="スクリーンショット 2025-12-09 034257" src="https://github.com/user-attachments/assets/c3b67e3e-bb7a-427c-b480-7f1d084af1f9" />
 
 
-<img width="959" height="474" alt="スクリーンショット 2025-12-09 034403" src="https://github.com/user-attachments/assets/6cd5f123-8e45-40e1-8565-cb75b7df5bd4" />
+<img width="1767" height="835" alt="Screenshot 2026-01-25 221454" src="https://github.com/user-attachments/assets/c120b545-e28c-40cc-ac41-696cede63fb5" />
+<img width="1777" height="838" alt="Screenshot 2026-01-25 221421" src="https://github.com/user-attachments/assets/0ab97a01-5a05-487f-b434-6b72760c5639" />
+
+
+
