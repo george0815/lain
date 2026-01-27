@@ -51,6 +51,7 @@ namespace lain
         // List of all active torrent managers
         internal static List<TorrentManager> Managers { get; } = [];
 
+
         // List of all TorrentData objects for serialization
         public static List<TorrentData> TorrentDataDTOList { get; set; } = [];
 
@@ -264,8 +265,8 @@ namespace lain
 
                         Log.Write(
                             $"[{m.Torrent.Name}] {m.Progress:0.00}% " +
-                            $"DL: {m.Monitor.DownloadRate / 1024:0.0}kB/s " +
-                            $"UL: {m.Monitor.UploadRate / 1024:0.0}kB/s"
+                            $"DL: {m.Monitor.DownloadRate / 1024:0.0} kB/s " +
+                            $"UL: {m.Monitor.UploadRate / 1024:0.0} kB/s"
                         );
                     }
 
@@ -298,7 +299,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.Errorloadingtorrents} {ex.Message}");
+                Log.Write($"{Resources.Errorloadingtorrents} {ex.Message}");
                 Settings.Save();
             }
         }
@@ -315,7 +316,7 @@ namespace lain
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{Resources.ErrorsavingtorrentsexMessage} {ex.Message}");
+                Log.Write($"{Resources.ErrorsavingtorrentsexMessage} {ex.Message}");
             }
         }
 
