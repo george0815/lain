@@ -34,7 +34,7 @@ namespace lain
             // Optional debug: change culture to Japanese
             // ------------------------------
             CultureInfo ci = new("ja-JP");
-            Thread.CurrentThread.CurrentUICulture = ci;
+            //Thread.CurrentThread.CurrentUICulture = ci;
 
 
             // Register encodings for legacy code pages (e.g., Shift-JIS)
