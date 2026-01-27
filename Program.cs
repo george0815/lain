@@ -29,9 +29,27 @@ namespace lain
         public static async Task Main(string[] args)
         {
 
+
+            // ------------------------------
+            // Optional debug: change culture to Japanese
+            // ------------------------------
+            CultureInfo ci = new("ja-JP");
+            Thread.CurrentThread.CurrentUICulture = ci;
+
+
+            // Register encodings for legacy code pages (e.g., Shift-JIS)
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            // Enable UTF-8
+            Application.UseSystemConsole = true;
+            Console.InputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = Encoding.UTF8;
+
+
             // ------------------------------
             // CLI Entry point
             // ------------------------------
+
             if (args.Length > 0)
             {
 
@@ -57,7 +75,12 @@ namespace lain
                                     var result = Ghidorah.CheckStatusPlugins(true);
                                     Console.WriteLine(result);
                                 }
-                                catch (Exception ex) { Console.WriteLine(ex.Message); }
+                                catch (Exception ex)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine(ex.Message); 
+                                    Console.ResetColor();
+                                }
                             });
 
                             break;
@@ -84,16 +107,20 @@ namespace lain
                             //Invlaid torrent/magnet
                             if (!input.StartsWith("magnet:?") && flag == "-M")
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{Resources.Error}: {Resources.Thisdoesnotappeartobeavalidmagnetlink}");
+                                Console.ResetColor();
                                 break;
                             }
                             if (flag == "-F" && !File.Exists(input))
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{Resources.Error}: {Resources.Torrentfiledoesnotexist}");
+                                Console.ResetColor();
                                 break;
                             }
 
-                            Console.WriteLine($"Starting download: {input}");
+                            Console.WriteLine($"{Resources.Startingdownload} {input}");
 
                             // Build settings object 
                             TorrentData settings = new()
@@ -118,18 +145,22 @@ namespace lain
 
                                 await downloadTask; // This just starts the torrent, doesn't wait for completion
 
-                                Console.WriteLine("Download started, waiting for completion...");
+                                Console.WriteLine(Resources.Downloadstarted);
 
                                 // Wait for all torrents to finish
                                 await WaitForTorrentsAsync();
 
                                 cts.Cancel();
 
-                                Console.WriteLine("All downloads complete!");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine(Resources.Alldownloadscomplete);
+                                Console.ResetColor();
                             }
                             catch (Exception ex)
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"Error: {ex.Message}");
+                                Console.ResetColor();
                             }
 
 
@@ -157,14 +188,18 @@ namespace lain
                             if (string.IsNullOrWhiteSpace(inputPath) ||
                                 (!File.Exists(inputPath) && !Directory.Exists(inputPath)))
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{Resources.Error}: {Resources.Invalidfile_folderpath}");
+                                Console.ResetColor();
                                 return;
                             }
 
                             // Validate output path.
                             if (string.IsNullOrWhiteSpace(outPath))
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{Resources.Error}: {Resources.Outputpathdoesnotexist}");
+                                Console.ResetColor();
                                 return;
                             }
 
@@ -179,7 +214,9 @@ namespace lain
                                         trackerList.Add(trimmed);
                                     else
                                     {
+                                        Console.ForegroundColor = ConsoleColor.Red;
                                         Console.WriteLine($"{Resources.Error}: {Resources.InvalidtrackerURL} - {trimmed}");
+                                        Console.ResetColor();
                                         return;
                                     }
                                 }
@@ -202,6 +239,8 @@ namespace lain
                                     PieceSize = 512 * 1024,
                                     StartSeedingAfterCreation = true,
                                     IsPrivate = false,
+                                    Comment = "",
+                                    Publisher = ""
 
                                 };
 
@@ -214,15 +253,21 @@ namespace lain
                                     }
                                     catch (Exception ex)
                                     {
+                                        Console.ForegroundColor = ConsoleColor.Red;
                                         Console.WriteLine($"{Resources.Torrentcreationfailed}\n{ex.Message}");
+                                        Console.ResetColor();
                                     }
                                 });
 
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine(Resources.Torrentcreatedsuccessfully_);
+                                Console.ResetColor();
                             }
                             catch (Exception ex)
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{Resources.Torrentcreationfailed}\n{ex.Message}");
+                                Console.ResetColor();
                             }
                         
                        
@@ -267,7 +312,7 @@ namespace lain
                                     Console.WriteLine(res);
                                     SaveToJson(res);
                                     Console.ForegroundColor = ConsoleColor.Green;
-                                    Console.WriteLine("Results saved to JSON.");
+                                    Console.WriteLine(Resources.Resultssavedtojson);
                                     Console.ResetColor();
                                 }
                                 catch (Exception ex) { Console.WriteLine(ex.Message); }
@@ -295,19 +340,7 @@ namespace lain
             else
             {
 
-                // ------------------------------
-                // Optional debug: change culture to Japanese
-                // ------------------------------
-                CultureInfo ci = new("ja-JP");
-                //Thread.CurrentThread.CurrentUICulture = ci;
-
-                // Register encodings for legacy code pages (e.g., Shift-JIS)
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-                // Enable UTF-8
-                Application.UseSystemConsole = true;
-                Console.InputEncoding = Encoding.UTF8;
-                Console.OutputEncoding = Encoding.UTF8;
+                
 
 
                 // ------------------------------
@@ -326,6 +359,7 @@ namespace lain
                 // Initialize Terminal.Gui
                 // ------------------------------
                 Application.Init();
+
 
                 // Top-level container for windows
                 var top = Application.Top;
@@ -409,15 +443,16 @@ namespace lain
                 }
             }
 
-
+                
             // Prints usage instructions and exits the application
             static void PrintUsageAndExit()
             {
-                Console.WriteLine("----------------------------USAGE----------------------------");
-                Console.WriteLine("Download: lain --download <-F | -M> <torrent file | magnet link>");
-                Console.WriteLine("Create: lain --create <folder/file path> <output path> <tracker links>");
-                Console.WriteLine("Search: lain --search <query>");
-                Console.WriteLine("Check status: lain --status");
+
+                Console.WriteLine($"----------------------------{Resources.Help}----------------------------");
+                Console.WriteLine($"{Resources.Download}: lain --download <-F | -M> <{Resources.Torrentfile} | {Resources.Magnetlinklower}>");
+                Console.WriteLine($"{Resources.Create}: lain --create <{Resources.Folderslashfilepath}> <{Resources.Outputpathlower}> <{Resources.Trackerlink}>");
+                Console.WriteLine($"{Resources.Search}: lain --search <{Resources.Query}>");
+                Console.WriteLine($"{Resources.Checkstatus}: lain --status");
                 Console.WriteLine("-------------------------------------------------------------");
 
 
@@ -445,7 +480,6 @@ namespace lain
                     Console.WriteLine($"{Resources.Error}: {ex.Message}");
                 }
             }
-
 
 
 

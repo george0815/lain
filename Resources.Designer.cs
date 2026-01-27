@@ -160,6 +160,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All downloads complete..
+        /// </summary>
+        internal static string Alldownloadscomplete {
+            get {
+                return ResourceManager.GetString("Alldownloadscomplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applications.
         /// </summary>
         internal static string Applications {
@@ -565,6 +574,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download started, waiting for completion....
+        /// </summary>
+        internal static string Downloadstarted {
+            get {
+                return ResourceManager.GetString("Downloadstarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable detailed logging.
         /// </summary>
         internal static string Enabledetailedlogging {
@@ -772,6 +790,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to folder/file path.
+        /// </summary>
+        internal static string Folderslashfilepath {
+            get {
+                return ResourceManager.GetString("Folderslashfilepath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Games.
         /// </summary>
         internal static string Games {
@@ -858,6 +885,15 @@ namespace lain {
         internal static string HEADER {
             get {
                 return ResourceManager.GetString("HEADER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HELP.
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
             }
         }
         
@@ -1132,6 +1168,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to magnet link.
+        /// </summary>
+        internal static string Magnetlinklower {
+            get {
+                return ResourceManager.GetString("Magnetlinklower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnet link.
         /// </summary>
         internal static string MagnetLinkSearch {
@@ -1321,6 +1366,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to output path.
+        /// </summary>
+        internal static string Outputpathlower {
+            get {
+                return ResourceManager.GetString("Outputpathlower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paused torrent:.
         /// </summary>
         internal static string PausedtorrentmanagerTorrent_Name {
@@ -1402,6 +1456,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to query.
+        /// </summary>
+        internal static string Query {
+            get {
+                return ResourceManager.GetString("Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Red.
         /// </summary>
         internal static string Red {
@@ -1416,6 +1479,15 @@ namespace lain {
         internal static string Results {
             get {
                 return ResourceManager.GetString("Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Results saved to JSON..
+        /// </summary>
+        internal static string Resultssavedtojson {
+            get {
+                return ResourceManager.GetString("Resultssavedtojson", resourceCulture);
             }
         }
         
@@ -1745,6 +1817,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Starting download:.
+        /// </summary>
+        internal static string Startingdownload {
+            get {
+                return ResourceManager.GetString("Startingdownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start seeding: .
         /// </summary>
         internal static string Startseeding {
@@ -1907,6 +1988,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to torrent file.
+        /// </summary>
+        internal static string Torrentfile {
+            get {
+                return ResourceManager.GetString("Torrentfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Torrent file does not exist..
         /// </summary>
         internal static string Torrentfiledoesnotexist {
@@ -1948,6 +2038,15 @@ namespace lain {
         internal static string TorrentstartupfailedexMessage {
             get {
                 return ResourceManager.GetString("TorrentstartupfailedexMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tracker link.
+        /// </summary>
+        internal static string Trackerlink {
+            get {
+                return ResourceManager.GetString("Trackerlink", resourceCulture);
             }
         }
         

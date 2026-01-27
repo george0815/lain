@@ -790,4 +790,37 @@
   <data name="Errorwrittentolog" xml:space="preserve">
     <value>Error initializing Ghidorah, see log for more details.</value>
   </data>
+  <data name="Startingdownload" xml:space="preserve">
+    <value>Starting download:</value>
+  </data>
+  <data name="Downloadstarted" xml:space="preserve">
+    <value>Download started, waiting for completion...</value>
+  </data>
+  <data name="Alldownloadscomplete" xml:space="preserve">
+    <value>All downloads complete.</value>
+  </data>
+  <data name="Resultssavedtojson" xml:space="preserve">
+    <value>Results saved to JSON.</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>HELP</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>query</value>
+  </data>
+  <data name="Torrentfile" xml:space="preserve">
+    <value>torrent file</value>
+  </data>
+  <data name="Magnetlinklower" xml:space="preserve">
+    <value>magnet link</value>
+  </data>
+  <data name="Folderslashfilepath" xml:space="preserve">
+    <value>folder/file path</value>
+  </data>
+  <data name="Outputpathlower" xml:space="preserve">
+    <value>output path</value>
+  </data>
+  <data name="Trackerlink" xml:space="preserve">
+    <value>tracker link</value>
+  </data>
 </root>

@@ -790,4 +790,37 @@
   <data name="Errorwrittentolog" xml:space="preserve">
     <value>ギドラの初期化中にエラーが発生しました。詳細はログを確認してください。</value>
   </data>
+  <data name="Startingdownload" xml:space="preserve">
+    <value>ダウンロードを開始しています：</value>
+  </data>
+  <data name="Downloadstarted" xml:space="preserve">
+    <value>ダウンロード開始。完了待ち…</value>
+  </data>
+  <data name="Alldownloadscomplete" xml:space="preserve">
+    <value>すべてのダウンロードが完了しました。</value>
+  </data>
+  <data name="Resultssavedtojson" xml:space="preserve">
+    <value>検索結果をJSONファイルに保存しました。</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>検索語</value>
+  </data>
+  <data name="Torrentfile" xml:space="preserve">
+    <value>トレントファイル</value>
+  </data>
+  <data name="Magnetlinklower" xml:space="preserve">
+    <value>マグネットリンク</value>
+  </data>
+  <data name="Folderslashfilepath" xml:space="preserve">
+    <value>ファイル/フォルダ</value>
+  </data>
+  <data name="Outputpathlower" xml:space="preserve">
+    <value>出力先</value>
+  </data>
+  <data name="Trackerlink" xml:space="preserve">
+    <value>トラッカー</value>
+  </data>
 </root>
