@@ -99,8 +99,8 @@ namespace lain
                             TorrentData settings = new()
                             {
                                 UseMagnetLink = flag == "-M",
-                                MagnetUrl = input,
-                                TorPath = input,
+                                MagnetUrl = flag == "-M" ? input : "",
+                                TorPath = flag == "-F" ? input : "",
                                 DownPath = Settings.Current.DefaultDownloadPath!,
                                 MaxConnections = Settings.Current.MaxConnections,
                                 MaxDownloadRate = Settings.Current.MaxDownloadSpeed,
@@ -385,9 +385,8 @@ namespace lain
 
 
             // Waits for all active torrents to complete downloading
-            static async Task WaitForTorrentsAsync() {
-
-
+            static async Task WaitForTorrentsAsync()
+            {
                 while (TorrentOperations.Managers.Count > 0)
                 {
                     bool allDone = true;
@@ -396,8 +395,8 @@ namespace lain
                     {
                         if (m == null) continue;
 
-                        // Still downloading if state is Downloading or Metadata
-                        if (m.State == TorrentState.Downloading || m.State == TorrentState.Metadata)
+                        // Still active if not Seeding or Stopped
+                        if (m.State != TorrentState.Seeding && m.State != TorrentState.Stopped)
                         {
                             allDone = false;
                             break;
@@ -408,10 +407,8 @@ namespace lain
 
                     await Task.Delay(1000); // Wait 1s before checking again
                 }
-
-
-
             }
+
 
             // Prints usage instructions and exits the application
             static void PrintUsageAndExit()
