@@ -8,7 +8,7 @@ TUI bittorrent client meant to be run from the terminal. Main branch currently s
 
 ## Search
 A search engine is also included that scrapes popular sites for torrents. Users can additionally install qBittorrent plugins and start torrent downloads directly from the search results list.
-A plugin can be installed by placing the .py file into the qv_env/engines directory.
+A plugin can be installed by placing the .py file into the qb_env/engines directory.
 
 
 
