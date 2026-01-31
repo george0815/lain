@@ -14,16 +14,26 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using lain.protocol;
 using Terminal.Gui;
 
 namespace lain
 {
     /// <summary>
     /// Entry point for the Lain application.
-    /// Initializes settings, plugins, and starts the Terminal.Gui interface.
+    /// The main branch uses MonoTorrent, however I wanted
+    /// to try rolling my own BitTorrent protocol implementation 
+    /// so I created this branch separately. I mainly made this for
+    /// research/learning purposes, so comments will be more common,
+    /// and more thorough as I feel explaining the program to myself as
+    /// I write it helps me get a deeper understanding. 
+    ///
+    /// The original idea comes from Sean O'Flynn's 
+    /// "Building a BitTorrent client from scratch in C#", so big thanks to him. 
     /// </summary>
     /// <author>George Hunter S.</author>
     /// <created>Jan, 2026</created>
+
     class Program
     {
         public static async Task Main(string[] args)
@@ -43,6 +53,39 @@ namespace lain
 
                 switch (command)
                 {
+
+                    // ------------------------------
+                    // Test parsing torrent file
+                    // ------------------------------
+
+                    case "--parse":
+                        {
+
+
+                            try
+                            {
+                                byte[] ToBeParsed = File.ReadAllBytes("libre.torrent");
+
+
+
+                                Console.WriteLine("Parsing torrent file...");
+                                var torrent = Parser.Parse(ToBeParsed);
+
+                                Console.WriteLine(torrent.ToString);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error parsing torrent: {ex.Message}");
+                            }
+
+
+
+
+
+                            break;
+                        }
+
+
                     // ------------------------------
                     // Check status
                     // ------------------------------
