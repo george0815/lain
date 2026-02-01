@@ -27,6 +27,19 @@ namespace lain.protocol
 
         internal void MoveNext() {Position++;}
 
+
+        internal int Mark() => Position;
+        internal byte[] Slice (int start, int end)
+        {
+            int length = end - start;
+            byte[] slice = new byte[length];
+            Array.Copy(_bytes, start, slice, 0, length);
+            return slice;
+
+        }
+
+
+
     }
 
 
@@ -86,6 +99,7 @@ namespace lain.protocol
         #region Parse Helper Methods
 
 
+
         private static Dictionary<string, object> ParseDict(ByteReader reader)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -96,8 +110,23 @@ namespace lain.protocol
 
                 byte[] keyByte = ParseString(reader);
                 string key = Encoding.UTF8.GetString(keyByte);
-                object value = ParseNext(reader);
-                dict[key] = value;
+
+                if (key == "info")
+                {
+                    int start = reader.Mark();
+                    object value = ParseNext(reader);
+                    int end = reader.Mark();
+
+                    dict[key] = value;
+                    dict["_raw_info"] = reader.Slice(start, end);
+                }
+                else
+                {
+                    dict[key] = ParseNext(reader);
+
+                }
+
+
             }
             // Move past the 'e' character
             reader.MoveNext();
