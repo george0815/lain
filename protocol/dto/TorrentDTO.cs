@@ -1,111 +1,277 @@
-﻿using System;
+﻿// =====================================================================================
+// TorrentDto.cs
+//
+// Data Transfer Object representing the root of a BitTorrent metainfo file (.torrent).
+//
+// This DTO models the top-level bencoded dictionary defined by the BitTorrent
+// specification and acts as the primary bridge between:
+// - Raw bencode parsing output
+// - Strongly-typed application logic
+// - Re-serialization back into bencode when needed
+//
+// Responsibilities:
+// - Hold tracker configuration (announce, announce-list)
+// - Store optional metadata (comment, created by, creation date)
+// - Reference the InfoDto, which contains all payload-critical data
+// - Preserve raw bencoded "info" bytes to guarantee info-hash correctness
+//
+// Design Notes:
+// - All properties are init-only to maintain immutability once constructed.
+// - Binary protocol fields are stored as byte[] to avoid encoding ambiguity.
+// - Conversion helpers expose decoded string views for convenience without
+//   mutating underlying data.
+// - Serialization logic is careful to preserve the original raw "info"
+//   dictionary when available.
+//
+// =====================================================================================
+
+using lain.protocol.helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace lain.protocol.dto
 {
+    /// <summary>
+    /// Strongly-typed representation of a BitTorrent metainfo file.
+    ///
+    /// This object corresponds to the root dictionary of a .torrent file
+    /// and encapsulates tracker configuration, metadata, and the embedded
+    /// InfoDto which defines the actual payload structure.
+    /// </summary>
     internal sealed class TorrentDto
     {
 
+        #region BENCODE KEYS AS BYTES
+
+        internal static class BencodeKeys
+        {
+            public static readonly byte[] Announce = Encoding.ASCII.GetBytes("announce");
+            public static readonly byte[] AnnounceList = Encoding.ASCII.GetBytes("announce-list");
+            public static readonly byte[] Comment = Encoding.ASCII.GetBytes("comment");
+            public static readonly byte[] CreatedBy = Encoding.ASCII.GetBytes("created by");
+            public static readonly byte[] CreationDate = Encoding.ASCII.GetBytes("creation date");
+            public static readonly byte[] UrlList = Encoding.ASCII.GetBytes("url-list");
+            public static readonly byte[] Sources = Encoding.ASCII.GetBytes("sources");
+            public static readonly byte[] Info = Encoding.ASCII.GetBytes("info");
+        }
+
+        #endregion
+
+
+        #region TRACKER CONFIGURATION
+
+        /// <summary>
+        /// Primary tracker URL (announce).
+        ///
+        /// Stored as raw UTF-8 bytes to preserve the original encoding.
+        /// </summary>
         internal byte[]? Announce { get; init; }
+
+        /// <summary>
+        /// Tiered tracker list (announce-list).
+        ///
+        /// Each inner list represents a tracker tier; trackers within
+        /// the same tier are considered equivalent.
+        /// </summary>
         internal List<List<byte[]>>? AnnounceList { get; init; }
+
+        #endregion
+
+        #region PAYLOAD INFORMATION
+
+        /// <summary>
+        /// Parsed "info" dictionary.
+        ///
+        /// This contains all payload-defining fields such as piece hashes,
+        /// file name(s), and piece length.
+        /// </summary>
         internal InfoDto? Info { get; init; }
 
+        #endregion
+
+        #region OPTIONAL METADATA
+
+        /// <summary>
+        /// Optional free-form comment.
+        /// </summary>
         internal byte[]? Comment { get; init; }
+
+        /// <summary>
+        /// Identifier of the tool or client that created the torrent.
+        /// </summary>
         internal byte[]? CreatedBy { get; init; }
+
+        /// <summary>
+        /// Creation timestamp stored as a UNIX epoch value (seconds).
+        /// </summary>
         internal long? CreationDate { get; init; }
 
+        /// <summary>
+        /// Optional list of source URLs (non-standard extension).
+        /// </summary>
         internal List<byte[]>? Sources { get; init; }
+
+        /// <summary>
+        /// Optional web seed URLs (url-list).
+        /// </summary>
         internal List<byte[]>? UrlList { get; init; }
 
+        #endregion
 
-        internal DateTimeOffset? CreationDateTimeOffset => CreationDate != null ? DateTimeOffset.FromUnixTimeSeconds(CreationDate.Value) : null;
+        #region DERIVED / CONVENIENCE PROPERTIES
 
-        internal string AnnounceString => Announce != null ? Encoding.UTF8.GetString(Announce) : string.Empty;
-        internal string CommentString => Comment != null ? Encoding.UTF8.GetString(Comment) : string.Empty;
-        internal string CreatedByString => CreatedBy != null ? Encoding.UTF8.GetString(CreatedBy) : string.Empty;
+        /// <summary>
+        /// Creation date converted to a DateTimeOffset.
+        ///
+        /// Returns null if the creation date is not present.
+        /// </summary>
+        internal DateTimeOffset? CreationDateTimeOffset =>
+            CreationDate != null
+                ? DateTimeOffset.FromUnixTimeSeconds(CreationDate.Value)
+                : null;
 
-        internal IEnumerable<IEnumerable<string>>? AnnounceListStrings => AnnounceList?.Select(tier => tier.Select(url => Encoding.UTF8.GetString(url)));
+        /// <summary>
+        /// Decoded UTF-8 announce URL.
+        /// </summary>
+        internal string AnnounceString =>
+            Announce != null ? Encoding.UTF8.GetString(Announce) : string.Empty;
 
+        /// <summary>
+        /// Decoded UTF-8 comment.
+        /// </summary>
+        internal string CommentString =>
+            Comment != null ? Encoding.UTF8.GetString(Comment) : string.Empty;
 
-        internal Dictionary <string, object> ToBencodeModel()
+        /// <summary>
+        /// Decoded UTF-8 creator identifier.
+        /// </summary>
+        internal string CreatedByString =>
+            CreatedBy != null ? Encoding.UTF8.GetString(CreatedBy) : string.Empty;
+
+        /// <summary>
+        /// Decoded announce-list URLs grouped by tier.
+        /// </summary>
+        internal IEnumerable<IEnumerable<string>>? AnnounceListStrings =>
+            AnnounceList?.Select(tier => tier.Select(url => Encoding.UTF8.GetString(url)));
+
+        #endregion
+
+        #region BENCODE SERIALIZATION
+
+        /// <summary>
+        /// Converts this DTO into a bencode-compatible object model.
+        ///
+        /// The resulting dictionary can be passed directly to a bencode
+        /// serializer to regenerate a .torrent file.
+        ///
+        /// If the InfoDto contains raw bencoded info bytes, they are used
+        /// verbatim to preserve hash stability.
+        /// </summary>
+        internal SortedDictionary<byte[], object> ToBencodeModel()
         {
-            var dict = new Dictionary<string, object>();
+            var dict = new SortedDictionary<byte[], object>(ByteComparer.Instance);
 
             if (Announce != null)
-                dict["announce"] = Announce;
+                dict[BencodeKeys.Announce] = Announce;
+
             if (AnnounceList != null)
             {
-                dict["announce-list"] = AnnounceList
+                dict[BencodeKeys.AnnounceList] = AnnounceList
                     .Select(tier => tier.Cast<object>().ToList())
                     .Cast<object>()
                     .ToList();
             }
-            if (Comment != null)
-                dict["comment"] = Comment;
-            if (CreatedBy != null)
-                dict["created by"] = CreatedBy;
-            if (CreationDate != null)
-                dict["creation date"] = CreationDate.Value;
-            if (UrlList != null)
-                dict["url-list"] = UrlList.Cast<object>().ToList();
-            if (Sources != null)
-                dict["sources"] = Sources.Cast<object>().ToList();
 
+            if (Comment != null)
+                dict[BencodeKeys.Comment] = Comment;
+
+            if (CreatedBy != null)
+                dict[BencodeKeys.CreatedBy] = CreatedBy;
+
+            if (CreationDate != null)
+                dict[BencodeKeys.CreationDate] = CreationDate.Value;
+
+            if (UrlList != null)
+                dict[BencodeKeys.UrlList] = UrlList.Cast<object>().ToList();
+
+            if (Sources != null)
+                dict[BencodeKeys.Sources] = Sources.Cast<object>().ToList();
 
             if (Info != null)
             {
-                if (Info.RawBencodedInfo != null)
-                {
-                    dict["info"] = Info.RawBencodedInfo;
-                }
-                else
-                {
-                    dict["info"] = Info.ToBencodeModel();
-                }
+                // Prefer raw bencoded info bytes when available to
+                // guarantee correct info-hash reproduction.
+                dict[BencodeKeys.Info] = Info.RawBencodedInfo != null
+                    ? Info.RawBencodedInfo
+                    : Info.ToBencodeModel();
             }
 
             return dict;
-
         }
 
-        internal static TorrentDto MapToTorrentDTO(Dictionary<string, object> root)
+        #endregion
+
+        #region MAPPING FROM PARSED BENCODE
+
+        /// <summary>
+        /// Maps a parsed bencode dictionary into a TorrentDto.
+        ///
+        /// This method assumes the input dictionary originates from the
+        /// Parser and follows BitTorrent metainfo conventions.
+        ///
+        /// The "_raw_info" entry is expected to be present and is injected
+        /// into the InfoDto to preserve the exact info dictionary bytes.
+        /// </summary>
+        internal static TorrentDto MapToTorrentDTO(Dictionary<byte[], object> root)
         {
-            var infoDict = (Dictionary<string, object>)root["info"];
+            var infoDict = (Dictionary<byte[], object>)root[BencodeKeys.Info];
 
             return new TorrentDto
             {
-                Announce = (byte[])root["announce"],
-                Comment = root.TryGetValue("comment", out var c) ? (byte[])c : null,
-                CreatedBy = root.TryGetValue("created by", out var cb) ? (byte[])cb : null,
-                CreationDate = root.TryGetValue("creation date", out var cd) ? (long?)cd : null,
+                Announce = (byte[])root[BencodeKeys.Announce],
 
+                Comment = root.TryGetValue(BencodeKeys.Comment, out var c)
+                    ? (byte[])c
+                    : null,
 
-                UrlList = root.TryGetValue("url-list", out var ul) ? ((List<object>)ul).Cast<byte[]>().ToList() : null,
+                CreatedBy = root.TryGetValue(BencodeKeys.CreatedBy, out var cb)
+                    ? (byte[])cb
+                    : null,
 
-                Sources = root.TryGetValue("sources", out var s) ? ((List<object>)s).Cast<byte[]>().ToList() : null,
+                CreationDate = root.TryGetValue(BencodeKeys.CreationDate, out var cd)
+                    ? (long?)cd
+                    : null,
 
-                AnnounceList = root.TryGetValue("announce-list", out var al)
-            ? ((List<object>)al)
-                .Select(tier => ((List<object>)tier).Cast<byte[]>().ToList())
-                .ToList()
-            : null,
+                UrlList = root.TryGetValue(BencodeKeys.UrlList, out var ul)
+                    ? ((List<object>)ul).Cast<byte[]>().ToList()
+                    : null,
+
+                Sources = root.TryGetValue(BencodeKeys.Sources, out var s)
+                    ? ((List<object>)s).Cast<byte[]>().ToList()
+                    : null,
+
+                AnnounceList = root.TryGetValue(BencodeKeys.AnnounceList, out var al)
+                    ? ((List<object>)al)
+                        .Select(tier => ((List<object>)tier).Cast<byte[]>().ToList())
+                        .ToList()
+                    : null,
+
                 Info = new InfoDto
                 {
+                    Length = (long)infoDict[InfoDto.BencodeKeys.Length],
+                    Name = (byte[])infoDict[InfoDto.BencodeKeys.Name],
+                    PieceLength = (long)infoDict[InfoDto.BencodeKeys.PieceLength],
+                    Pieces = (byte[])infoDict[InfoDto.BencodeKeys.Pieces],
 
-                    Length = (long)infoDict["length"],
-                    Name = (byte[])infoDict["name"],
-                    PieceLength = (long)infoDict["piece length"],
-                    Pieces = (byte[])infoDict["pieces"],              
-                    RawBencodedInfo = (byte[])root["_raw_info"]
-
+                    // Raw info bytes captured during parsing
+                    RawBencodedInfo = (byte[])root[Parser.RawInfoKey]
                 }
             };
-            }
+        }
 
-
+        #endregion
     }
 }
