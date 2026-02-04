@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace lain.protocol.dto
 {
@@ -44,6 +45,7 @@ namespace lain.protocol.dto
         
         internal static class BencodeKeys
         {
+            public static readonly byte[] Path = Encoding.ASCII.GetBytes("path");
             public static readonly byte[] Length = Encoding.ASCII.GetBytes("length");
             public static readonly byte[] Name = Encoding.ASCII.GetBytes("name");
             public static readonly byte[] PieceLength = Encoding.ASCII.GetBytes("piece length");
@@ -51,6 +53,8 @@ namespace lain.protocol.dto
             public static readonly byte[] Md5Sum = Encoding.ASCII.GetBytes("md5sum");
             public static readonly byte[] Sha1 = Encoding.ASCII.GetBytes("sha1");
             public static readonly byte[] Sha256 = Encoding.ASCII.GetBytes("sha256");
+            public static readonly byte[] Files = Encoding.ASCII.GetBytes("files");
+
         }
 
         #endregion
@@ -61,8 +65,8 @@ namespace lain.protocol.dto
         /// <summary>
         /// Total length of the torrent payload in bytes.
         ///
-        /// For single-file torrents, this represents the file size.
-        /// For multi-file torrents, this is typically the sum of all files.
+        /// Present ONLY for single-file torrents
+        /// This field must NOT exist for mult-file torrents
         /// </summary>
         internal long? Length { get; init; }
 
@@ -71,6 +75,9 @@ namespace lain.protocol.dto
         /// All files that will be download
         ///</summary>
         internal List<FileDto>? Files { get; init; }
+
+  
+
 
 
         /// <summary>
@@ -197,11 +204,27 @@ namespace lain.protocol.dto
         {
             var dict = new Dictionary<byte[], object>
             {
-                [BencodeKeys.Length] = Length!,
                 [BencodeKeys.Name] = Name!,
                 [BencodeKeys.PieceLength] = PieceLength,
                 [BencodeKeys.Pieces] = Pieces!
             };
+
+            if (Files != null)
+            {
+                dict[BencodeKeys.Files] = Files
+                    .Select(f => new Dictionary<byte[], object>
+                    {
+                        [BencodeKeys.Length] = f.Length,
+                        [BencodeKeys.Path] = f.Path.Cast<object>().ToList()
+
+
+                    })
+                    .Cast<object>().ToList();
+            }
+            else
+            {
+                dict[BencodeKeys.Length] = Length!;
+            }
 
             if (Md5Sum != null)
                 dict[BencodeKeys.Md5Sum] = Md5Sum;
@@ -212,7 +235,9 @@ namespace lain.protocol.dto
             if (Sha256 != null)
                 dict[BencodeKeys.Sha256] = Sha256;
 
-            return dict;
+
+            return dict;    
+
         }
 
         #endregion

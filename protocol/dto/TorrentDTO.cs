@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 
 namespace lain.protocol.dto
@@ -229,9 +230,13 @@ namespace lain.protocol.dto
         {
             var infoDict = (Dictionary<byte[], object>)root[BencodeKeys.Info];
 
+
+            bool isSingleFile = infoDict.ContainsKey(InfoDto.BencodeKeys.Length);
+
+
             return new TorrentDto
             {
-                Announce = (byte[])root[BencodeKeys.Announce],
+                Announce = root.TryGetValue(BencodeKeys.Announce, out var a) ? (byte[])a : null,
 
                 Comment = root.TryGetValue(BencodeKeys.Comment, out var c)
                     ? (byte[])c
@@ -259,18 +264,96 @@ namespace lain.protocol.dto
                         .ToList()
                     : null,
 
+
+
                 Info = new InfoDto
                 {
-                    Length = (long)infoDict[InfoDto.BencodeKeys.Length],
+
+
+
+                    Length = isSingleFile ? (long)infoDict[InfoDto.BencodeKeys.Length] : null,
+                    Files = !isSingleFile ? ParseFiles((List<object>)infoDict[InfoDto.BencodeKeys.Files]) : null,
                     Name = (byte[])infoDict[InfoDto.BencodeKeys.Name],
                     PieceLength = (long)infoDict[InfoDto.BencodeKeys.PieceLength],
                     Pieces = (byte[])infoDict[InfoDto.BencodeKeys.Pieces],
+                    Md5Sum = infoDict.TryGetValue(InfoDto.BencodeKeys.Md5Sum, out var md5) ? (byte[])md5 : null,
+                    Sha1 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
+                    Sha256 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
+
 
                     // Raw info bytes captured during parsing
-                    RawBencodedInfo = (byte[])root[Parser.RawInfoKey]
+                    RawBencodedInfo = root.TryGetValue(Parser.RawInfoKey, out var rawInfo)
+                        ? (byte[])rawInfo
+                        : null
                 }
             };
         }
+
+        #endregion
+
+
+
+        #region MAPPING HELPERS
+
+        internal static object Map(Parser.BNode node)
+        {
+
+            return node switch
+            {
+                Parser.BInt i => i.Value,
+
+                Parser.BString s => s.Value.ToArray(),
+
+                Parser.BList l => l.Values.Select(Map).ToList(),
+
+                Parser.BDict d => MapDict(d),
+
+                _ => throw new InvalidDataException("Unknown BNode type")
+            };
+
+
+        }
+
+
+        private static Dictionary<byte[], object> MapDict(Parser.BDict dict)
+        {
+            var result = new Dictionary<byte[], object>(ByteComparer.Instance);
+
+            foreach (var (key, value) in dict.Values)
+                result[key] = Map(value);
+
+            if (dict.RawBytes != null)
+                result[Parser.RawInfoKey] = dict.RawBytes.Value.ToArray();
+            
+        
+            return result;
+        }
+
+
+        private static List<FileDto> ParseFiles(List<object> files)
+        {
+            var result = new List<FileDto>();
+
+            foreach (var obj in files)
+            {
+
+                var dict = (Dictionary<byte[], object>) obj;
+
+                var file = new FileDto
+                {
+                    Length = (long)dict[InfoDto.BencodeKeys.Length],
+                    Path = ((List<object>)dict[InfoDto.BencodeKeys.Path])
+                    .Cast<byte[]>().ToList(),
+                };
+
+                result.Add(file);
+
+            }
+
+            return result;
+        }
+
+
 
         #endregion
     }
