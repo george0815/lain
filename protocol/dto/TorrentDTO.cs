@@ -59,7 +59,51 @@ namespace lain.protocol.dto
             public static readonly byte[] Info = Encoding.ASCII.GetBytes("info");
         }
 
+
+
         #endregion
+
+
+        #region KNOWN ROOT KEYS
+
+        ///<summary>
+        /// Set of all recognized top-level metainfo keys
+        /// </summary>
+
+
+        internal static readonly HashSet<byte[]> KnownRootKeys =
+            new HashSet<byte[]>(ByteComparer.Instance)
+            {
+                BencodeKeys.Announce,
+                BencodeKeys.AnnounceList,
+                BencodeKeys.Comment,
+                BencodeKeys.CreatedBy,
+                BencodeKeys.CreationDate,
+                BencodeKeys.UrlList,
+                BencodeKeys.Sources,
+                BencodeKeys.Info,
+                Parser.RawInfoKey,
+            };
+
+        internal static readonly HashSet<byte[]> KnownInfoKeys =
+            new HashSet<byte[]>(ByteComparer.Instance)
+            {
+                InfoDto.BencodeKeys.Length,
+                InfoDto.BencodeKeys.Name,
+                InfoDto.BencodeKeys.PieceLength,
+                InfoDto.BencodeKeys.Pieces,
+                InfoDto.BencodeKeys.Md5Sum,
+                InfoDto.BencodeKeys.Sha1,
+                InfoDto.BencodeKeys.Sha256,
+                InfoDto.BencodeKeys.Files,
+
+
+
+
+            };
+
+        #endregion
+
 
 
         #region TRACKER CONFIGURATION
@@ -78,6 +122,13 @@ namespace lain.protocol.dto
         /// the same tier are considered equivalent.
         /// </summary>
         internal List<List<byte[]>>? AnnounceList { get; init; }
+
+
+        /// <summary>
+        /// Extra fields (such as private, encoding, etc) that are not critical to the functionality
+        /// </summary>
+        internal Dictionary<byte[], object>? ExtraFields { get; init; }
+
 
         #endregion
 
@@ -210,6 +261,14 @@ namespace lain.protocol.dto
                     : Info.ToBencodeModel();
             }
 
+            if (ExtraFields != null)
+            {
+                foreach (var x in ExtraFields)
+                    dict[x.Key] = x.Value;
+            }
+
+            
+
             return dict;
         }
 
@@ -264,6 +323,8 @@ namespace lain.protocol.dto
                         .ToList()
                     : null,
 
+                ExtraFields = root.Where(x => !KnownRootKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
+
 
 
                 Info = new InfoDto
@@ -280,6 +341,9 @@ namespace lain.protocol.dto
                     Sha1 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
                     Sha256 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
 
+                    ExtraFields = infoDict
+                    .Where(x => !KnownInfoKeys.Contains(x.Key))
+                    .ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
 
                     // Raw info bytes captured during parsing
                     RawBencodedInfo = root.TryGetValue(Parser.RawInfoKey, out var rawInfo)

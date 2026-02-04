@@ -72,11 +72,16 @@ namespace lain.protocol.dto
 
 
         /// <summary>
-        /// All files that will be download
+        /// All files that will be downloaded
         ///</summary>
         internal List<FileDto>? Files { get; init; }
 
-  
+
+        /// <summary>
+        /// Extra fields that dont affect functionality
+        ///</summary>
+        internal Dictionary<byte[], object>? ExtraFields { get; init; }
+
 
 
 
@@ -208,6 +213,12 @@ namespace lain.protocol.dto
                 [BencodeKeys.PieceLength] = PieceLength,
                 [BencodeKeys.Pieces] = Pieces!
             };
+
+            if (ExtraFields != null)
+            {
+                foreach (var x in ExtraFields)
+                    dict[x.Key] = x.Value;
+            }
 
             if (Files != null)
             {
