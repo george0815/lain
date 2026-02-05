@@ -215,7 +215,7 @@ namespace lain.protocol
             const byte StringSeparator = (byte)':';
 
   
-      
+  
         #endregion
 
         #region ENTRY POINTS

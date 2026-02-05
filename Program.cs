@@ -1,10 +1,13 @@
 ﻿using lain.protocol;
+using lain.protocol.dto;
+using System;
+using System.Text;
 
 namespace lain
 {
     /// <summary>
     /// Entry point for the Lain application.
-    /// The main branch uses MonoTorrent, however I wanted
+    /// The main branch uses MonoTorrent, which is a C# bittorrent library, however I wanted
     /// to try rolling my own BitTorrent protocol implementation 
     /// so I created this branch separately. I mainly made this for
     /// research/learning purposes, so comments will be more common,
@@ -45,14 +48,11 @@ namespace lain
 
                             try
                             {
-                                byte[] ToBeParsed = File.ReadAllBytes("libre.torrent");
 
 
 
-                                Console.WriteLine("Parsing torrent file...");
-                                var torrent = Parser.Parse(ToBeParsed);
+                                
 
-                                Console.WriteLine(torrent.ToString);
                             }
                             catch (Exception ex)
                             {
