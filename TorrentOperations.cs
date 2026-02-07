@@ -191,7 +191,7 @@ namespace lain
             // Log state changes
             manager.TorrentStateChanged += async (o, e) =>
             {
-                Log.Write($"{Resources.StatechangedeOldState__eNewState} {e.OldState} -> {e.NewState}");
+                Log.Write($"{Resources.Statechanged} {e.OldState} -> {e.NewState}");
 
                 // Auto-stop seeding if enabled
                 if ((e.OldState == TorrentState.Downloading) &&
@@ -213,7 +213,7 @@ namespace lain
             manager.PieceHashed += (o, e) =>
             {
                 if (Settings.Current.DetailedLogging)
-                    Log.Write($"{Resources.PiecehashedePieceIndex_eHashPassed} {e.PieceIndex} - {e.HashPassed}");
+                    Log.Write($"{Resources.Piecehashed} {e.PieceIndex} - {e.HashPassed}");
             };
         }
 

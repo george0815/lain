@@ -846,9 +846,9 @@ namespace lain {
         /// <summary>
         ///   Looks up a localized string similar to Error: Ghidorah process timed out..
         /// </summary>
-        internal static string ghidorahtimeout {
+        internal static string Ghidorahtimeout {
             get {
-                return ResourceManager.GetString("ghidorahtimeout", resourceCulture);
+                return ResourceManager.GetString("Ghidorahtimeout", resourceCulture);
             }
         }
         
@@ -1395,18 +1395,18 @@ namespace lain {
         /// <summary>
         ///   Looks up a localized string similar to Piece hashed:.
         /// </summary>
-        internal static string PiecehashedePieceIndex_eHashPassed {
+        internal static string Piecehashed {
             get {
-                return ResourceManager.GetString("PiecehashedePieceIndex-eHashPassed", resourceCulture);
+                return ResourceManager.GetString("Piecehashed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Piece Size:.
+        ///   Looks up a localized string similar to Piece size:.
         /// </summary>
-        internal static string PieceSize {
+        internal static string Piecesize {
             get {
-                return ResourceManager.GetString("PieceSize", resourceCulture);
+                return ResourceManager.GetString("Piecesize", resourceCulture);
             }
         }
         
@@ -1873,9 +1873,9 @@ namespace lain {
         /// <summary>
         ///   Looks up a localized string similar to State changed:.
         /// </summary>
-        internal static string StatechangedeOldState__eNewState {
+        internal static string Statechanged {
             get {
-                return ResourceManager.GetString("StatechangedeOldState->eNewState", resourceCulture);
+                return ResourceManager.GetString("Statechanged", resourceCulture);
             }
         }
         

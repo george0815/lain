@@ -56,8 +56,8 @@ public class TorrentListView : FrameView
         _tableData.Columns.Add(Resources.State, typeof(string));
         _tableData.Columns.Add(Resources.Progress, typeof(string));
         _tableData.Columns.Add(Resources.Peers, typeof(string));
-        _tableData.Columns.Add(Resources.Leechers, typeof(string));
         _tableData.Columns.Add(Resources.Seeders, typeof(string));
+        _tableData.Columns.Add(Resources.Leechers, typeof(string));
         _tableData.Columns.Add(Resources.Downloadrate, typeof(string));
         _tableData.Columns.Add(Resources.Uploadrate, typeof(string));
 
@@ -220,8 +220,8 @@ public class TorrentListView : FrameView
                     state,
                     progress,
                     peers,
-                    leechers,
                     seeders,
+                    leechers,
                     downloadRate,
                     uploadRate
                 );

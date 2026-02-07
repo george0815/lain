@@ -101,7 +101,7 @@ namespace lain.frameviews
             // Piece size selection
             // -------------------
 
-            scroll.Add(new Label(Resources.PieceSize) { X = 1, Y = y });
+            scroll.Add(new Label(Resources.Piecesize) { X = 1, Y = y });
 
             // Human-readable piece sizes mapped to their byte values.
             var pieceSizes = new Dictionary<string, int>

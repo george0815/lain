@@ -129,7 +129,7 @@
   <data name="Trackers" xml:space="preserve">
     <value>トラッカー：</value>
   </data>
-  <data name="PieceSize" xml:space="preserve">
+  <data name="Piecesize" xml:space="preserve">
     <value>ピースサイズ：</value>
   </data>
   <data name="16KB" xml:space="preserve">
@@ -594,13 +594,13 @@
   <data name="Downloadingfrommagnetlink" xml:space="preserve">
     <value>マグネットリンクからダウンロード中...</value>
   </data>
-  <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
+  <data name="Statechanged" xml:space="preserve">
     <value>状態が変更されました：</value>
   </data>
   <data name="DHTEngineDhtState" xml:space="preserve">
     <value>DHT：</value>
   </data>
-  <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
+  <data name="Piecehashed" xml:space="preserve">
     <value>ピースがハッシュ化されました：</value>
   </data>
   <data name="Savedfastresumedata" xml:space="preserve">
@@ -736,7 +736,7 @@
   <data name="Searchresultslimitpersource" xml:space="preserve">
     <value>配信元ごとの検索結果数の上限：</value>
   </data>
-  <data name="ghidorahtimeout" xml:space="preserve">
+  <data name="Ghidorahtimeout" xml:space="preserve">
     <value>ギドラの処理がタイムアウトしました。</value>
   </data>
   <data name="Nomagnetlink" xml:space="preserve">

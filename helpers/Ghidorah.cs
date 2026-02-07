@@ -121,8 +121,8 @@ namespace lain.helpers
             if (!process.WaitForExit(120000))
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
-                Log.Write(Resources.ghidorahtimeout);
-                return Resources.ghidorahtimeout;
+                Log.Write(Resources.Ghidorahtimeout);
+                return Resources.Ghidorahtimeout;
             }
 
             // Ensure async reads are completed
@@ -195,8 +195,8 @@ namespace lain.helpers
             if (!process.WaitForExit(Settings.Current.Timeout))
             {
                 try { process.Kill(entireProcessTree: true); } catch { }
-                Log.Write(Resources.ghidorahtimeout);
-                return $"{{\"data\":[],\"errors\":[\"{Resources.ghidorahtimeout}\"]}}";
+                Log.Write(Resources.Ghidorahtimeout);
+                return $"{{\"data\":[],\"errors\":[\"{Resources.Ghidorahtimeout}\"]}}";
             }
 
             Task.WaitAll(outputTask, errorTask);

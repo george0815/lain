@@ -129,8 +129,8 @@
   <data name="Trackers" xml:space="preserve">
     <value>Trackers:</value>
   </data>
-  <data name="PieceSize" xml:space="preserve">
-    <value>Piece Size:</value>
+  <data name="Piecesize" xml:space="preserve">
+    <value>Piece size:</value>
   </data>
   <data name="16KB" xml:space="preserve">
     <value>16 KB</value>
@@ -594,13 +594,13 @@
   <data name="Downloadingfrommagnetlink" xml:space="preserve">
     <value>Downloading from magnet link...</value>
   </data>
-  <data name="StatechangedeOldState-&gt;eNewState" xml:space="preserve">
+  <data name="Statechanged" xml:space="preserve">
     <value>State changed:</value>
   </data>
   <data name="DHTEngineDhtState" xml:space="preserve">
     <value>DHT:</value>
   </data>
-  <data name="PiecehashedePieceIndex-eHashPassed" xml:space="preserve">
+  <data name="Piecehashed" xml:space="preserve">
     <value>Piece hashed:</value>
   </data>
   <data name="Savedfastresumedata" xml:space="preserve">
@@ -736,7 +736,7 @@
   <data name="Searchresultslimitpersource" xml:space="preserve">
     <value>Search results limit per source: </value>
   </data>
-  <data name="ghidorahtimeout" xml:space="preserve">
+  <data name="Ghidorahtimeout" xml:space="preserve">
     <value>Error: Ghidorah process timed out.</value>
   </data>
   <data name="Nomagnetlink" xml:space="preserve">
