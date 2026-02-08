@@ -87,7 +87,7 @@ namespace lain.protocol
                 var tmp = new List<string>();
                 foreach (byte[] s in dto.UrlList)
                 {
-                    tmp.Add(Encoding.ASCII.GetString(s));
+                    tmp.Add(Encoding.UTF8.GetString(s));
                 }
                 UrlList = tmp;
             }
@@ -96,7 +96,7 @@ namespace lain.protocol
                 var tmp = new List<string>();
                 foreach (byte[] s in dto.Sources)
                 {
-                    tmp.Add(Encoding.ASCII.GetString(s));
+                    tmp.Add(Encoding.UTF8.GetString(s));
                 }
                 Sources = tmp;
             }
