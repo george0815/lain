@@ -106,8 +106,9 @@ namespace lain.frameviews
                 string[] tmp = DialogHelpers.PickCategories([
                     Resources.Movies,
                     Resources.Games,
+                    Resources.Music,
                     Resources.TVshows,
-                    Resources.Applications,
+                    Resources.Software,
                     Resources.Other
                 ]);
 
@@ -122,8 +123,9 @@ namespace lain.frameviews
                     Settings.Current.Categories = [
                         Resources.Movies,
                         Resources.Games,
+                        Resources.Music,
                         Resources.TVshows,
-                        Resources.Applications,
+                        Resources.Software,
                         Resources.Other
                     ];
                     categories.Text = $"{Resources.Movies}...";

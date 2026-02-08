@@ -169,15 +169,6 @@ namespace lain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applications.
-        /// </summary>
-        internal static string Applications {
-            get {
-                return ResourceManager.GetString("Applications", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ASCII color:.
         /// </summary>
         internal static string ASCIIcolor {
@@ -1267,6 +1258,15 @@ namespace lain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Music.
+        /// </summary>
+        internal static string Music {
+            get {
+                return ResourceManager.GetString("Music", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string Name {
@@ -1768,6 +1768,15 @@ namespace lain {
         internal static string Size {
             get {
                 return ResourceManager.GetString("Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Software.
+        /// </summary>
+        internal static string Software {
+            get {
+                return ResourceManager.GetString("Software", resourceCulture);
             }
         }
         

@@ -58,7 +58,7 @@ namespace lain
         public Terminal.Gui.Color FocusBackgroundColor { get; set; } = Terminal.Gui.Color.White;
         public Terminal.Gui.Color FocusTextColor { get; set; } = Terminal.Gui.Color.Black;
         public Terminal.Gui.Color HotTextColor { get; set; } = Terminal.Gui.Color.BrightYellow;
-        public Terminal.Gui.Color LogoColor { get; set; } = Terminal.Gui.Color.White;
+        public Terminal.Gui.Color LogoColor { get; set; } = Terminal.Gui.Color.BrightCyan;
 
         // ------------------------------
         // Hotkey controls
@@ -106,8 +106,9 @@ namespace lain
         public String[] Categories { get; set; } = [
             Resources.Movies,
             Resources.Games,
+            Resources.Music,
             Resources.TVshows,
-            Resources.Applications,
+            Resources.Software,
             Resources.Other
         ];
 

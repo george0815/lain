@@ -157,18 +157,19 @@ namespace lain.helpers
         internal static string Search(SearchArgs args)
         {
             // Convert arrays to space-separated strings for CLI
-            string sources = string.Join(" ", args.Sources);
-            string categories = string.Join(" ", args.Categories);
+            SearchArgs NormArgs = NormalizedArgs(args);
+            string sources = string.Join(" ", NormArgs.Sources);
+            string categories = string.Join(" ", NormArgs.Categories);
 
             var psi = new ProcessStartInfo
             {
                 FileName = ExeFileName,
                 Arguments =
-                    $"\"{args.Query}\" " +
-                    $"--limit {args.Limit} " +
-                    $"--total_limit {args.TotalLimit} " +
+                    $"\"{NormArgs.Query}\" " +
+                    $"--limit {NormArgs.Limit} " +
+                    $"--total_limit {NormArgs.TotalLimit} " +
                     $"--categories {categories} " +
-                    $"--sort_by {args.SortBy} " +
+                    $"--sort_by {NormArgs.SortBy} " +
                     $"--sources {sources}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -279,5 +280,65 @@ namespace lain.helpers
                 ? string.Concat(error.AsSpan(0, maxLength), "…")
                 : error;
         }
+
+
+        /// <summary>
+        /// Translates arguments into English, as ghidorah will not accept args in Japanese
+        /// </summary>
+     
+        internal static SearchArgs NormalizedArgs(SearchArgs args)
+        {
+
+            //Normalize sort criteria 
+            static string sortby(string sortCriteria) => sortCriteria switch
+            {
+
+                _ when sortCriteria == Resources.Seeders => "Seeders",
+                _ when sortCriteria == Resources.Size => "Size",
+                _ when sortCriteria == Resources.Name => "Name",
+                _ => "Source",
+
+
+            };
+
+            args.SortBy = sortby(args.SortBy);
+
+
+
+
+            //Noralize categories 
+            static string normCat(string category) => category switch
+            {
+
+                _ when category == Resources.Music => "Music",
+                _ when category == Resources.Movies => "Movies",
+                _ when category == Resources.Games => "Games",
+                _ when category == Resources.Software => "Software",
+                _ when category == Resources.TVshows => "TV Shows",
+                _ when category == Resources.Other => "Other",
+
+
+                _ => "Other",
+
+
+            };
+
+
+
+            List<string> tmpCats = [];
+            foreach (string cat in args.Categories)
+            {
+                tmpCats.Add(normCat(cat));
+
+            }
+
+            args.Categories = [.. tmpCats];
+
+
+
+            return args;
+        }
+
+
     }
 }

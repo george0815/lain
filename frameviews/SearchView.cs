@@ -162,7 +162,7 @@ namespace lain.frameviews
                         seconds++;
                         Application.MainLoop.Invoke(() =>
                         {
-                            searchBtn.Text = $"Searching... {seconds}s";
+                            searchBtn.Text = $"{Resources.Searching} {seconds}s";
                             searchBtn.SetNeedsDisplay();
                         });
                     }, null, 0, 1000);
@@ -177,7 +177,7 @@ namespace lain.frameviews
                             Application.MainLoop.Invoke(() =>
                             {
                                 DisplayResults(res);
-                                searchBtn.Text = "Search";
+                                searchBtn.Text = Resources.Search;
                                 searchBtn.SetNeedsDisplay();
                             });
                         }

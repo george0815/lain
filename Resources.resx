@@ -703,8 +703,8 @@
   <data name="TVshows" xml:space="preserve">
     <value>TV shows</value>
   </data>
-  <data name="Applications" xml:space="preserve">
-    <value>Applications</value>
+  <data name="Software" xml:space="preserve">
+    <value>Software</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Other</value>
@@ -822,5 +822,8 @@
   </data>
   <data name="Trackerlink" xml:space="preserve">
     <value>tracker link</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Music</value>
   </data>
 </root>

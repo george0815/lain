@@ -703,8 +703,8 @@
   <data name="TVshows" xml:space="preserve">
     <value>テレビ番組</value>
   </data>
-  <data name="Applications" xml:space="preserve">
-    <value>アプリケーション</value>
+  <data name="Software" xml:space="preserve">
+    <value>ソフトウェア</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>その他</value>
@@ -822,5 +822,8 @@
   </data>
   <data name="Trackerlink" xml:space="preserve">
     <value>トラッカー</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>音楽</value>
   </data>
 </root>
