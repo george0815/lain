@@ -1,5 +1,5 @@
 ﻿// =====================================================================================
-// InfoDto.cs
+// Info.cs
 //
 // Data Transfer Object representing the BitTorrent "info" dictionary.
 //
@@ -7,7 +7,7 @@
 // Its bencoded byte representation is hashed to produce the torrent's
 // info-hash, which uniquely identifies the torrent on the network.
 //
-// This DTO serves three primary purposes:
+// This serves three primary purposes:
 // 1. Provide a strongly-typed representation of parsed "info" data.
 // 2. Preserve raw bencoded bytes for hash computation and verification.
 // 3. Act as a bridge between low-level parsing and higher-level torrent logic
@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using lain.protocol.helpers;
 
 namespace lain.protocol.dto
 {
@@ -35,16 +36,20 @@ namespace lain.protocol.dto
     /// This object models both required and optional fields defined by
     /// the BitTorrent specification and related extensions.
     ///
-    /// Once constructed, this DTO should be treated as immutable to ensure
+    /// Once constructed, this should be treated as immutable to ensure
     /// that any derived hashes (info-hash, piece hashes) remain valid.
     /// </summary>
-    internal sealed class InfoDto
+    internal sealed class Info
     {
 
-        #region KEYS FOR BENCODE DICTIONARY
+
         
+
+        #region KEYS FOR BENCODE DICTIONARY
+
         internal static class BencodeKeys
         {
+            public static readonly byte[] Files = Encoding.ASCII.GetBytes("files");
             public static readonly byte[] Path = Encoding.ASCII.GetBytes("path");
             public static readonly byte[] Length = Encoding.ASCII.GetBytes("length");
             public static readonly byte[] Name = Encoding.ASCII.GetBytes("name");
@@ -53,7 +58,10 @@ namespace lain.protocol.dto
             public static readonly byte[] Md5Sum = Encoding.ASCII.GetBytes("md5sum");
             public static readonly byte[] Sha1 = Encoding.ASCII.GetBytes("sha1");
             public static readonly byte[] Sha256 = Encoding.ASCII.GetBytes("sha256");
-            public static readonly byte[] Files = Encoding.ASCII.GetBytes("files");
+            public static readonly byte[] MetaInfo = Encoding.ASCII.GetBytes("meta version");
+            public static readonly byte[] Private = Encoding.ASCII.GetBytes("private");
+            public static readonly byte[] Source = Encoding.ASCII.GetBytes("source");
+            
 
         }
 
@@ -74,11 +82,26 @@ namespace lain.protocol.dto
         /// <summary>
         /// All files that will be downloaded
         ///</summary>
-        internal List<FileDto>? Files { get; init; }
+        internal List<File>? Files { get; init; }
 
 
         /// <summary>
-        /// Extra fields that dont affect functionality
+        /// Whether or not the torrent is private or not
+        ///</summary>
+
+        internal long? Private { get; init; }
+
+
+        /// <summary>
+        /// Hold tracker identifier 
+        ///</summary>
+
+        internal byte[]? Source { get; init; }
+
+
+
+        /// <summary>
+        /// Extra fields not explicitly modeled
         ///</summary>
         internal Dictionary<byte[], object>? ExtraFields { get; init; }
 
@@ -91,7 +114,7 @@ namespace lain.protocol.dto
         /// Stored as bytes to preserve the original encoding exactly as it
         /// appears in the torrent file.
         /// </summary>
-        internal byte[]? Name { get; init; }
+        internal byte[] Name { get; init; } = Encoding.ASCII.GetBytes("N/A");
 
         /// <summary>
         /// Length in bytes of each piece.
@@ -157,6 +180,21 @@ namespace lain.protocol.dto
             Name != null ? Encoding.UTF8.GetString(Name) : string.Empty;
 
         /// <summary>
+        /// Private bool
+        /// </summary>
+        internal bool IsPrivate => (Private != null) && Private == 1;
+
+
+        /// <summary>
+        /// Decoded UTF-8 string representation of the source.
+        ///
+        /// Returns an empty string if the name is not present.
+        /// </summary>
+        internal string SourceString =>
+            Source != null ? Encoding.UTF8.GetString(Source) : string.Empty;
+
+
+        /// <summary>
         /// Number of pieces in the torrent.
         ///
         /// Calculated by dividing the total piece hash buffer length
@@ -195,7 +233,7 @@ namespace lain.protocol.dto
         #region BENCODE SERIALIZATION
 
         /// <summary>
-        /// Converts this DTO back into a bencode-compatible model.
+        /// Converts this back into a bencode-compatible model.
         ///
         /// The returned dictionary uses protocol-defined keys and raw
         /// byte values, making it suitable for:
@@ -205,14 +243,16 @@ namespace lain.protocol.dto
         ///
         /// Optional hash fields are only included if present.
         /// </summary>
-        internal Dictionary<byte[], object> ToBencodeModel()
+        internal SortedDictionary<byte[], object> ToBencodeModel()
         {
-            var dict = new Dictionary<byte[], object>
+            var dict = new SortedDictionary<byte[], object>(ByteComparer.Instance)
             {
-                [BencodeKeys.Name] = Name!,
+                [BencodeKeys.Name] = Name,
                 [BencodeKeys.PieceLength] = PieceLength,
-                [BencodeKeys.Pieces] = Pieces!
             };
+
+            if (Pieces != null)
+                dict[BencodeKeys.Pieces] = Pieces;
 
             if (ExtraFields != null)
             {
@@ -246,6 +286,14 @@ namespace lain.protocol.dto
             if (Sha256 != null)
                 dict[BencodeKeys.Sha256] = Sha256;
 
+            if (Source != null)
+                dict[BencodeKeys.Source] = Source;
+
+            if (Private != null)
+                dict[BencodeKeys.Private] = Private;
+
+            
+
 
             return dict;    
 
@@ -256,12 +304,22 @@ namespace lain.protocol.dto
 
 
     /// <summary>
-    /// Strongly-typed representation of a file used in the InfoDTOP
+    /// Strongly-typed representation of a file used in the Info
     /// </summary>
-    internal sealed class FileDto
+    internal sealed class File
     {
         internal long Length { get; init; }
         internal List<byte[]> Path { get; init; } = new();
+    }
+
+
+    ///<summary>
+    /// Used to capture raw info bytes
+    /// </summary>
+    /// 
+    internal sealed class RawInfoBytesHolder
+    {
+        internal byte[]? rawBytes { get; set; }
     }
 
 }

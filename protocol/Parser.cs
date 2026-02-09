@@ -229,7 +229,10 @@ namespace lain.protocol
         internal static BNode Parse(byte[] bytes)
         {
             var reader = new ByteReader(bytes);
-            return ParseNext(reader, captureRaw: false);
+            var node = ParseNext(reader, captureRaw: false);
+            if (reader.Position != reader.Buffer.Length)
+                throw new InvalidDataException("Trailing data after root object.");
+            return node;
         }
 
         /// <summary>
@@ -281,7 +284,7 @@ namespace lain.protocol
             var dict = new Dictionary<byte[], BNode>(ByteComparer.Instance);
             byte[]? previousKey = null;
 
-            while (reader.Current != DictEnd)
+            while (reader.Position < reader.Buffer.Length && reader.Current != DictEnd)
             {
                 var keyNode = ParseString(reader);
                 var keyBytes = keyNode.Value.ToArray();
@@ -295,11 +298,13 @@ namespace lain.protocol
 
                 // where raw capture is decided
                 bool childCaptureRaw =
-                    !captureRaw && keyBytes.SequenceEqual(TorrentDto.BencodeKeys.Info);
+                    !captureRaw && keyBytes.SequenceEqual(Torrent.BencodeKeys.Info);
 
                 var value = ParseNext(reader, childCaptureRaw);
                 dict[keyBytes] = value;
             }
+            if (reader.Position >= reader.Buffer.Length)
+                throw new EndOfStreamException("Unterminated dictionary");
 
             reader.Expect(DictEnd);
 
@@ -339,11 +344,13 @@ namespace lain.protocol
                 throw new InvalidDataException("Invalid string length");
 
             // Read digits until ':' is encountered
-            while (reader.Current != StringSeparator)
+            while (reader.Position < reader.Buffer.Length && reader.Current != StringSeparator)
             {
                 lengthBuilder.Append((char)reader.Current);
                 reader.MoveNext();
             }
+            if (reader.Position >= reader.Buffer.Length)
+                throw new EndOfStreamException("Unterminated string");
 
             // Consume the ':' separator
             reader.MoveNext();
@@ -379,7 +386,7 @@ namespace lain.protocol
             {
                 strBytes[i] = reader.Current;
                 reader.MoveNext();
-            }
+            }   
 
             return new BString(strBytes);
         }
@@ -407,11 +414,29 @@ namespace lain.protocol
 
             StringBuilder intBuilder = new();
 
-            while (reader.Current != IntEnd)
+            bool first = true;
+            while (reader.Position < reader.Buffer.Length && reader.Current != IntEnd)
             {
-                intBuilder.Append((char)reader.Current);
+
+                byte b = reader.Current;
+
+                if (first && b == (byte)'-')
+                {
+                    //ok
+                }
+
+                else if (b < '0' || b > '9')
+                {
+                    throw new InvalidDataException("Invalid integer character");
+                }
+
+                first = false;
+
+                intBuilder.Append((char)b);
                 reader.MoveNext();
             }
+            if (reader.Position >= reader.Buffer.Length)
+                throw new EndOfStreamException("Unterminated int");
 
             // Consume the terminating 'e'
             reader.MoveNext();
@@ -423,6 +448,10 @@ namespace lain.protocol
 
             if (s == "-0")
                 throw new InvalidDataException("Negative zero");
+
+            if (s == "-")
+                throw new InvalidDataException("Invalid integer");
+
 
             if (s.Length > 1 && s[0] == '0')
                 throw new InvalidDataException("Leading zero");
@@ -461,18 +490,18 @@ namespace lain.protocol
             // Consume the 'l' marker
             reader.MoveNext();
 
-            while (reader.Current != ListEnd)
+            while (reader.Position < reader.Buffer.Length && reader.Current != ListEnd)
             {
                 list.Add(ParseNext(reader, captureRaw: false));
             }
+            if (reader.Position >= reader.Buffer.Length)
+                throw new EndOfStreamException("Unterminated list");
 
             // Consume the terminating 'e'
             reader.MoveNext();
             return new BList(list);
         }
 
-        //Stores raw info dictionary bytes
-        internal static readonly byte[] RawInfoKey = Encoding.ASCII.GetBytes("_raw_info");
 
         #endregion
     }

@@ -1,9 +1,9 @@
 ﻿// =====================================================================================
-// TorrentDto.cs
+// Torrent.cs
 //
 // Data Transfer Object representing the root of a BitTorrent metainfo file (.torrent).
 //
-// This DTO models the top-level bencoded dictionary defined by the BitTorrent
+// This models the top-level bencoded dictionary defined by the BitTorrent
 // specification and acts as the primary bridge between:
 // - Raw bencode parsing output
 // - Strongly-typed application logic
@@ -12,7 +12,7 @@
 // Responsibilities:
 // - Hold tracker configuration (announce, announce-list)
 // - Store optional metadata (comment, created by, creation date)
-// - Reference the InfoDto, which contains all payload-critical data
+// - Reference the Info, which contains all payload-critical data
 // - Preserve raw bencoded "info" bytes to guarantee info-hash correctness
 //
 // Design Notes:
@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Net.NetworkInformation;
 using System.Text;
 
@@ -40,10 +41,33 @@ namespace lain.protocol.dto
     ///
     /// This object corresponds to the root dictionary of a .torrent file
     /// and encapsulates tracker configuration, metadata, and the embedded
-    /// InfoDto which defines the actual payload structure.
+    /// Info which defines the actual payload structure.
     /// </summary>
-    internal sealed class TorrentDto
+    internal sealed class Torrent
     {
+        /// <summary>
+        /// Constructor - takes in a filename and executes full parsing process
+        /// </summary>
+
+        internal Torrent(string filename)
+        {
+            RawInfoBytesHolder rawBytes = new RawInfoBytesHolder();
+            Parser.BNode node = Parser.Parse(System.IO.File.ReadAllBytes(filename));
+            var root = (Dictionary<byte[], object>)Map(node, rawBytes);
+            MapToTorrent(root, rawBytes);
+            Validate();
+
+        }
+
+
+        /// <summary>
+        /// Enum for version detection
+        /// </summary>
+
+        internal enum Version
+        {
+            Unknown = 0, V1 = 1, V2 = 2, HYBRID = 3,
+        }
 
         #region BENCODE KEYS AS BYTES
 
@@ -57,6 +81,9 @@ namespace lain.protocol.dto
             public static readonly byte[] UrlList = Encoding.ASCII.GetBytes("url-list");
             public static readonly byte[] Sources = Encoding.ASCII.GetBytes("sources");
             public static readonly byte[] Info = Encoding.ASCII.GetBytes("info");
+            public static readonly byte[] Publisher = Encoding.ASCII.GetBytes("publisher");
+            public static readonly byte[] PublisherUrl = Encoding.ASCII.GetBytes("publisher-url");
+            public static readonly byte[] EncodingType = Encoding.ASCII.GetBytes("encoding");
         }
 
 
@@ -82,20 +109,28 @@ namespace lain.protocol.dto
                 BencodeKeys.UrlList,
                 BencodeKeys.Sources,
                 BencodeKeys.Info,
-                Parser.RawInfoKey,
+                BencodeKeys.Publisher,
+                BencodeKeys.PublisherUrl,
+                BencodeKeys.EncodingType,
             };
 
+
+        //NOTE: v2 specific keys are intentionally left in ExtraFields, will be added when v2 support is implemented
         internal static readonly HashSet<byte[]> KnownInfoKeys =
             new HashSet<byte[]>(ByteComparer.Instance)
             {
-                InfoDto.BencodeKeys.Length,
-                InfoDto.BencodeKeys.Name,
-                InfoDto.BencodeKeys.PieceLength,
-                InfoDto.BencodeKeys.Pieces,
-                InfoDto.BencodeKeys.Md5Sum,
-                InfoDto.BencodeKeys.Sha1,
-                InfoDto.BencodeKeys.Sha256,
-                InfoDto.BencodeKeys.Files,
+                Info.BencodeKeys.Length,
+                Info.BencodeKeys.Name,
+                Info.BencodeKeys.PieceLength,
+                Info.BencodeKeys.Pieces,
+                Info.BencodeKeys.Md5Sum,
+                Info.BencodeKeys.Sha1,
+                Info.BencodeKeys.Sha256,
+                Info.BencodeKeys.Files,
+                Info.BencodeKeys.Private,
+                Info.BencodeKeys.Source,
+                Info.BencodeKeys.MetaInfo,
+                
 
 
 
@@ -113,7 +148,7 @@ namespace lain.protocol.dto
         ///
         /// Stored as raw UTF-8 bytes to preserve the original encoding.
         /// </summary>
-        internal byte[]? Announce { get; init; }
+        internal byte[]? Announce { get; set; }
 
         /// <summary>
         /// Tiered tracker list (announce-list).
@@ -121,13 +156,32 @@ namespace lain.protocol.dto
         /// Each inner list represents a tracker tier; trackers within
         /// the same tier are considered equivalent.
         /// </summary>
-        internal List<List<byte[]>>? AnnounceList { get; init; }
+        internal List<List<byte[]>>? AnnounceList { get; set; }
 
 
         /// <summary>
-        /// Extra fields (such as private, encoding, etc) that are not critical to the functionality
+        /// Extra fields (such as private, encoding, etc) that are not explicitly modeled
         /// </summary>
-        internal Dictionary<byte[], object>? ExtraFields { get; init; }
+        internal Dictionary<byte[], object>? ExtraFields { get; set; }
+
+
+
+        /// <summary>
+        /// Publisher that distributed the torrent
+        /// </summary>
+        internal byte[]? Publisher { get; set; }
+
+
+        /// <summary>
+        /// Publisher url
+        /// </summary>
+        internal byte[]? PublisherUrl { get; set; }
+
+
+        /// <summary>
+        /// Encoding type
+        /// </summary>
+        internal byte[]? EncodingType { get; set; }
 
 
         #endregion
@@ -140,7 +194,7 @@ namespace lain.protocol.dto
         /// This contains all payload-defining fields such as piece hashes,
         /// file name(s), and piece length.
         /// </summary>
-        internal InfoDto? Info { get; init; }
+        internal Info? Info { get; set; }
 
         #endregion
 
@@ -149,27 +203,33 @@ namespace lain.protocol.dto
         /// <summary>
         /// Optional free-form comment.
         /// </summary>
-        internal byte[]? Comment { get; init; }
+        internal byte[]? Comment { get; set; }
+
+        /// <summary>
+        /// Torrent version
+        ///</summary>
+        internal Version Ver { get; set; }
+
 
         /// <summary>
         /// Identifier of the tool or client that created the torrent.
         /// </summary>
-        internal byte[]? CreatedBy { get; init; }
+        internal byte[]? CreatedBy { get; set; }
 
         /// <summary>
         /// Creation timestamp stored as a UNIX epoch value (seconds).
         /// </summary>
-        internal long? CreationDate { get; init; }
+        internal long? CreationDate { get; set; }
 
         /// <summary>
         /// Optional list of source URLs (non-standard extension).
         /// </summary>
-        internal List<byte[]>? Sources { get; init; }
+        internal List<byte[]>? Sources { get; set; }
 
         /// <summary>
         /// Optional web seed URLs (url-list).
         /// </summary>
-        internal List<byte[]>? UrlList { get; init; }
+        internal List<byte[]>? UrlList { get; set; }
 
         #endregion
 
@@ -191,11 +251,36 @@ namespace lain.protocol.dto
         internal string AnnounceString =>
             Announce != null ? Encoding.UTF8.GetString(Announce) : string.Empty;
 
+
+
+
+
         /// <summary>
         /// Decoded UTF-8 comment.
         /// </summary>
         internal string CommentString =>
             Comment != null ? Encoding.UTF8.GetString(Comment) : string.Empty;
+
+
+        /// <summary>
+        /// Decoded UTF-8 publisher.
+        /// </summary>
+        internal string PublisherString =>
+            Publisher != null ? Encoding.UTF8.GetString(Publisher) : string.Empty;
+
+        /// <summary>
+        /// Decoded UTF-8 publisher url.
+        /// </summary>
+        internal string PublisherUrlString =>
+            PublisherUrl != null ? Encoding.UTF8.GetString(PublisherUrl) : string.Empty;
+
+
+        /// <summary>
+        /// Decoded UTF-8 encoding type.
+        /// </summary>
+        internal string EncodingTypeString =>
+            EncodingType != null ? Encoding.UTF8.GetString(EncodingType) : string.Empty;
+
 
         /// <summary>
         /// Decoded UTF-8 creator identifier.
@@ -214,12 +299,12 @@ namespace lain.protocol.dto
         #region BENCODE SERIALIZATION
 
         /// <summary>
-        /// Converts this DTO into a bencode-compatible object model.
+        /// Converts this into a bencode-compatible object model.
         ///
         /// The resulting dictionary can be passed directly to a bencode
         /// serializer to regenerate a .torrent file.
         ///
-        /// If the InfoDto contains raw bencoded info bytes, they are used
+        /// If the Info contains raw bencoded info bytes, they are used
         /// verbatim to preserve hash stability.
         /// </summary>
         internal SortedDictionary<byte[], object> ToBencodeModel()
@@ -242,6 +327,15 @@ namespace lain.protocol.dto
 
             if (CreatedBy != null)
                 dict[BencodeKeys.CreatedBy] = CreatedBy;
+
+            if (Publisher != null)
+                dict[BencodeKeys.Publisher] = Publisher;
+
+            if (PublisherUrl != null)
+                dict[BencodeKeys.PublisherUrl]  = PublisherUrl;
+
+            if (EncodingType != null)
+                dict[BencodeKeys.EncodingType] = EncodingType;
 
             if (CreationDate != null)
                 dict[BencodeKeys.CreationDate] = CreationDate.Value;
@@ -277,90 +371,175 @@ namespace lain.protocol.dto
         #region MAPPING FROM PARSED BENCODE
 
         /// <summary>
-        /// Maps a parsed bencode dictionary into a TorrentDto.
+        /// Maps a parsed bencode dictionary into a Torrent.
         ///
         /// This method assumes the input dictionary originates from the
         /// Parser and follows BitTorrent metainfo conventions.
         ///
         /// The "_raw_info" entry is expected to be present and is injected
-        /// into the InfoDto to preserve the exact info dictionary bytes.
+        /// into the Info to preserve the exact info dictionary bytes.
         /// </summary>
-        internal static TorrentDto MapToTorrentDTO(Dictionary<byte[], object> root)
+        internal void MapToTorrent(Dictionary<byte[], object> root, RawInfoBytesHolder rawInfo)
         {
             var infoDict = (Dictionary<byte[], object>)root[BencodeKeys.Info];
 
 
-            bool isSingleFile = infoDict.ContainsKey(InfoDto.BencodeKeys.Length);
 
+            bool isSingleFile = infoDict.ContainsKey(Info.BencodeKeys.Length);
 
-            return new TorrentDto
+            //detect torrent version
+            Version tmp = 0;
+            if (infoDict.TryGetValue(Info.BencodeKeys.MetaInfo, out var meta))
             {
-                Announce = root.TryGetValue(BencodeKeys.Announce, out var a) ? (byte[])a : null,
+                if ((long)meta != 2)
+                    throw new InvalidDataException("Invalid version value");
+
+                tmp = (infoDict.ContainsKey(Info.BencodeKeys.Pieces)) ? Version.HYBRID : Version.V2; 
+            }
+            else
+            {
+                tmp = Version.V1;
+            }
+
+
+
+
+
+            Announce = root.TryGetValue(BencodeKeys.Announce, out var a) ? (byte[])a : null;
+
+                EncodingType = root.TryGetValue(BencodeKeys.EncodingType, out var e) ? (byte[])e : null;
+
+                Publisher = root.TryGetValue(BencodeKeys.Publisher, out var p) ? (byte[])p : null;
+
+
+                PublisherUrl = root.TryGetValue(BencodeKeys.PublisherUrl, out var pu) ? (byte[])pu : null;
+
 
                 Comment = root.TryGetValue(BencodeKeys.Comment, out var c)
                     ? (byte[])c
-                    : null,
+                    : null;
 
                 CreatedBy = root.TryGetValue(BencodeKeys.CreatedBy, out var cb)
                     ? (byte[])cb
-                    : null,
+                    : null;
 
                 CreationDate = root.TryGetValue(BencodeKeys.CreationDate, out var cd)
                     ? (long?)cd
-                    : null,
+                    : null;
 
                 UrlList = root.TryGetValue(BencodeKeys.UrlList, out var ul)
                     ? ((List<object>)ul).Cast<byte[]>().ToList()
-                    : null,
+                    : null;
 
                 Sources = root.TryGetValue(BencodeKeys.Sources, out var s)
                     ? ((List<object>)s).Cast<byte[]>().ToList()
-                    : null,
+                    : null;
 
                 AnnounceList = root.TryGetValue(BencodeKeys.AnnounceList, out var al)
                     ? ((List<object>)al)
                         .Select(tier => ((List<object>)tier).Cast<byte[]>().ToList())
                         .ToList()
-                    : null,
+                    : null;
 
-                ExtraFields = root.Where(x => !KnownRootKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
-
-
-
-                Info = new InfoDto
-                {
+                ExtraFields = root.Where(x => !KnownRootKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance);
 
 
+                Ver = tmp;
 
-                    Length = isSingleFile ? (long)infoDict[InfoDto.BencodeKeys.Length] : null,
-                    Files = !isSingleFile ? ParseFiles((List<object>)infoDict[InfoDto.BencodeKeys.Files]) : null,
-                    Name = (byte[])infoDict[InfoDto.BencodeKeys.Name],
-                    PieceLength = (long)infoDict[InfoDto.BencodeKeys.PieceLength],
-                    Pieces = (byte[])infoDict[InfoDto.BencodeKeys.Pieces],
-                    Md5Sum = infoDict.TryGetValue(InfoDto.BencodeKeys.Md5Sum, out var md5) ? (byte[])md5 : null,
-                    Sha1 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
-                    Sha256 = infoDict.TryGetValue(InfoDto.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
+                    Info = new Info
+                    {
 
-                    ExtraFields = infoDict
+
+                        Private = infoDict.TryGetValue(Info.BencodeKeys.Private, out var priv) ? (long)priv : null,
+                        Source = infoDict.TryGetValue(Info.BencodeKeys.Source, out var sor) ? (byte[])sor : null,
+                        Length = isSingleFile ? (long)infoDict[Info.BencodeKeys.Length] : null,
+                        Files = !isSingleFile ? ParseFiles((List<object>)infoDict[Info.BencodeKeys.Files]) : null,
+                        Name = infoDict.TryGetValue(Info.BencodeKeys.Name, out var name) ? (byte[])name : throw new InvalidDataException("Invalid name"),
+                        PieceLength = (long)infoDict[Info.BencodeKeys.PieceLength],
+                        Pieces = (tmp == Version.V1 || tmp == Version.HYBRID) ? (byte[])infoDict[Info.BencodeKeys.Pieces] : null,
+                        Md5Sum = infoDict.TryGetValue(Info.BencodeKeys.Md5Sum, out var md5) ? (byte[])md5 : null,
+                        Sha1 = infoDict.TryGetValue(Info.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
+                        Sha256 = infoDict.TryGetValue(Info.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
+
+
+
+
+                        ExtraFields = infoDict
                     .Where(x => !KnownInfoKeys.Contains(x.Key))
                     .ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
 
-                    // Raw info bytes captured during parsing
-                    RawBencodedInfo = root.TryGetValue(Parser.RawInfoKey, out var rawInfo)
-                        ? (byte[])rawInfo
-                        : null
-                }
-            };
+                        // Raw info bytes captured during parsing
+                        RawBencodedInfo = rawInfo.rawBytes ?? throw new InvalidDataException("Failure to capture raw info bytes")
+
+
+
+
+                    };
         }
 
         #endregion
 
 
+        #region VALIDATION
+
+        internal void Validate()
+        {
+            //Piece length
+            if (Info!.PieceLength <= 0)
+                throw new InvalidDataException("Invalid piece length");
+
+
+            //Total pieces length
+            if ((Ver == Version.V1 || Ver == Version.HYBRID))
+            {
+                if (Info!.Pieces == null || Info.Pieces.Length % 20 != 0 || Info.Pieces.Length <= 0)
+                    throw new InvalidDataException("Invalid pieces field length");
+
+
+            }
+
+
+            //Single file torrent must not contain files, or a multi-file dictionary must not have a length
+            if ((Info!.Length != null && Info.Files != null) || (Info!.Length == null && Info.Files == null))
+                throw new InvalidDataException("Info dictionary must contain exactly one of \"length\" or \"files\"");
+
+
+         
+
+
+            //Empty files
+            if (Info.Files != null)
+            {
+                foreach (var file in Info.Files)
+                {
+                    if (file.Path.Count == 0 || file.Path.Any(p => p.Length == 0))
+                        throw new InvalidDataException("Invalid empty path element");
+
+                }
+            }
+
+
+            //Torrent size
+            long totalLength = (Info.Files == null) ? (long)Info.Length! : Info.Files.Sum(f => f.Length);
+            if (totalLength <= 0)
+                throw new InvalidDataException("Invalid size");
+
+
+
+
+        }
+
+
+        #endregion
+
 
         #region MAPPING HELPERS
 
-        internal static object Map(Parser.BNode node)
+        internal static object Map(Parser.BNode node, RawInfoBytesHolder rawInfo, bool isInfo = false)
         {
+
+ 
+         
 
             return node switch
             {
@@ -368,9 +547,9 @@ namespace lain.protocol.dto
 
                 Parser.BString s => s.Value.ToArray(),
 
-                Parser.BList l => l.Values.Select(Map).ToList(),
+                Parser.BList l => l.Values.Select(v => Map(v, rawInfo)).ToList(),
 
-                Parser.BDict d => MapDict(d),
+                Parser.BDict d => MapDict(d, rawInfo, isInfo),
 
                 _ => throw new InvalidDataException("Unknown BNode type")
             };
@@ -379,34 +558,38 @@ namespace lain.protocol.dto
         }
 
 
-        private static Dictionary<byte[], object> MapDict(Parser.BDict dict)
+        private static Dictionary<byte[], object> MapDict(Parser.BDict dict, RawInfoBytesHolder rawInfo, bool isInfo = false)
         {
             var result = new Dictionary<byte[], object>(ByteComparer.Instance);
 
             foreach (var (key, value) in dict.Values)
-                result[key] = Map(value);
+            {
+                bool childIsInfo = !isInfo && key.SequenceEqual(Torrent.BencodeKeys.Info);
+                result[key] = Map(value, rawInfo, childIsInfo);
+            }
+                
 
-            if (dict.RawBytes != null)
-                result[Parser.RawInfoKey] = dict.RawBytes.Value.ToArray();
-            
-        
+            if (isInfo && rawInfo.rawBytes == null && dict.RawBytes != null)
+                rawInfo.rawBytes = dict.RawBytes.Value.ToArray();
+
+
             return result;
         }
 
 
-        private static List<FileDto> ParseFiles(List<object> files)
+        private static List<File> ParseFiles(List<object> files)
         {
-            var result = new List<FileDto>();
+            var result = new List<File>();
 
             foreach (var obj in files)
             {
 
                 var dict = (Dictionary<byte[], object>) obj;
 
-                var file = new FileDto
+                var file = new File
                 {
-                    Length = (long)dict[InfoDto.BencodeKeys.Length],
-                    Path = ((List<object>)dict[InfoDto.BencodeKeys.Path])
+                    Length = (long)dict[Info.BencodeKeys.Length],
+                    Path = ((List<object>)dict[Info.BencodeKeys.Path])
                     .Cast<byte[]>().ToList(),
                 };
 
