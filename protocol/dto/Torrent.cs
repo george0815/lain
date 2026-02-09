@@ -348,11 +348,8 @@ namespace lain.protocol.dto
 
             if (Info != null)
             {
-                // Prefer raw bencoded info bytes when available to
-                // guarantee correct info-hash reproduction.
-                dict[BencodeKeys.Info] = Info.RawBencodedInfo != null
-                    ? Info.RawBencodedInfo
-                    : Info.ToBencodeModel();
+                
+                dict[BencodeKeys.Info] = Info.ToBencodeModel();
             }
 
             if (ExtraFields != null)

@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <Configurations>Debug;Release;ParseTest</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using lain.protocol;
 using lain.protocol.dto;
 using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace lain
@@ -49,8 +50,13 @@ namespace lain
                             try
                             {
 
+                                Torrent original = new Torrent("ubuntu.torrent");
+                                var originalBytes = System.IO.File.ReadAllBytes("libre.torrent");
 
-                                
+                                Serializer.SaveTorrentAsFile(original, "ubuntu2.torrent");
+                                var rebuiltBytes = System.IO.File.ReadAllBytes("ubuntu2.torrent");
+
+                                Debug.Assert(originalBytes.SequenceEqual(rebuiltBytes));
 
                             }
                             catch (Exception ex)
