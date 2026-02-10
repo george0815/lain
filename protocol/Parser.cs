@@ -186,6 +186,10 @@ namespace lain.protocol
     internal class Parser
     {
         #region RECORD TYPES
+        // These records form a minimal, immutable AST for bencoded data.
+        // They represent syntax only (structure and raw values), not torrent semantics.
+        // Using records keeps nodes lightweight, value-based, and easy to pattern-match
+        // during mapping while preserving exact byte data needed for hash correctness.
         internal abstract record BNode;
         internal record BInt(long Value) : BNode;
         internal record BString(ReadOnlyMemory<byte> Value) : BNode;
@@ -207,12 +211,12 @@ namespace lain.protocol
         /// scattered throughout parsing logic.
         /// </summary>
         const byte DictStart = (byte)'d';
-            const byte DictEnd = (byte)'e';
-            const byte ListStart = (byte)'l';
-            const byte ListEnd = (byte)'e';
-            const byte IntStart = (byte)'i';
-            const byte IntEnd = (byte)'e';
-            const byte StringSeparator = (byte)':';
+        const byte DictEnd = (byte)'e';
+        const byte ListStart = (byte)'l';
+        const byte ListEnd = (byte)'e';
+        const byte IntStart = (byte)'i';
+        const byte IntEnd = (byte)'e';
+        const byte StringSeparator = (byte)':';
 
   
   
@@ -362,6 +366,7 @@ namespace lain.protocol
 
             int length;
 
+            //validate
             try
             {
                 length = int.Parse(lenStr);

@@ -43,10 +43,15 @@ namespace lain.protocol.dto
     {
 
 
-        
+
 
         #region KEYS FOR BENCODE DICTIONARY
 
+
+        /// <summary>
+        /// Known keys used in the info dictionary. Used when parsing to a Torrent object and during serialization - NOT used 
+        /// during the initial parsing into AST
+        ///</summary>
         internal static class BencodeKeys
         {
             public static readonly byte[] Files = Encoding.ASCII.GetBytes("files");
@@ -180,7 +185,7 @@ namespace lain.protocol.dto
             Name != null ? Encoding.UTF8.GetString(Name) : string.Empty;
 
         /// <summary>
-        /// Private bool
+        /// Returns a bool denoting whether a torrent is private
         /// </summary>
         internal bool IsPrivate => (Private != null) && Private == 1;
 
@@ -219,8 +224,10 @@ namespace lain.protocol.dto
                 if (Pieces == null)
                     yield break;
 
+                //for every 20 bytes
                 for (int i = 0; i < Pieces.Length; i += 20)
                 {
+                    //split it into chunk, return one at a time
                     byte[] pieceHash = new byte[20];
                     Array.Copy(Pieces, i, pieceHash, 0, 20);
                     yield return pieceHash;
@@ -245,11 +252,16 @@ namespace lain.protocol.dto
         /// </summary>
         internal SortedDictionary<byte[], object> ToBencodeModel()
         {
+
+            //New dictionary with keys sorted lexicographically by their raw byte values, uses the ByteComparer class to achieve this
             var dict = new SortedDictionary<byte[], object>(ByteComparer.Instance)
             {
                 [BencodeKeys.Name] = Name,
                 [BencodeKeys.PieceLength] = PieceLength,
             };
+
+
+            //Sets keys and values depedning on what info the torrent has
 
             if (Pieces != null)
                 dict[BencodeKeys.Pieces] = Pieces;
@@ -314,9 +326,8 @@ namespace lain.protocol.dto
 
 
     ///<summary>
-    /// Used to capture raw info bytes
-    /// </summary>
-    /// 
+    /// Used to capture raw info bytes, it is a class because it has to be passed by reference to the Map and MapToTorrent functions
+    /// </summary> 
     internal sealed class RawInfoBytesHolder
     {
         internal byte[]? rawBytes { get; set; }

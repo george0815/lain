@@ -16,7 +16,6 @@
 // - Preserve raw bencoded "info" bytes to guarantee info-hash correctness
 //
 // Design Notes:
-// - All properties are init-only to maintain immutability once constructed.
 // - Binary protocol fields are stored as byte[] to avoid encoding ambiguity.
 // - Conversion helpers expose decoded string views for convenience without
 //   mutating underlying data.
@@ -71,6 +70,11 @@ namespace lain.protocol.dto
 
         #region BENCODE KEYS AS BYTES
 
+
+        /// <summary>
+        /// Known keys used by the root top-level torrent dictionary. Used when parsing to a Torrent object and during serialization - NOT used 
+        /// during the initial parsing into AST
+        ///</summary>
         internal static class BencodeKeys
         {
             public static readonly byte[] Announce = Encoding.ASCII.GetBytes("announce");
@@ -94,7 +98,7 @@ namespace lain.protocol.dto
         #region KNOWN ROOT KEYS
 
         ///<summary>
-        /// Set of all recognized top-level metainfo keys
+        /// Set of all recognized top-level metainfo keys, used for deciding whether a field goes into extra fields 
         /// </summary>
 
 
@@ -309,8 +313,12 @@ namespace lain.protocol.dto
         /// </summary>
         internal SortedDictionary<byte[], object> ToBencodeModel()
         {
+
+            //New dictionary sorted by raw bytes using ByteComparer
             var dict = new SortedDictionary<byte[], object>(ByteComparer.Instance);
 
+
+            //Add values to torrent dictionary depedning on what isn't null
             if (Announce != null)
                 dict[BencodeKeys.Announce] = Announce;
 
@@ -384,7 +392,8 @@ namespace lain.protocol.dto
 
             bool isSingleFile = infoDict.ContainsKey(Info.BencodeKeys.Length);
 
-            //detect torrent version
+            //detect torrent version, hybrid and v2 torrents MUST have a meta version key with a value of two
+            //hybrid torrents have to have a pieces key for v1 behavior fallback
             Version tmp = 0;
             if (infoDict.TryGetValue(Info.BencodeKeys.MetaInfo, out var meta))
             {
@@ -400,78 +409,81 @@ namespace lain.protocol.dto
 
 
 
-
+            //Maps all values to their respective properties
 
             Announce = root.TryGetValue(BencodeKeys.Announce, out var a) ? (byte[])a : null;
 
-                EncodingType = root.TryGetValue(BencodeKeys.EncodingType, out var e) ? (byte[])e : null;
+            EncodingType = root.TryGetValue(BencodeKeys.EncodingType, out var e) ? (byte[])e : null;
 
-                Publisher = root.TryGetValue(BencodeKeys.Publisher, out var p) ? (byte[])p : null;
-
-
-                PublisherUrl = root.TryGetValue(BencodeKeys.PublisherUrl, out var pu) ? (byte[])pu : null;
+            Publisher = root.TryGetValue(BencodeKeys.Publisher, out var p) ? (byte[])p : null;
 
 
-                Comment = root.TryGetValue(BencodeKeys.Comment, out var c)
-                    ? (byte[])c
-                    : null;
-
-                CreatedBy = root.TryGetValue(BencodeKeys.CreatedBy, out var cb)
-                    ? (byte[])cb
-                    : null;
-
-                CreationDate = root.TryGetValue(BencodeKeys.CreationDate, out var cd)
-                    ? (long?)cd
-                    : null;
-
-                UrlList = root.TryGetValue(BencodeKeys.UrlList, out var ul)
-                    ? ((List<object>)ul).Cast<byte[]>().ToList()
-                    : null;
-
-                Sources = root.TryGetValue(BencodeKeys.Sources, out var s)
-                    ? ((List<object>)s).Cast<byte[]>().ToList()
-                    : null;
-
-                AnnounceList = root.TryGetValue(BencodeKeys.AnnounceList, out var al)
-                    ? ((List<object>)al)
-                        .Select(tier => ((List<object>)tier).Cast<byte[]>().ToList())
-                        .ToList()
-                    : null;
-
-                ExtraFields = root.Where(x => !KnownRootKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance);
+            PublisherUrl = root.TryGetValue(BencodeKeys.PublisherUrl, out var pu) ? (byte[])pu : null;
 
 
-                Ver = tmp;
+            Comment = root.TryGetValue(BencodeKeys.Comment, out var c)
+                ? (byte[])c
+                : null;
 
-                    Info = new Info
-                    {
+            CreatedBy = root.TryGetValue(BencodeKeys.CreatedBy, out var cb)
+                ? (byte[])cb
+                : null;
+
+            CreationDate = root.TryGetValue(BencodeKeys.CreationDate, out var cd)
+                ? (long?)cd
+                : null;
+
+            UrlList = root.TryGetValue(BencodeKeys.UrlList, out var ul)
+                ? ((List<object>)ul).Cast<byte[]>().ToList()
+                : null;
+
+            Sources = root.TryGetValue(BencodeKeys.Sources, out var s)
+                ? ((List<object>)s).Cast<byte[]>().ToList()
+                : null;
+
+            AnnounceList = root.TryGetValue(BencodeKeys.AnnounceList, out var al)
+                ? ((List<object>)al)
+                    .Select(tier => ((List<object>)tier).Cast<byte[]>().ToList())
+                    .ToList()
+                : null;
+
+            ExtraFields = root.Where(x => !KnownRootKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance);
 
 
-                        Private = infoDict.TryGetValue(Info.BencodeKeys.Private, out var priv) ? (long)priv : null,
-                        Source = infoDict.TryGetValue(Info.BencodeKeys.Source, out var sor) ? (byte[])sor : null,
-                        Length = isSingleFile ? (long)infoDict[Info.BencodeKeys.Length] : null,
-                        Files = !isSingleFile ? ParseFiles((List<object>)infoDict[Info.BencodeKeys.Files]) : null,
-                        Name = infoDict.TryGetValue(Info.BencodeKeys.Name, out var name) ? (byte[])name : throw new InvalidDataException("Invalid name"),
-                        PieceLength = (long)infoDict[Info.BencodeKeys.PieceLength],
-                        Pieces = (tmp == Version.V1 || tmp == Version.HYBRID) ? (byte[])infoDict[Info.BencodeKeys.Pieces] : null,
-                        Md5Sum = infoDict.TryGetValue(Info.BencodeKeys.Md5Sum, out var md5) ? (byte[])md5 : null,
-                        Sha1 = infoDict.TryGetValue(Info.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
-                        Sha256 = infoDict.TryGetValue(Info.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
+            Ver = tmp;
 
 
 
+            //new info class, just as with the top-level data, all fields with unknow keys are in extra fields
+            Info = new Info
+            {
 
-                        ExtraFields = infoDict
-                    .Where(x => !KnownInfoKeys.Contains(x.Key))
-                    .ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
 
-                        // Raw info bytes captured during parsing
-                        RawBencodedInfo = rawInfo.rawBytes ?? throw new InvalidDataException("Failure to capture raw info bytes")
+                Private = infoDict.TryGetValue(Info.BencodeKeys.Private, out var priv) ? (long)priv : null,
+                Source = infoDict.TryGetValue(Info.BencodeKeys.Source, out var sor) ? (byte[])sor : null,
+                Length = isSingleFile ? (long)infoDict[Info.BencodeKeys.Length] : null,
+                Files = !isSingleFile ? ParseFiles((List<object>)infoDict[Info.BencodeKeys.Files]) : null,
+                Name = infoDict.TryGetValue(Info.BencodeKeys.Name, out var name) ? (byte[])name : throw new InvalidDataException("Invalid name"),
+                PieceLength = (long)infoDict[Info.BencodeKeys.PieceLength],
+                Pieces = (tmp == Version.V1 || tmp == Version.HYBRID) ? (byte[])infoDict[Info.BencodeKeys.Pieces] : null,
+                Md5Sum = infoDict.TryGetValue(Info.BencodeKeys.Md5Sum, out var md5) ? (byte[])md5 : null,
+                Sha1 = infoDict.TryGetValue(Info.BencodeKeys.Sha1, out var sha1) ? (byte[])sha1 : null,
+                Sha256 = infoDict.TryGetValue(Info.BencodeKeys.Sha256, out var sha256) ? (byte[])sha256 : null,
 
 
 
 
-                    };
+                ExtraFields = infoDict
+            .Where(x => !KnownInfoKeys.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Value, ByteComparer.Instance),
+
+                // Raw info bytes captured during parsing
+                RawBencodedInfo = rawInfo.rawBytes ?? throw new InvalidDataException("Failure to capture raw info bytes")
+
+
+
+
+            };
         }
 
         #endregion
@@ -532,70 +544,142 @@ namespace lain.protocol.dto
 
         #region MAPPING HELPERS
 
+        // =================================================================================
+        // BENCODE AST → RUNTIME OBJECT MAPPING
+        //
+        // These helpers transform the parsed bencode Abstract Syntax Tree (AST)
+        // into plain CLR objects (long, byte[], List<object>, Dictionary<byte[], object>).
+        //
+        // Critical responsibilities:
+        // - Preserve raw byte[] values for all binary fields
+        // - Avoid string decoding during parsing to prevent encoding ambiguity
+        // - Capture the *exact* raw bencoded "info" dictionary bytes once, verbatim,
+        //   so the info-hash can be computed correctly
+        //
+        // The mapping process is recursive and mirrors the bencode data model:
+        // - integers   → long
+        // - byte strings → byte[]
+        // - lists      → List<object>
+        // - dictionaries → Dictionary<byte[], object>
+        //
+        // =================================================================================
+
+        /// <summary>
+        /// Recursively maps a parsed bencode node into a CLR object graph.
+        ///
+        /// This method is intentionally minimal and type-driven; it does not
+        /// apply torrent-specific semantics, validation, or key filtering.
+        ///
+        /// The optional <paramref name="isInfo"/> flag propagates context so
+        /// that the raw bencoded bytes of the "info" dictionary can be captured
+        /// exactly once during traversal.
+        /// </summary>
         internal static object Map(Parser.BNode node, RawInfoBytesHolder rawInfo, bool isInfo = false)
         {
-
- 
-         
-
             return node switch
             {
-                Parser.BInt i => i.Value,
+                // Bencode integer → long
+                Parser.BInt i =>
+                    i.Value,
 
-                Parser.BString s => s.Value.ToArray(),
+                // Bencode byte string → raw byte[]
+                // NOTE: No decoding occurs here. Interpretation is deferred.
+                Parser.BString s =>
+                    s.Value.ToArray(),
 
-                Parser.BList l => l.Values.Select(v => Map(v, rawInfo)).ToList(),
+                // Bencode list → List<object>
+                // Elements are recursively mapped
+                Parser.BList l =>
+                    l.Values.Select(v => Map(v, rawInfo)).ToList(),
 
-                Parser.BDict d => MapDict(d, rawInfo, isInfo),
+                // Bencode dictionary → Dictionary<byte[], object>
+                Parser.BDict d =>
+                    MapDict(d, rawInfo, isInfo),
 
-                _ => throw new InvalidDataException("Unknown BNode type")
+                // Any unknown node type indicates a malformed AST
+                _ =>
+                    throw new InvalidDataException("Unknown BNode type")
             };
-
-
         }
 
-
-        private static Dictionary<byte[], object> MapDict(Parser.BDict dict, RawInfoBytesHolder rawInfo, bool isInfo = false)
+        /// <summary>
+        /// Maps a bencode dictionary node into a Dictionary&lt;byte[], object&gt;.
+        ///
+        /// Keys are preserved as raw byte arrays and stored using ByteComparer
+        /// to guarantee correct lexicographical behavior.
+        ///
+        /// If this dictionary represents the top-level "info" dictionary,
+        /// its raw bencoded bytes are captured exactly as emitted by the parser.
+        /// This is essential for computing a stable info-hash.
+        /// </summary>
+        private static Dictionary<byte[], object> MapDict(
+            Parser.BDict dict,
+            RawInfoBytesHolder rawInfo,
+            bool isInfo = false)
         {
+            // Use ByteComparer to ensure correct byte-wise key semantics
             var result = new Dictionary<byte[], object>(ByteComparer.Instance);
 
             foreach (var (key, value) in dict.Values)
             {
-                bool childIsInfo = !isInfo && key.SequenceEqual(Torrent.BencodeKeys.Info);
+                // Detect entry into the "info" dictionary.
+                // This flag is propagated downward exactly once.
+                bool childIsInfo =
+                    !isInfo &&
+                    key.SequenceEqual(Torrent.BencodeKeys.Info);
+
                 result[key] = Map(value, rawInfo, childIsInfo);
             }
-                
 
+            // Capture raw bencoded bytes of the "info" dictionary.
+            //
+            // This must:
+            // - Occur exactly once
+            // - Use the parser-provided raw bytes
+            // - Preserve original ordering and formatting
+            //
+            // Any re-encoding would invalidate the info-hash.
             if (isInfo && rawInfo.rawBytes == null && dict.RawBytes != null)
                 rawInfo.rawBytes = dict.RawBytes.Value.ToArray();
-
 
             return result;
         }
 
-
+        /// <summary>
+        /// Parses the "files" list of a multi-file torrent.
+        ///
+        /// Each entry is expected to be a dictionary containing:
+        /// - "length" : file size in bytes
+        /// - "path"   : list of UTF-8 path components as byte[]
+        ///
+        /// This method assumes structural correctness; validation is performed
+        /// later during Torrent.Validate().
+        /// </summary>
         private static List<File> ParseFiles(List<object> files)
         {
             var result = new List<File>();
 
             foreach (var obj in files)
             {
-
-                var dict = (Dictionary<byte[], object>) obj;
+                var dict = (Dictionary<byte[], object>)obj;
 
                 var file = new File
                 {
                     Length = (long)dict[Info.BencodeKeys.Length],
+
+                    // Path components are preserved as raw bytes
+                    // to avoid premature decoding or normalization
                     Path = ((List<object>)dict[Info.BencodeKeys.Path])
-                    .Cast<byte[]>().ToList(),
+                        .Cast<byte[]>()
+                        .ToList(),
                 };
 
                 result.Add(file);
-
             }
 
             return result;
         }
+
 
 
 

@@ -50,10 +50,16 @@ namespace lain
                             try
                             {
 
+                                //Parse torrent file and map it to object
                                 Torrent original = new Torrent("ubuntu.torrent");
+
+                                //Get raw bytes from original file for comparison
                                 var originalBytes = System.IO.File.ReadAllBytes("libre.torrent");
 
+                                //Save parsed torrent as new file
                                 Serializer.SaveTorrentAsFile(original, "ubuntu2.torrent");
+
+                                //Get raw bytes from the rebuilt file for comparison
                                 var rebuiltBytes = System.IO.File.ReadAllBytes("ubuntu2.torrent");
 
                                 Debug.Assert(originalBytes.SequenceEqual(rebuiltBytes));
