@@ -17,4 +17,6 @@ A plugin can be installed by placing the .py file into the qb_env/engines direct
 <img width="1777" height="838" alt="Screenshot 2026-01-25 221421" src="https://github.com/user-attachments/assets/0ab97a01-5a05-487f-b434-6b72760c5639" />
 
 
+### COPYRIGHT
 
+Copyright (C) 2025-2026 George Hunter Shipman
