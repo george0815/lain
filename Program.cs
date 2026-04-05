@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -33,17 +32,21 @@ namespace lain
             // ------------------------------
             // Optional debug: change culture to Japanese
             // ------------------------------
-            //CultureInfo ci = new("ja-JP");
-            //Thread.CurrentThread.CurrentUICulture = ci;
-            //CultureInfo.DefaultThreadCurrentCulture = ci;
-            //CultureInfo.DefaultThreadCurrentUICulture = ci;
+            CultureInfo ci = new("ja-JP");
+            Thread.CurrentThread.CurrentUICulture = ci;
+            CultureInfo.DefaultThreadCurrentCulture = ci;
+            CultureInfo.DefaultThreadCurrentUICulture = ci;
+
+
+            // load user settings from file
+            Settings.Load();
 
 
             // Register encodings for legacy code pages (e.g., Shift-JIS)
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             // Enable UTF-8
-            Application.UseSystemConsole = true;
+            Application.UseSystemConsole = Settings.Current.UseSystemConsole;
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
 
@@ -51,12 +54,10 @@ namespace lain
             // ------------------------------
             // CLI Entry point
             // ------------------------------
-
             if (args.Length > 0)
             {
 
 
-                Settings.Load();
                 Ghidorah.LoadQbittorrentPlugins();
 
                 string command = args[0].ToLowerInvariant();
@@ -80,7 +81,7 @@ namespace lain
                                 catch (Exception ex)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine(ex.Message); 
+                                    Console.WriteLine(ex.Message);
                                     Console.ResetColor();
                                 }
                             });
@@ -271,10 +272,10 @@ namespace lain
                                 Console.WriteLine($"{Resources.Torrentcreationfailed}\n{ex.Message}");
                                 Console.ResetColor();
                             }
-                        
-                       
-                        break;
-                
+
+
+                            break;
+
                         }
 
 
@@ -342,13 +343,10 @@ namespace lain
             else
             {
 
-                
-
 
                 // ------------------------------
                 // Load settings and plugins
                 // ------------------------------
-                Settings.Load(); // load user settings from file
                 Ghidorah.LoadQbittorrentPlugins(); // load qbittorrent plugin sources
 
                 // Disable QB plugin usage if none loaded
@@ -445,7 +443,7 @@ namespace lain
                 }
             }
 
-                
+
             // Prints usage instructions and exits the application
             static void PrintUsageAndExit()
             {
@@ -471,9 +469,9 @@ namespace lain
                     var options = new JsonSerializerOptions
                     {
                         WriteIndented = true,
-                        
+
                     };
-                    
+
                     string jsonString = JsonSerializer.Serialize(doc.RootElement, options);
                     File.WriteAllText("search_results.json", jsonString);
                 }
