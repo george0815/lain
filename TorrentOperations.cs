@@ -2,16 +2,7 @@
 using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Terminal.Gui;
-using TextCopy;
 
 namespace lain
 {

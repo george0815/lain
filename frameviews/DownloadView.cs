@@ -1,9 +1,4 @@
-﻿using MonoTorrent;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using lain.helpers;
+﻿using lain.helpers;
 using Terminal.Gui;
 
 namespace lain.frameviews

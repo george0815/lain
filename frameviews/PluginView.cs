@@ -1,7 +1,4 @@
 ﻿using lain.helpers;
-using System;
-using System.Drawing;
-using System.Net.NetworkInformation;
 using Terminal.Gui;
 
 namespace lain.frameviews

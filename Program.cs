@@ -1,18 +1,8 @@
 ﻿using lain.helpers;
-using MonoTorrent;
 using MonoTorrent.Client;
-using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using Terminal.Gui;
 
 namespace lain

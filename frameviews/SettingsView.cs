@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using lain.helpers;
 
 namespace lain.frameviews

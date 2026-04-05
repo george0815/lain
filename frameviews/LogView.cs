@@ -1,6 +1,5 @@
 ﻿using lain;
 using lain.helpers;
-using MonoTorrent.Client;
 using Terminal.Gui;
 
 /// <summary>

@@ -1,10 +1,7 @@
-﻿using lain;
-using lain.helpers;
+﻿using lain.helpers;
 using MonoTorrent;
 using MonoTorrent.Client;
-using System;
 using System.Data;
-using System.Xml.Linq;
 using Terminal.Gui;
 using TextCopy;
 

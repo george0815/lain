@@ -1,17 +1,8 @@
 ﻿using lain.helpers;
-using MonoTorrent;
-using System;
-using System.ComponentModel.Design;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.Text.Json.Serialization;
-using System.Xml.Linq;
 using Terminal.Gui;
-using TextCopy;
-using static NStack.Unicode;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lain.frameviews
 {

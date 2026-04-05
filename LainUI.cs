@@ -1,9 +1,5 @@
 ﻿using lain.frameviews;
 using lain.helpers;
-using MonoTorrent.Client;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Terminal.Gui;
 
 namespace lain
@@ -187,6 +183,8 @@ namespace lain
             Add(header);
 
             #endregion
+
+
             #endregion
 
             #region SIDEBAR AND MENU

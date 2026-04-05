@@ -1,14 +1,5 @@
-﻿using lain;
-using MonoTorrent.Client;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using lain.helpers;
+﻿using lain.helpers;
 using Terminal.Gui;
-using TextCopy;
 
 namespace lain.frameviews
 {

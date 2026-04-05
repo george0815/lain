@@ -2,7 +2,6 @@
 using MonoTorrent.Client;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Terminal.Gui;
 
 namespace lain
