@@ -402,6 +402,9 @@
   <data name="EnablePortForwarding" xml:space="preserve">
     <value>Enable Port Forwarding</value>
   </data>
+  <data name="Usesystemconsole" xml:space="preserve">
+    <value>Use system console</value>
+  </data>
   <data name="Hidetextcursor" xml:space="preserve">
     <value>Hide text cursor</value>
   </data>

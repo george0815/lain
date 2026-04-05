@@ -74,6 +74,14 @@ namespace lain
         };
 
         // ------------------------------
+        // UseSystemConsole 
+        // ------------------------------
+
+        public bool UseSystemConsole { get; set; } = false;
+
+
+        //
+        // ------------------------------
         // ASCII / Icons
         // ------------------------------
         public List<string> Icons { get; set; } = ASCII.icons;

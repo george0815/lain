@@ -203,6 +203,15 @@ namespace lain.frameviews
             scroll.Add(hideTextCursor);
             y += 2;
 
+            // Hide the terminal text cursor
+            var useSystemConsole = new CheckBox(Resources.Usesystemconsole)
+            {
+                X = 1,
+                Y = y,
+                Checked = Settings.Current.UseSystemConsole
+            };
+            scroll.Add(useSystemConsole);
+            y += 2;
             #endregion
 
 
@@ -576,6 +585,7 @@ namespace lain.frameviews
                     Settings.Current.DisableASCII = disableASCII.Checked;
                     Settings.Current.DisableColoredHotkeyInfo = disableHotKeyColors.Checked;
                     Settings.Current.HidetextCursor = hideTextCursor.Checked;
+                    Settings.Current.UseSystemConsole = useSystemConsole.Checked;
 
                     Settings.Current.DefaultDownloadPath = downloadPath;
                     Settings.Current.LogPath = logPath;

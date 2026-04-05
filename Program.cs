@@ -32,10 +32,10 @@ namespace lain
             // ------------------------------
             // Optional debug: change culture to Japanese
             // ------------------------------
-            CultureInfo ci = new("ja-JP");
-            Thread.CurrentThread.CurrentUICulture = ci;
-            CultureInfo.DefaultThreadCurrentCulture = ci;
-            CultureInfo.DefaultThreadCurrentUICulture = ci;
+            //CultureInfo ci = new("ja-JP");
+            //Thread.CurrentThread.CurrentUICulture = ci;
+            //CultureInfo.DefaultThreadCurrentCulture = ci;
+            //CultureInfo.DefaultThreadCurrentUICulture = ci;
 
 
             // load user settings from file

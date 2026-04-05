@@ -402,6 +402,9 @@
   <data name="EnablePortForwarding" xml:space="preserve">
     <value>ポートフォワーディングを有効にする</value>
   </data>
+  <data name="Usesystemconsole" xml:space="preserve">
+    <value>システムコンソールを使用する</value>
+  </data>
   <data name="Hidetextcursor" xml:space="preserve">
     <value>テキストカーソルを非表示</value>
   </data>
